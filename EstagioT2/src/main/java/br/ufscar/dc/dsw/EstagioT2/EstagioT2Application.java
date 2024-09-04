@@ -3,6 +3,8 @@ package br.ufscar.dc.dsw.EstagioT2;
 import br.ufscar.dc.dsw.EstagioT2.domain.Empresa;
 import br.ufscar.dc.dsw.EstagioT2.domain.Profissional;
 import br.ufscar.dc.dsw.EstagioT2.domain.Usuario;
+import br.ufscar.dc.dsw.EstagioT2.domain.Vaga;
+import br.ufscar.dc.dsw.EstagioT2.repository.VagaRepository;
 import br.ufscar.dc.dsw.EstagioT2.repository.EmpresaRepository;
 import br.ufscar.dc.dsw.EstagioT2.repository.ProfissionalRepository;
 import br.ufscar.dc.dsw.EstagioT2.repository.UsuarioRepository;
@@ -11,6 +13,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.math.BigDecimal;
 
 @SpringBootApplication
 public class EstagioT2Application implements CommandLineRunner {
@@ -25,7 +29,14 @@ public class EstagioT2Application implements CommandLineRunner {
 	private ProfissionalRepository profissionalRepository;
 
 	@Autowired
+	private VagaRepository vagaRepository;
+
+
+	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(EstagioT2Application.class, args);
@@ -75,23 +86,58 @@ public class EstagioT2Application implements CommandLineRunner {
 			empresa3.setUsuario(usuarioEmpresa3);
 			empresaRepository.save(empresa3);
 
-			
+			Vaga vaga = new Vaga();
+			vaga.setDescricao("Vaga Exemplo 1");
+			vaga.setRemuneracao(BigDecimal.valueOf(1000.00));
+			vaga.setDataLimiteInscricao(java.sql.Date.valueOf("2021-12-31"));
+			vaga.setCidade("Cidade Exemplo 1");
+			vaga.setEmpresa(empresa);
+			vagaRepository.save(vaga);
+
 
 
 
 			// Criando usuário do tipo Profissional
 			Usuario usuarioProfissional = new Usuario();
-			usuarioProfissional.setEmail("profissional@example.com");
+			usuarioProfissional.setEmail("profissional1@example.com");
 			usuarioProfissional.setSenha(passwordEncoder.encode("profissional123"));
 			usuarioProfissional.setTipo(Usuario.TipoUsuario.profissional);
 			usuarioRepository.save(usuarioProfissional);
-
 			Profissional profissional = new Profissional();
-			profissional.setNome("Profissional Exemplo");
-			profissional.setCpf("123.456.789-00");
+			profissional.setNome("Profissional Exemplo 1");
+			profissional.setCpf("123.456.789-01");
 			profissional.setTelefone("11 98765-4321");
 			profissional.setUsuario(usuarioProfissional);
 			profissionalRepository.save(profissional);
+
+			Usuario usuarioProfissional2 = new Usuario();
+			usuarioProfissional2.setEmail("profissional2@example.com");
+			usuarioProfissional2.setSenha(passwordEncoder.encode("profissional123"));
+			usuarioProfissional2.setTipo(Usuario.TipoUsuario.profissional);
+			usuarioRepository.save(usuarioProfissional2);
+			Profissional profissional2 = new Profissional();
+			profissional2.setNome("Profissional Exemplo 2");
+			profissional2.setCpf("123.456.789-02");
+			profissional2.setTelefone("11 98765-4322");
+			profissional2.setUsuario(usuarioProfissional2);
+			profissionalRepository.save(profissional2);
+
+			Usuario usuarioProfissional3 = new Usuario();
+			usuarioProfissional3.setEmail("profissional3@example.com");
+			usuarioProfissional3.setSenha(passwordEncoder.encode("profissional123"));
+			usuarioProfissional3.setTipo(Usuario.TipoUsuario.profissional);
+			usuarioRepository.save(usuarioProfissional3);
+			Profissional profissional3 = new Profissional();
+			profissional3.setNome("Profissional Exemplo 3");
+			profissional3.setCpf("123.456.789-03");
+			profissional3.setTelefone("11 98765-4323");
+			profissional3.setUsuario(usuarioProfissional3);
+			profissionalRepository.save(profissional3);
+
+
+
+
+
 
 			Usuario usuarioAdmin = new Usuario();
 			usuarioAdmin.setEmail("admin@example.com");

@@ -20,6 +20,10 @@
     <td th:text="${profissional.usuario.email}"></td>
     <td th:text="${profissional.cpf}"></td>
     <td th:text="${profissional.telefone}"></td>
+    <td>
+        <a th:href="@{/admin/editarProfissional/{id}(id=${profissional.id})}">Editar</a>
+        <a th:href="@{/admin/excluirProfissional/{id}(id=${profissional.id})}">Excluir</a>
+    </td>
   </tr>
   </tbody>
 </table>

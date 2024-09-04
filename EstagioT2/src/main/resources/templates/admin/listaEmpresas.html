@@ -13,6 +13,7 @@
         <th>Descrição</th>
         <th>Cidade</th>
         <th>Email</th>
+        <th>Ações</th>
     </tr>
     </thead>
     <tbody>
@@ -22,6 +23,10 @@
         <td th:text="${empresa.descricao}"></td>
         <td th:text="${empresa.cidade}"></td>
         <td th:text="${empresa.usuario.email}"></td>
+        <td>
+            <a th:href="@{/admin/editarEmpresa/{id}(id=${empresa.id})}">Editar</a>
+            <a th:href="@{/admin/excluirEmpresa/{id}(id=${empresa.id})}">Excluir</a>
+        </td>
     </tr>
     </tbody>
 </table>
