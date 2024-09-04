@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista de Empresas</title>
+</head>
+<body>
+<h1>Lista de Empresas Cadastradas</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Nome</th>
+        <th>CNPJ</th>
+        <th>Descrição</th>
+        <th>Cidade</th>
+        <th>Email</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="empresa : ${empresas}">
+        <td th:text="${empresa.nome}"></td>
+        <td th:text="${empresa.cnpj}"></td>
+        <td th:text="${empresa.descricao}"></td>
+        <td th:text="${empresa.cidade}"></td>
+        <td th:text="${empresa.usuario.email}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

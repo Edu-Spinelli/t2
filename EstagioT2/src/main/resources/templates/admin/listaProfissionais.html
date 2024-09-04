@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Lista de Profissionais</title>
+</head>
+<body>
+<h1>Lista de Profissionais</h1>
+<table border="1">
+  <thead>
+  <tr>
+    <th>Nome</th>
+    <th>Email</th>
+    <th>CPF</th>
+    <th>Telefone</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="profissional : ${profissionais}">
+    <td th:text="${profissional.nome}"></td>
+    <td th:text="${profissional.usuario.email}"></td>
+    <td th:text="${profissional.cpf}"></td>
+    <td th:text="${profissional.telefone}"></td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>
