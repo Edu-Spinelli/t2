@@ -41,6 +41,10 @@ public class CandidaturaService {
         return candidaturaRepository.findFirstByVaga(vaga);
     }
 
+    public List<Candidatura> buscarPorProfissional(Profissional profissional) {
+        return candidaturaRepository.findByProfissional(profissional);
+    }
+
 
 
 }

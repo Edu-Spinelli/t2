@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Vagas Inscritas</title>
+</head>
+<body>
+<h1>Vagas Inscritas</h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Descrição da Vaga</th>
+        <th>Cidade</th>
+        <th>Status</th>
+        <th>Link da Entrevista</th>
+        <th>Currículo</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="candidatura : ${candidaturas}">
+        <td th:text="${candidatura.vaga.descricao}"></td>
+        <td th:text="${candidatura.vaga.cidade}"></td>
+        <td th:text="${candidatura.status.descricao}"></td>
+        <td>
+            <a th:href="${candidatura.entrevistaLink}" th:if="${candidatura.entrevistaLink != null}">Link</a>
+            <span th:if="${candidatura.entrevistaLink == null}">Sem link</span>
+        </td>
+        <td>
+            <a th:href="@{/profissional/downloadCurriculo/{vagaId}(vagaId=${candidatura.vaga.id})}" th:if="${candidatura.curriculo != null}">
+                <span th:text="${candidatura.curriculoNome}"></span> <!-- Exibe o nome do currículo -->
+            </a>
+            <span th:if="${candidatura.curriculo == null}">Nenhum currículo</span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<a href="/profissional/vagas">Voltar</a>
+</body>
+</html>

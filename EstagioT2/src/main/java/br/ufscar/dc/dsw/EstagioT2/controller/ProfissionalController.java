@@ -216,7 +216,26 @@ public class ProfissionalController {
 
 
 
+    @GetMapping("/vagasInscritas")
+    public String listarVagasInscritas(Model model, Authentication authentication) {
+        // Obtém o email do usuário logado
+        String email = authentication.getName();
 
+        // Busca o profissional logado pelo email
+        Optional<Profissional> optionalProfissional = profissionalService.buscarPorEmail(email);
+        if (!optionalProfissional.isPresent()) {
+            return "redirect:/profissional/vagas"; // Redireciona se o profissional não for encontrado
+        }
+        Profissional profissional = optionalProfissional.get();
+
+        // Busca todas as candidaturas do profissional
+        List<Candidatura> candidaturas = candidaturaService.buscarPorProfissional(profissional);
+
+        // Adiciona as candidaturas ao modelo
+        model.addAttribute("candidaturas", candidaturas);
+
+        return "profissional/vagasInscritas"; // Retorna a view com a lista de vagas inscritas
+    }
 
 
 
