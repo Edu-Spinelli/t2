@@ -1,6 +1,8 @@
 package br.ufscar.dc.dsw.EstagioT2.domain;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +26,8 @@ public class Profissional {
     private Sexo sexo;
 
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd") // Define o formato da data
+
     private Date dataNascimento;
 
     @OneToOne

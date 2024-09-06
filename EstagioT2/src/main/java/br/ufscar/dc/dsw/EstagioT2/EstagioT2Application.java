@@ -94,6 +94,24 @@ public class EstagioT2Application implements CommandLineRunner {
 			vaga.setEmpresa(empresa);
 			vagaRepository.save(vaga);
 
+			Vaga vaga2 = new Vaga();
+			vaga2.setDescricao("Vaga Exemplo 2");
+			vaga2.setRemuneracao(BigDecimal.valueOf(1000.00));
+			vaga2.setDataLimiteInscricao(java.sql.Date.valueOf("2021-12-31"));
+			vaga2.setCidade("Cidade Exemplo 2");
+			vaga2.setEmpresa(empresa2);
+			vagaRepository.save(vaga2);
+
+			Vaga vaga3 = new Vaga();
+			vaga3.setDescricao("Vaga Exemplo 3");
+			vaga3.setRemuneracao(BigDecimal.valueOf(1000.00));
+			vaga3.setDataLimiteInscricao(java.sql.Date.valueOf("2021-12-31"));
+			vaga3.setCidade("Cidade Exemplo 3");
+			vaga3.setEmpresa(empresa3);
+			vagaRepository.save(vaga3);
+
+
+
 
 
 
@@ -107,6 +125,7 @@ public class EstagioT2Application implements CommandLineRunner {
 			profissional.setNome("Profissional Exemplo 1");
 			profissional.setCpf("123.456.789-01");
 			profissional.setTelefone("11 98765-4321");
+			profissional.setDataNascimento(java.sql.Date.valueOf("1990-01-01"));
 			profissional.setUsuario(usuarioProfissional);
 			profissionalRepository.save(profissional);
 
@@ -119,6 +138,7 @@ public class EstagioT2Application implements CommandLineRunner {
 			profissional2.setNome("Profissional Exemplo 2");
 			profissional2.setCpf("123.456.789-02");
 			profissional2.setTelefone("11 98765-4322");
+			profissional2.setDataNascimento(java.sql.Date.valueOf("1990-01-01"));
 			profissional2.setUsuario(usuarioProfissional2);
 			profissionalRepository.save(profissional2);
 
@@ -131,6 +151,7 @@ public class EstagioT2Application implements CommandLineRunner {
 			profissional3.setNome("Profissional Exemplo 3");
 			profissional3.setCpf("123.456.789-03");
 			profissional3.setTelefone("11 98765-4323");
+			profissional3.setDataNascimento(java.sql.Date.valueOf("1990-01-01"));
 			profissional3.setUsuario(usuarioProfissional3);
 			profissionalRepository.save(profissional3);
 

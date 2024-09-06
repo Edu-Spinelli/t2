@@ -1,6 +1,8 @@
 package br.ufscar.dc.dsw.EstagioT2.domain;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +25,7 @@ public class Vaga {
     private BigDecimal remuneracao;
 
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dataLimiteInscricao;
 
     @Column(nullable = false)

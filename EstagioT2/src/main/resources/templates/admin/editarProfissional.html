@@ -5,7 +5,8 @@
 </head>
 <body>
 <h1>Editar Profissional</h1>
-<form th:action="@{/profissional/save}" th:object="${profissionais}" method="post">
+<form th:action="@{'/admin/profissional/save/' + ${profissionais.id}}" th:object="${profissionais}" method="post">
+
 
   <input type="hidden" th:field="*{id}"    />
 

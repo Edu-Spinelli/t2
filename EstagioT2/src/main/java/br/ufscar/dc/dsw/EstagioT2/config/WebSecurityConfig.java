@@ -15,7 +15,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/home", "/vagas").permitAll()
+                        .requestMatchers("/", "/home", "/vagas", "/register", "/register/empresa", "/register/profissional").permitAll() // Permite o acesso às rotas de registro
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/empresa/**").hasRole("EMPRESA")
                         .requestMatchers("/profissional/**").hasRole("PROFISSIONAL")
@@ -24,7 +24,7 @@ public class WebSecurityConfig {
                 .formLogin((form) -> form
                         .loginPage("/login")
                         .permitAll()
-                        .successHandler(new CustomAuthenticationSuccessHandler()) // Usar o handler personalizado
+                        .successHandler(new CustomAuthenticationSuccessHandler())
                 )
                 .logout((logout) -> logout.permitAll());
 
@@ -36,3 +36,4 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
+
