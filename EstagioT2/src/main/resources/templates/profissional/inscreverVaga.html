@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Inscrição na Vaga</title>
+</head>
+<body>
+<h1>Inscrever-se na Vaga</h1>
+
+<!-- Ajuste na URL para incluir o ID da vaga -->
+<form th:action="@{'/profissional/inscreverVaga/' + ${vaga.id}}" th:object="${candidatura}" method="post">
+
+    <input type="hidden" th:field="*{vaga.id}" value="${vaga.id}" /> <!-- Campo oculto para o ID da vaga -->
+    <input type="hidden" th:field="*{profissional.id}" value="${profissional.id}" /> <!-- Campo oculto para o ID do profissional -->
+
+    <div>
+        <label for="curriculo">Currículo (URL):</label>
+        <input type="text" id="curriculo" th:field="*{curriculo}" required="required"/>
+    </div>
+
+    <div>
+        <label for="dataCandidatura">Data de Inscrição:</label>
+        <input type="text" id="dataCandidatura" th:field="*{dataCandidatura}" disabled="disabled" th:value="${#dates.format(candidatura.dataCandidatura, 'yyyy-MM-dd HH:mm:ss')}" />
+    </div>
+
+    <div>
+        <button type="submit">Inscrever-se</button>
+        <a th:href="@{/profissional/vagas}">Cancelar</a>
+    </div>
+</form>
+
+</body>
+</html>

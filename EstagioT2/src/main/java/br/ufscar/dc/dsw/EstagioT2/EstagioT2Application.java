@@ -1,13 +1,11 @@
 package br.ufscar.dc.dsw.EstagioT2;
 
-import br.ufscar.dc.dsw.EstagioT2.domain.Empresa;
-import br.ufscar.dc.dsw.EstagioT2.domain.Profissional;
-import br.ufscar.dc.dsw.EstagioT2.domain.Usuario;
-import br.ufscar.dc.dsw.EstagioT2.domain.Vaga;
+import br.ufscar.dc.dsw.EstagioT2.domain.*;
 import br.ufscar.dc.dsw.EstagioT2.repository.VagaRepository;
 import br.ufscar.dc.dsw.EstagioT2.repository.EmpresaRepository;
 import br.ufscar.dc.dsw.EstagioT2.repository.ProfissionalRepository;
 import br.ufscar.dc.dsw.EstagioT2.repository.UsuarioRepository;
+import br.ufscar.dc.dsw.EstagioT2.service.StatusCandidaturaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -35,6 +33,9 @@ public class EstagioT2Application implements CommandLineRunner {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+
+	@Autowired
+	private StatusCandidaturaService statusCandidaturaService;
 
 
 
@@ -165,6 +166,13 @@ public class EstagioT2Application implements CommandLineRunner {
 			usuarioAdmin.setSenha(passwordEncoder.encode("admin123"));
 			usuarioAdmin.setTipo(Usuario.TipoUsuario.admin);
 			usuarioRepository.save(usuarioAdmin);
+
+			statusCandidaturaService.salvar(new StatusCandidatura("ABERTO"));
+			statusCandidaturaService.salvar(new StatusCandidatura("NÃO SELECIONADO"));
+			statusCandidaturaService.salvar(new StatusCandidatura("SELECIONADO"));
+
+
+
 
 			System.out.println("Usuários de teste criados com sucesso!");
 		} else {

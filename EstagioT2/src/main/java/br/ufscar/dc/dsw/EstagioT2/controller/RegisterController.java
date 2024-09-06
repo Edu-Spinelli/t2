@@ -13,8 +13,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/register")
 public class RegisterController {
 
     @Autowired
@@ -30,38 +32,39 @@ public class RegisterController {
     private PasswordEncoder passwordEncoder;
 
     // Exibe o formulário de registro para empresa
-    @GetMapping("/register/empresa")
+    @GetMapping("/empresa")
     public String showRegisterEmpresaForm(Model model) {
         model.addAttribute("empresa", new Empresa());
         return "register/registerEmpresa"; // Página HTML de registro de empresa
     }
 
     // Lida com o envio do formulário de registro de empresa
-    @PostMapping("/register/empresa")
+    @PostMapping("/empresa")
     public String registerEmpresa(@ModelAttribute("empresa") Empresa empresa) {
         Usuario usuario = empresa.getUsuario();
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha())); // Criptografa a senha
-        usuario.setTipo(Usuario.TipoUsuario.empresa);
+        usuario.setTipo(Usuario.TipoUsuario.empresa); // Define o tipo de usuário como empresa
         usuarioService.salvar(usuario);
         empresaService.salvar(empresa);
         return "redirect:/login"; // Redireciona para a página de login após o registro
     }
 
     // Exibe o formulário de registro para profissional
-    @GetMapping("/register/profissional")
+    @GetMapping("/profissional")
     public String showRegisterProfissionalForm(Model model) {
         model.addAttribute("profissional", new Profissional());
         return "register/registerProfissional"; // Página HTML de registro de profissional
     }
 
     // Lida com o envio do formulário de registro de profissional
-    @PostMapping("/register/profissional")
+    @PostMapping("/profissional")
     public String registerProfissional(@ModelAttribute("profissional") Profissional profissional) {
         Usuario usuario = profissional.getUsuario();
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha())); // Criptografa a senha
-        usuario.setTipo(Usuario.TipoUsuario.profissional);
+        usuario.setTipo(Usuario.TipoUsuario.profissional); // Define o tipo de usuário como profissional
         usuarioService.salvar(usuario);
         profissionalService.salvar(profissional);
         return "redirect:/login"; // Redireciona para a página de login após o registro
     }
 }
+

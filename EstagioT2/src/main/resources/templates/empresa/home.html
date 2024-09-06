@@ -7,8 +7,14 @@
 <h1>Bem-vindo ao Sistema de Estágio e Emprego</h1>
 <p>Escolha uma opção:</p>
 <ul>
-    <li><a href="/vagas">Ver Vagas Disponíveis</a></li>
-    <li><a href="/login">Login</a></li>
+    <li><a href="/empresa/cadastrarVaga">Cadastrar vaga de emprego</a></li>
+    <li><a href="/empresa/vagas">Ver minhas vagas cadastradas</a></li>
+
+
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Logout</button>
+    </form>
+
 </ul>
 </body>
 </html>

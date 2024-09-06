@@ -17,6 +17,14 @@ public class StatusCandidatura {
     @OneToMany(mappedBy = "status")
     private List<Candidatura> candidaturas;
 
+    public StatusCandidatura(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public StatusCandidatura() {
+
+    }
+
     // Getters e setters
     public Long getId() {
         return id;

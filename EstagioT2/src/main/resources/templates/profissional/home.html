@@ -4,11 +4,15 @@
   <title>Página Inicial</title>
 </head>
 <body>
-<h1>Bem-vindo ao Sistema de Estágio e Emprego</h1>
+<h1>Bem-vindo, <span th:text="${nomeUsuario}">Usuário</span> ao Sistema de Estágio e Emprego</h1>
 <p>Escolha uma opção:</p>
 <ul>
-  <li><a href="/vagas">Ver Vagas Disponíveis</a></li>
-  <li><a href="/login">Login</a></li>
+  <li><a href="/profissional/vagas">Ver Vagas Disponíveis</a></li>
+  <li><a href="/profissional/vagasInscritas">Ver Minhas Inscrições</a></li>
+
+  <form th:action="@{/logout}" method="post">
+    <button type="submit">Logout</button>
+  </form>
 </ul>
 </body>
 </html>

@@ -1,6 +1,8 @@
 package br.ufscar.dc.dsw.EstagioT2.service;
 
 import br.ufscar.dc.dsw.EstagioT2.domain.Candidatura;
+import br.ufscar.dc.dsw.EstagioT2.domain.Profissional;
+import br.ufscar.dc.dsw.EstagioT2.domain.Vaga;
 import br.ufscar.dc.dsw.EstagioT2.repository.CandidaturaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,4 +32,10 @@ public class CandidaturaService {
     public void excluir(Long id) {
         candidaturaRepository.deleteById(id);
     }
+
+    public List<Candidatura> buscarPorProfissionalEVaga(Profissional profissional, Vaga vaga) {
+        return candidaturaRepository.findByProfissionalAndVaga(profissional, vaga);
+    }
+
+
 }

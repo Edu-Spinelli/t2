@@ -26,7 +26,11 @@ public class WebSecurityConfig {
                         .permitAll()
                         .successHandler(new CustomAuthenticationSuccessHandler())
                 )
-                .logout((logout) -> logout.permitAll());
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")  // Redireciona para a página de login após o logout
+                        .permitAll()
+                );
 
         return http.build();
     }
