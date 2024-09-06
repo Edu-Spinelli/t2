@@ -19,8 +19,13 @@ public class Candidatura {
     @JoinColumn(name = "id_vaga", nullable = false)
     private Vaga vaga;
 
-    @Column(nullable = false)
-    private String curriculo;
+    @Lob
+    @Column(name = "curriculo", columnDefinition = "LONGBLOB")
+    private byte[] curriculo;
+
+    @Column(name = "curriculo_nome", length = 255)
+    private String curriculoNome;
+
 
     @ManyToOne
     @JoinColumn(name = "id_status", nullable = false)
@@ -59,13 +64,24 @@ public class Candidatura {
         this.vaga = vaga;
     }
 
-    public String getCurriculo() {
+    public byte[] getCurriculo() {
         return curriculo;
     }
 
-    public void setCurriculo(String curriculo) {
+    public void setCurriculo(byte[] curriculo) {
         this.curriculo = curriculo;
     }
+
+    public String getCurriculoNome() {
+        return curriculoNome;
+    }
+
+    public void setCurriculoNome(String curriculoNome) {
+        this.curriculoNome = curriculoNome;
+    }
+
+
+
 
     public StatusCandidatura getStatus() {
         return status;

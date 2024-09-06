@@ -11,4 +11,8 @@ import java.util.List;
 @Repository
 public interface CandidaturaRepository extends JpaRepository<Candidatura, Long> {
     List<Candidatura> findByProfissionalAndVaga(Profissional profissional, Vaga vaga);
+
+    Candidatura findFirstByVaga(Vaga vaga);
 }
+
+

@@ -6,15 +6,14 @@
 <body>
 <h1>Inscrever-se na Vaga</h1>
 
-<!-- Ajuste na URL para incluir o ID da vaga -->
-<form th:action="@{'/profissional/inscreverVaga/' + ${vaga.id}}" th:object="${candidatura}" method="post">
+<form th:action="@{'/profissional/inscreverVaga/' + ${vaga.id}}" th:object="${candidatura}" method="post" enctype="multipart/form-data">
 
-    <input type="hidden" th:field="*{vaga.id}" value="${vaga.id}" /> <!-- Campo oculto para o ID da vaga -->
-    <input type="hidden" th:field="*{profissional.id}" value="${profissional.id}" /> <!-- Campo oculto para o ID do profissional -->
+    <input type="hidden" th:field="*{vaga.id}" th:value="${vaga.id}" />
+    <input type="hidden" th:field="*{profissional.id}" th:value="${profissional.id}" />
 
     <div>
-        <label for="curriculo">Currículo (URL):</label>
-        <input type="text" id="curriculo" th:field="*{curriculo}" required="required"/>
+        <label for="curriculo">Currículo (PDF):</label>
+        <input type="file" id="curriculo" name="curriculoFile" accept=".pdf" required="required"/>
     </div>
 
     <div>

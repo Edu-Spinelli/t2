@@ -25,6 +25,7 @@
         <td th:text="${vaga.cidade}"></td>
         <td>
             <a th:href="@{/profissional/inscreverVaga/{id}(id=${vaga.id})}">Inscrever-se</a>
+            <a th:href="@{/profissional/downloadCurriculo/{id}(id=${vaga.id})}" target="_blank">Baixar Currículo</a>
         </td>
     </tr>
     </tbody>

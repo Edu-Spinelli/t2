@@ -12,14 +12,20 @@ import br.ufscar.dc.dsw.EstagioT2.service.VagaService;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -68,10 +74,11 @@ public class ProfissionalController {
     }
 
     @GetMapping("/inscreverVaga/{id}")
-    public String exibirFormularioInscricao(@PathVariable("id") Long id, Model model, Authentication authentication) {
+    public String exibirFormularioInscricao(@PathVariable("id") Long id, Model model, Authentication authentication, RedirectAttributes attributes) {
         // Busca a vaga pelo ID
         Vaga vaga = vagaService.buscarPorId(id);
         if (vaga == null) {
+            attributes.addFlashAttribute("erro", "Vaga não encontrada.");
             return "redirect:/profissional/vagas";
         }
 
@@ -79,25 +86,28 @@ public class ProfissionalController {
         String email = authentication.getName();
         Optional<Profissional> optionalProfissional = profissionalService.buscarPorEmail(email);
         if (!optionalProfissional.isPresent()) {
+            attributes.addFlashAttribute("erro", "Profissional não encontrado.");
             return "redirect:/profissional/vagas";
         }
 
         Profissional profissional = optionalProfissional.get();
 
-
         List<Candidatura> candidaturasExistentes = candidaturaService.buscarPorProfissionalEVaga(profissional, vaga);
         if (!candidaturasExistentes.isEmpty()) {
             // Se já houver uma candidatura, redireciona para a lista de vagas com uma mensagem
+            attributes.addFlashAttribute("erro", "Você já se candidatou a esta vaga.");
             return "redirect:/profissional/vagas";
         }
+
 
         // Cria uma nova candidatura e preenche com a vaga e o profissional
         Candidatura candidatura = new Candidatura();
         candidatura.setVaga(vaga);
         candidatura.setProfissional(profissional);
 
-        // Adiciona a vaga e a candidatura ao modelo para o Thymeleaf
+        // Adiciona a vaga, profissional e candidatura ao modelo para o Thymeleaf
         model.addAttribute("vaga", vaga);
+        model.addAttribute("profissional", profissional);
         model.addAttribute("candidatura", candidatura);
 
         return "profissional/inscreverVaga";
@@ -105,8 +115,13 @@ public class ProfissionalController {
 
 
 
+
     @PostMapping("/inscreverVaga/{id}")
-    public String inscreverVaga(@PathVariable("id") Long id, @ModelAttribute("candidatura") Candidatura candidatura, Authentication authentication, RedirectAttributes attributes) {
+    public String inscreverVaga(@PathVariable("id") Long id,
+                                @ModelAttribute("candidatura") Candidatura candidatura,
+                                @RequestParam("curriculoFile") MultipartFile curriculoFile,
+                                Authentication authentication,
+                                RedirectAttributes attributes) {
 
         // Busca da vaga
         Vaga vaga = vagaService.buscarPorId(id);
@@ -131,6 +146,25 @@ public class ProfissionalController {
             return "redirect:/profissional/vagas";
         }
 
+        // Verificar e processar o upload do arquivo PDF
+        if (curriculoFile.isEmpty()) {
+            attributes.addFlashAttribute("erro", "Por favor, selecione um arquivo PDF para o currículo.");
+            return "redirect:/profissional/vagas";
+        }
+
+        if (!curriculoFile.getContentType().equals("application/pdf")) {
+            attributes.addFlashAttribute("erro", "Por favor, envie apenas arquivos PDF.");
+            return "redirect:/profissional/vagas";
+        }
+
+        try {
+            candidatura.setCurriculo(curriculoFile.getBytes());
+            candidatura.setCurriculoNome(curriculoFile.getOriginalFilename());
+        } catch (IOException e) {
+            attributes.addFlashAttribute("erro", "Erro ao processar o arquivo do currículo.");
+            return "redirect:/profissional/vagas";
+        }
+
         // Definindo vaga, profissional e data de candidatura
         candidatura.setVaga(vaga);
         candidatura.setProfissional(profissional);
@@ -150,6 +184,34 @@ public class ProfissionalController {
         attributes.addFlashAttribute("sucesso", "Inscrição realizada com sucesso!");
 
         return "redirect:/profissional/vagas";
+    }
+
+    @GetMapping("/downloadCurriculo/{vagaId}")
+    public ResponseEntity<byte[]> downloadCurriculo(@PathVariable Long vagaId) {
+        try {
+            // Buscar a vaga pelo ID
+            Vaga vaga = vagaService.buscarPorId(vagaId);
+            if (vaga == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            // Buscar a candidatura associada à vaga (assumindo que existe apenas uma por vaga)
+            Candidatura candidatura = candidaturaService.buscarPorVaga(vaga);
+            if (candidatura == null || candidatura.getCurriculo() == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            // Configurar os headers da resposta
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", candidatura.getCurriculoNome());
+            headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+
+            // Retornar o arquivo PDF
+            return new ResponseEntity<>(candidatura.getCurriculo(), headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 

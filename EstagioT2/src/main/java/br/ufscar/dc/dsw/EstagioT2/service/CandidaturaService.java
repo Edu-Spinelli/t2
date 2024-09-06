@@ -37,5 +37,10 @@ public class CandidaturaService {
         return candidaturaRepository.findByProfissionalAndVaga(profissional, vaga);
     }
 
+    public Candidatura buscarPorVaga(Vaga vaga) {
+        return candidaturaRepository.findFirstByVaga(vaga);
+    }
+
+
 
 }
