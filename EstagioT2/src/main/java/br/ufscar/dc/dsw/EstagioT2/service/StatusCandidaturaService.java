@@ -5,6 +5,7 @@ import br.ufscar.dc.dsw.EstagioT2.repository.StatusCandidaturaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,5 +21,10 @@ public class StatusCandidaturaService {
 
     public void salvar(StatusCandidatura status) {
         statusCandidaturaRepository.save(status);
+    }
+
+
+    public List<StatusCandidatura> listarTodos() {
+        return statusCandidaturaRepository.findAll();
     }
 }

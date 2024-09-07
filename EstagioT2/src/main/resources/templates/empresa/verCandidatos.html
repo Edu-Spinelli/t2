@@ -13,6 +13,7 @@
     <th>Email</th>
     <th>Data de Inscrição</th>
     <th>Currículo</th>
+    <th>Ações</th>
   </tr>
   </thead>
   <tbody>
@@ -24,6 +25,16 @@
       <a th:href="@{/empresa/downloadCurriculo/{candidaturaId}(candidaturaId=${candidatura.id})}">
         <span th:text="${candidatura.curriculoNome}">Download Currículo</span>
       </a>
+    </td>
+    <td>
+      <!-- Exibir o link Avaliar Candidato apenas se a data limite já passou -->
+      <a th:if="${vaga.dataLimiteInscricao.time <= #dates.createNow().time}"
+         th:href="@{/empresa/avaliarCandidato/{candidaturaId}(candidaturaId=${candidatura.id})}">
+        Avaliar Candidato
+      </a>
+      <span th:if="${vaga.dataLimiteInscricao.time > #dates.createNow().time}">
+        Avaliação disponível após a data limite.
+      </span>
     </td>
   </tr>
   </tbody>

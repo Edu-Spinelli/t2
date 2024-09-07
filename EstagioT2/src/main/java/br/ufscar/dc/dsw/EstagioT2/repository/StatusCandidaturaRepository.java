@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface StatusCandidaturaRepository extends JpaRepository<StatusCandidatura, Long> {
 
     Optional<StatusCandidatura> findByDescricao(String descricao);
+
+
 }

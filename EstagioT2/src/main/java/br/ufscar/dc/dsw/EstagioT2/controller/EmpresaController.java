@@ -2,11 +2,10 @@ package br.ufscar.dc.dsw.EstagioT2.controller;
 
 import br.ufscar.dc.dsw.EstagioT2.domain.Candidatura;
 import br.ufscar.dc.dsw.EstagioT2.domain.Empresa;
+import br.ufscar.dc.dsw.EstagioT2.domain.StatusCandidatura;
 import br.ufscar.dc.dsw.EstagioT2.domain.Vaga;
 import br.ufscar.dc.dsw.EstagioT2.security.UsuarioDetails;
-import br.ufscar.dc.dsw.EstagioT2.service.CandidaturaService;
-import br.ufscar.dc.dsw.EstagioT2.service.EmpresaService;
-import br.ufscar.dc.dsw.EstagioT2.service.VagaService;
+import br.ufscar.dc.dsw.EstagioT2.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -36,6 +35,11 @@ public class EmpresaController {
     @Autowired
     CandidaturaService candidaturaService;
 
+    @Autowired
+    StatusCandidaturaService statusCandidaturaService;
+
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping("/home")
     public String home(Model model, @AuthenticationPrincipal UsuarioDetails user) {
@@ -265,6 +269,68 @@ public class EmpresaController {
         return new ResponseEntity<>(candidatura.getCurriculo(), headers, HttpStatus.OK);
     }
 
+    @GetMapping("/avaliarCandidato/{candidaturaId}")
+    public String avaliarCandidato(@PathVariable Long candidaturaId, Model model) {
+        Candidatura candidatura = candidaturaService.buscarPorId(candidaturaId);
+        if (candidatura == null) {
+            return "redirect:/empresa/listaVagas"; // Redireciona caso a candidatura não seja encontrada
+        }
+
+        // Adiciona a candidatura ao modelo
+        model.addAttribute("candidatura", candidatura);
+
+        return "empresa/avaliarCandidato"; // Retorna o template da página de avaliação do candidato
+    }
+
+    @PostMapping("/avaliarCandidato/{candidaturaId}")
+    public String avaliarCandidato(@PathVariable("candidaturaId") Long candidaturaId,
+                                   @ModelAttribute("candidatura") Candidatura candidatura,
+                                   RedirectAttributes attributes) {
+        // Busca a candidatura pelo ID
+        Candidatura candidaturaExistente = candidaturaService.buscarPorId(candidaturaId);
+        if (candidaturaExistente == null) {
+            attributes.addFlashAttribute("erro", "Candidatura não encontrada.");
+            return "redirect:/empresa/listaVagas";
+        }
+
+        // Atualiza o status da candidatura
+        StatusCandidatura novoStatus = statusCandidaturaService.buscarPorDescricao(candidatura.getStatus().getDescricao());
+        if (novoStatus == null) {
+            attributes.addFlashAttribute("erro", "Status de candidatura não encontrado.");
+            return "redirect:/empresa/listaVagas";
+        }
+        candidaturaExistente.setStatus(novoStatus);
+
+        // Se o status for "SELECIONADO", atualiza o link da entrevista
+        if ("SELECIONADO".equals(novoStatus.getDescricao())) {
+            candidaturaExistente.setEntrevistaLink(candidatura.getEntrevistaLink());
+        } else {
+            candidaturaExistente.setEntrevistaLink(null); // Se não for selecionado, remove o link da entrevista
+        }
+        candidaturaService.salvar(candidaturaExistente);
+
+        // Obtém o e-mail do profissional associado à candidatura
+        String emailProfissional = candidaturaExistente.getProfissional().getUsuario().getEmail();
+        String nomeProfissional = candidaturaExistente.getProfissional().getNome();
+
+        // Envia e-mail baseado no status
+        if ("NÃO SELECIONADO".equals(candidatura.getStatus().getDescricao())) {
+            String subject = "Atualização sobre sua candidatura";
+            String body = "Olá " + nomeProfissional + ",\n\nInfelizmente, você não foi selecionado para a vaga " +
+                    candidaturaExistente.getVaga().getDescricao() + ".\n\nAtenciosamente,\nEquipe de Recrutamento";
+            emailService.sendEmail(emailProfissional, subject, body);
+
+        } else if ("SELECIONADO".equals(candidatura.getStatus().getDescricao())) {
+            String subject = "Você foi selecionado para a vaga!";
+            String body = "Parabéns " + nomeProfissional + "!\n\nVocê foi selecionado para a vaga " +
+                    candidaturaExistente.getVaga().getDescricao() + ".\nA entrevista será realizada no seguinte link: " +
+                    candidaturaExistente.getEntrevistaLink() + ".\n\nAtenciosamente,\nEquipe de Recrutamento";
+            emailService.sendEmail(emailProfissional, subject, body);
+        }
+
+        attributes.addFlashAttribute("sucesso", "Avaliação enviada e e-mail enviado ao candidato.");
+        return "redirect:/empresa/listaVagas";
+    }
 
 
 
