@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Editar Vaga</title>
+</head>
+<body>
+<h1>Editar Vaga</h1>
+
+<form th:action="@{/empresa/editarVaga/{id}(id=${vaga.id})}" th:object="${vaga}" method="post">
+    <input type="hidden" th:field="*{id}" />
+
+    <div>
+        <label for="descricao">Descrição:</label>
+        <textarea id="descricao" th:field="*{descricao}" required="required"></textarea>
+    </div>
+
+    <div>
+        <label for="remuneracao">Remuneração:</label>
+        <input type="text" id="remuneracao" th:field="*{remuneracao}" />
+    </div>
+
+    <div>
+        <label for="dataLimiteInscricao">Data Limite de Inscrição:</label>
+        <input type="date" id="dataLimiteInscricao" th:field="*{dataLimiteInscricao}" />
+    </div>
+
+    <div>
+        <label for="cidade">Cidade:</label>
+        <input type="text" id="cidade" th:field="*{cidade}" required="required" />
+    </div>
+
+    <div>
+        <button type="submit">Salvar</button>
+        <a th:href="@{/empresa/listaVagas}">Cancelar</a>
+    </div>
+</form>
+
+</body>
+</html>

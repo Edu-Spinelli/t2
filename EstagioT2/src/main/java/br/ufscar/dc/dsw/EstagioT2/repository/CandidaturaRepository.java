@@ -18,6 +18,8 @@ public interface CandidaturaRepository extends JpaRepository<Candidatura, Long> 
 
     List<Candidatura> findByProfissional(Profissional profissional);
 
+    List<Candidatura> findByVaga(Vaga vaga);
+
 }
 
 

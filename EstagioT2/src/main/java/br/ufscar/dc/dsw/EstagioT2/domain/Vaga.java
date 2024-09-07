@@ -31,7 +31,7 @@ public class Vaga {
     @Column(nullable = false)
     private String cidade;
 
-    @OneToMany(mappedBy = "vaga")
+    @OneToMany(mappedBy = "vaga", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Candidatura> candidaturas;
 
     // Getters e setters
