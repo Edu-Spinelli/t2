@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista de Vagas</title>
+</head>
+<body>
+<h1>Vagas Disponíveis</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Empresa</th>
+        <th>Descrição</th>
+        <th>Remuneração</th>
+        <th>Data Limite</th>
+        <th>Cidade</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="vaga : ${vagas}">
+        <td th:text="${vaga.empresa.nome}"></td>
+        <td th:text="${vaga.descricao}"></td>
+        <td th:text="${vaga.remuneracao}"></td>
+        <td th:text="${#dates.format(vaga.dataLimiteInscricao, 'dd/MM/yyyy')}"></td>
+        <td th:text="${vaga.cidade}"></td>
+    </tr>
+    </tbody>
+</table>
+<a th:href="@{/login}">Voltar para o Login</a>
+</body>
+</html>

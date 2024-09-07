@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.validation.BindingResult;
 import jakarta.validation.Valid;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Controller
 @RequestMapping("/register")
-public class RegisterController {
+public class RegisterController implements WebMvcConfigurer {
 
     @Autowired
     private EmpresaService empresaService;
@@ -35,8 +37,8 @@ public class RegisterController {
 
     // Exibe o formulário de registro para empresa
     @GetMapping("/empresa")
-    public String showRegisterEmpresaForm(Model model) {
-        model.addAttribute("empresa", new Empresa());
+    public String showRegisterEmpresaForm(Empresa empresa) {
+
         return "register/registerEmpresa"; // Página HTML de registro de empresa
     }
 
@@ -57,8 +59,7 @@ public class RegisterController {
 
     // Exibe o formulário de registro para profissional
     @GetMapping("/profissional")
-    public String showRegisterProfissionalForm(Model model) {
-        model.addAttribute("profissional", new Profissional());
+    public String showRegisterProfissionalForm(Profissional profissional) {
         return "register/registerProfissional"; // Página HTML de registro de profissional
     }
 

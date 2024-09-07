@@ -2,49 +2,112 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Registrar Profissional</title>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+    <script>
+        // Função para formatar e validar CPF (somente números)
+        function formatarCPF(cpfInput) {
+            let cpf = cpfInput.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+
+            // Aplica a máscara: XXX.XXX.XXX-XX
+            if (cpf.length > 9) {
+                cpf = cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2}).*/, "$1.$2.$3-$4");
+            } else if (cpf.length > 6) {
+                cpf = cpf.replace(/^(\d{3})(\d{3})(\d{3}).*/, "$1.$2.$3");
+            } else if (cpf.length > 3) {
+                cpf = cpf.replace(/^(\d{3})(\d{3}).*/, "$1.$2");
+            }
+
+            cpfInput.value = cpf; // Atualiza o campo com a formatação
+        }
+
+        // Função para validar telefone (somente números, 10 ou 11 dígitos)
+        function formatarTelefone(telefoneInput) {
+            let telefone = telefoneInput.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+
+            // Aplica a máscara: (XX) XXXXX-XXXX ou (XX) XXXX-XXXX
+            if (telefone.length > 10) {
+                telefone = telefone.replace(/^(\d{2})(\d{5})(\d{4}).*/, "($1) $2-$3");
+            } else if (telefone.length > 6) {
+                telefone = telefone.replace(/^(\d{2})(\d{4})(\d{4}).*/, "($1) $2-$3");
+            } else if (telefone.length > 2) {
+                telefone = telefone.replace(/^(\d{2})(\d{4}).*/, "($1) $2");
+            }
+
+            telefoneInput.value = telefone; // Atualiza o campo com a formatação
+        }
+
+        // Função de validação final antes de enviar o formulário
+        function validarFormulario() {
+            var cpf = document.getElementById('cpf').value.replace(/\D/g, ''); // Remove a formatação do CPF
+            var telefone = document.getElementById('telefone').value.replace(/\D/g, ''); // Remove a formatação do telefone
+
+            if (cpf.length !== 11) {
+                alert('O CPF deve conter exatamente 11 dígitos numéricos.');
+                return false; // Impede o envio do formulário
+            }
+
+            if (telefone.length !== 10 && telefone.length !== 11) {
+                alert('O telefone deve conter 10 ou 11 dígitos numéricos.');
+                return false; // Impede o envio do formulário
+            }
+
+            return true; // Permite o envio do formulário
+        }
+    </script>
 </head>
 <body>
 <h1>Registrar Profissional</h1>
 <a th:href="@{/register/empresa}">Registrar Empresa</a>
-<form th:action="@{/register/profissional}" th:object="${profissional}" method="post">
-
+<form th:action="@{/register/profissional}" th:object="${profissional}" method="post" onsubmit="return validarFormulario()">
     <div>
         <label for="nome">Nome:</label>
-        <input type="text" id="nome" th:field="*{nome}" required="required"/>
+        <input type="text" id="nome" th:field="*{nome}" />
+        <span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="error"></span>
     </div>
 
     <div>
         <label for="cpf">CPF:</label>
-        <input type="text" id="cpf" th:field="*{cpf}" required="required"/>
+        <input type="text" id="cpf" th:field="*{cpf}" oninput="formatarCPF(this)" maxlength="14" />
+        <span th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}" class="error"></span>
     </div>
 
     <div>
         <label for="telefone">Telefone:</label>
-        <input type="text" id="telefone" th:field="*{telefone}"/>
+        <input type="text" id="telefone" th:field="*{telefone}" oninput="formatarTelefone(this)" maxlength="15" />
+        <span th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}" class="error"></span>
     </div>
 
     <div>
         <label for="sexo">Sexo:</label>
         <select id="sexo" th:field="*{sexo}">
+            <option value="">Selecione</option>
             <option value="M">Masculino</option>
             <option value="F">Feminino</option>
             <option value="Outro">Outro</option>
         </select>
+        <span th:if="${#fields.hasErrors('sexo')}" th:errors="*{sexo}" class="error"></span>
     </div>
 
     <div>
         <label for="dataNascimento">Data de Nascimento:</label>
-        <input type="date" id="dataNascimento" th:field="*{dataNascimento}" required="required"/>
+        <input type="date" id="dataNascimento" th:field="*{dataNascimento}" />
+        <span th:if="${#fields.hasErrors('dataNascimento')}" th:errors="*{dataNascimento}" class="error"></span>
     </div>
 
     <div>
         <label for="email">Email:</label>
-        <input type="email" id="email" th:field="*{usuario.email}" required="required"/>
+        <input type="email" id="email" th:field="*{usuario.email}" />
+        <span th:if="${#fields.hasErrors('usuario.email')}" th:errors="*{usuario.email}" class="error"></span>
     </div>
 
     <div>
         <label for="senha">Senha:</label>
-        <input type="password" id="senha" th:field="*{usuario.senha}" required="required"/>
+        <input type="password" id="senha" th:field="*{usuario.senha}" />
+        <span th:if="${#fields.hasErrors('usuario.senha')}" th:errors="*{usuario.senha}" class="error"></span>
     </div>
 
     <div>

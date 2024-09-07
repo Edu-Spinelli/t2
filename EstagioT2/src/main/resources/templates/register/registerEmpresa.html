@@ -2,12 +2,42 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Registrar Empresa</title>
+    <script>
+        // Função para formatar o CNPJ enquanto o usuário digita
+        function formatarCNPJ(cnpjInput) {
+            let cnpj = cnpjInput.value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+
+            // Aplica a formatação: XX.XXX.XXX/XXXX-XX
+            if (cnpj.length > 12) {
+                cnpj = cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2}).*/, "$1.$2.$3/$4-$5");
+            } else if (cnpj.length > 8) {
+                cnpj = cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4}).*/, "$1.$2.$3/$4");
+            } else if (cnpj.length > 5) {
+                cnpj = cnpj.replace(/^(\d{2})(\d{3})(\d{3}).*/, "$1.$2.$3");
+            } else if (cnpj.length > 2) {
+                cnpj = cnpj.replace(/^(\d{2})(\d{3}).*/, "$1.$2");
+            }
+
+            cnpjInput.value = cnpj; // Atualiza o campo com a formatação
+        }
+
+        // Função de validação do formulário
+        function validarFormulario() {
+            var cnpj = document.getElementById('cnpj').value.replace(/\D/g, ''); // Remove os não numéricos para validação
+
+            if (cnpj.length !== 14) {
+                alert('O CNPJ deve conter exatamente 14 dígitos numéricos.');
+                return false; // Impede o envio do formulário
+            }
+            return true; // Permite o envio do formulário se estiver correto
+        }
+    </script>
 </head>
 <body>
 <h1>Registrar Empresa</h1>
 <a th:href="@{/register/profissional}">Registrar Profissional</a>
 
-<form th:action="@{/register/empresa}" th:object="${empresa}" method="post">
+<form th:action="@{/register/empresa}" th:object="${empresa}" method="post" onsubmit="return validarFormulario()">
 
     <div>
         <label for="nome">Nome:</label>
@@ -17,7 +47,8 @@
 
     <div>
         <label for="cnpj">CNPJ:</label>
-        <input type="text" id="cnpj" th:field="*{cnpj}" required="required"/>
+        <input type="text" id="cnpj" th:field="*{cnpj}" required="required"
+               placeholder="00.000.000/0000-00" maxlength="18" oninput="formatarCNPJ(this)" />
         <p th:if="${#fields.hasErrors('cnpj')}" th:errors="*{cnpj}">O CNPJ deve conter exatamente 14 dígitos numéricos</p>
     </div>
 

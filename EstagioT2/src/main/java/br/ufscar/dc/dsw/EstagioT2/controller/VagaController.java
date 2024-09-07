@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/vagas")
 public class VagaController {
@@ -16,8 +18,9 @@ public class VagaController {
 
     @GetMapping
     public String listarVagas(Model model) {
+        List<Vaga> vagas = vagaService.listarTodas();
         model.addAttribute("vagas", vagaService.listarTodas());
-        return "vaga/lista";
+        return "vaga/listarVagas";
     }
 
     @GetMapping("/nova")

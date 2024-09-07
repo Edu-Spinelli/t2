@@ -104,5 +104,9 @@ public class Profissional {
         this.usuario = usuario;
     }
 
+    public String toString() {
+        return "Profissional(" + nome + "," + cpf + "," + telefone + "," + sexo + "," + dataNascimento + ")";
+    }
+
 
 }
