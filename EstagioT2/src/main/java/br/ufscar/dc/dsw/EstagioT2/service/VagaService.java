@@ -34,4 +34,9 @@ public class VagaService {
         return vagaRepository.findByEmpresa(empresa);
     }
 
+    public List<Vaga> buscarPorCidade(String cidade) {
+        return vagaRepository.findByCidade(cidade); // Esse método deve ser implementado no seu repository
+    }
+
+
 }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.text.SimpleDateFormat;
 
 import java.util.Date;
 import java.util.List;
@@ -302,8 +303,9 @@ public class EmpresaController {
         candidaturaExistente.setStatus(novoStatus);
 
         // Se o status for "SELECIONADO", atualiza o link da entrevista
-        if ("SELECIONADO".equals(novoStatus.getDescricao())) {
+        if ("ENTREVISTA".equals(novoStatus.getDescricao())) {
             candidaturaExistente.setEntrevistaLink(candidatura.getEntrevistaLink());
+            candidaturaExistente.setEntrevistaDataHora(candidatura.getEntrevistaDataHora());
         } else {
             candidaturaExistente.setEntrevistaLink(null); // Se não for selecionado, remove o link da entrevista
         }
@@ -320,11 +322,21 @@ public class EmpresaController {
                     candidaturaExistente.getVaga().getDescricao() + ".\n\nAtenciosamente,\nEquipe de Recrutamento";
             emailService.sendEmail(emailProfissional, subject, body);
 
-        } else if ("SELECIONADO".equals(candidatura.getStatus().getDescricao())) {
+        }else if ("ENTREVISTA".equals(candidatura.getStatus().getDescricao())) {
+            // Formatação da data
+            Date dataEntrevista = candidaturaExistente.getEntrevistaDataHora();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd 'de' MMMM 'às' HH:mm 'BRT' yyyy");
+            String dataFormatada = dateFormat.format(dataEntrevista);
+
+            // Corpo do email
             String subject = "Você foi selecionado para a vaga!";
-            String body = "Parabéns " + nomeProfissional + "!\n\nVocê foi selecionado para a vaga " +
-                    candidaturaExistente.getVaga().getDescricao() + ".\nA entrevista será realizada no seguinte link: " +
-                    candidaturaExistente.getEntrevistaLink() + ".\n\nAtenciosamente,\nEquipe de Recrutamento";
+            String body = "Parabéns " + nomeProfissional + "!\n\n" +
+                    "Você foi selecionado para a vaga " + candidaturaExistente.getVaga().getDescricao() + ".\n" +
+                    "A entrevista será realizada no seguinte link: " + candidaturaExistente.getEntrevistaLink() + ".\n" +
+                    "No seguinte horário: " + dataFormatada + ".\n\n" +
+                    "Atenciosamente,\nEquipe de Recrutamento";
+
+            // Envio do e-mail
             emailService.sendEmail(emailProfissional, subject, body);
         }
 

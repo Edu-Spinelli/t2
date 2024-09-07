@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/profissional")
@@ -68,8 +69,17 @@ public class ProfissionalController {
 
     @GetMapping("/vagas")
     public String listarVagas(Model model) {
-        List<Vaga> vagas = vagaService.listarTodas(); // Busca todas as vagas disponíveis
-        model.addAttribute("vagas", vagaService.listarTodas());
+        // Busca todas as vagas disponíveis
+        List<Vaga> vagas = vagaService.listarTodas();
+
+        // Filtra as vagas cuja data limite de inscrição ainda não passou
+        List<Vaga> vagasDisponiveis = vagas.stream()
+                .filter(vaga -> vaga.getDataLimiteInscricao().after(new Date())) // Verifica se a data limite é posterior à data atual
+                .collect(Collectors.toList());
+
+        // Adiciona as vagas disponíveis ao modelo
+        model.addAttribute("vagas", vagasDisponiveis);
+
         return "profissional/listaVagas"; // Aponta para o HTML da lista de vagas
     }
 

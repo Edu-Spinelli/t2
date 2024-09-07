@@ -15,8 +15,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.math.BigDecimal;
 
-@SpringBootApplication
-@EnableWebMvc
+@SpringBootApplication(exclude = {
+		org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration.class,
+		org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration.class
+})@EnableWebMvc
 
 public class EstagioT2Application implements CommandLineRunner {
 
@@ -40,14 +42,16 @@ public class EstagioT2Application implements CommandLineRunner {
 	@Autowired
 	private StatusCandidaturaService statusCandidaturaService;
 
-
-
 	public static void main(String[] args) {
 		SpringApplication.run(EstagioT2Application.class, args);
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
+
+
+
+
 		// Verifica se o banco de dados já contém usuários
 		if (usuarioRepository.count() == 0) {
 			// Criando usuário do tipo Empresa
@@ -93,7 +97,7 @@ public class EstagioT2Application implements CommandLineRunner {
 			Vaga vaga = new Vaga();
 			vaga.setDescricao("Vaga Exemplo 1");
 			vaga.setRemuneracao(BigDecimal.valueOf(1000.00));
-			vaga.setDataLimiteInscricao(java.sql.Date.valueOf("2021-12-31"));
+			vaga.setDataLimiteInscricao(java.sql.Date.valueOf("2024-12-31"));
 			vaga.setCidade("Cidade Exemplo 1");
 			vaga.setEmpresa(empresa);
 			vagaRepository.save(vaga);
@@ -101,7 +105,7 @@ public class EstagioT2Application implements CommandLineRunner {
 			Vaga vaga2 = new Vaga();
 			vaga2.setDescricao("Vaga Exemplo 2");
 			vaga2.setRemuneracao(BigDecimal.valueOf(1000.00));
-			vaga2.setDataLimiteInscricao(java.sql.Date.valueOf("2021-12-31"));
+			vaga2.setDataLimiteInscricao(java.sql.Date.valueOf("2024-12-31"));
 			vaga2.setCidade("Cidade Exemplo 2");
 			vaga2.setEmpresa(empresa2);
 			vagaRepository.save(vaga2);
@@ -109,7 +113,7 @@ public class EstagioT2Application implements CommandLineRunner {
 			Vaga vaga3 = new Vaga();
 			vaga3.setDescricao("Vaga Exemplo 3");
 			vaga3.setRemuneracao(BigDecimal.valueOf(1000.00));
-			vaga3.setDataLimiteInscricao(java.sql.Date.valueOf("2021-12-31"));
+			vaga3.setDataLimiteInscricao(java.sql.Date.valueOf("2024-12-31"));
 			vaga3.setCidade("Cidade Exemplo 3");
 			vaga3.setEmpresa(empresa3);
 			vagaRepository.save(vaga3);
@@ -172,7 +176,7 @@ public class EstagioT2Application implements CommandLineRunner {
 
 			statusCandidaturaService.salvar(new StatusCandidatura("ABERTO"));
 			statusCandidaturaService.salvar(new StatusCandidatura("NÃO SELECIONADO"));
-			statusCandidaturaService.salvar(new StatusCandidatura("SELECIONADO"));
+			statusCandidaturaService.salvar(new StatusCandidatura("ENTREVISTA"));
 
 
 

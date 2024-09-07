@@ -13,6 +13,7 @@
         <th>Cidade</th>
         <th>Status</th>
         <th>Link da Entrevista</th>
+        <th>Data e Hora da Entrevista</th>
         <th>Currículo</th>
     </tr>
     </thead>
@@ -24,6 +25,10 @@
         <td>
             <a th:href="${candidatura.entrevistaLink}" th:if="${candidatura.entrevistaLink != null}">Link</a>
             <span th:if="${candidatura.entrevistaLink == null}">Sem link</span>
+        </td>
+        <td>
+            <span th:if="${candidatura.entrevistaDataHora != null}" th:text="${#dates.format(candidatura.entrevistaDataHora, 'dd/MM/yyyy HH:mm')}"></span>
+            <span th:if="${candidatura.entrevistaDataHora == null}">Sem data de entrevista</span>
         </td>
         <td>
             <a th:href="@{/profissional/downloadCurriculo/{vagaId}(vagaId=${candidatura.vaga.id})}" th:if="${candidatura.curriculo != null}">

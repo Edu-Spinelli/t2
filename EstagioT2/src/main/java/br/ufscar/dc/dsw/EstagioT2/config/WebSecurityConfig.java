@@ -15,7 +15,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/home", "/vagas", "/register", "/register/empresa", "/register/profissional").permitAll() // Permite o acesso às rotas de registro
+                        .requestMatchers("/", "/home", "/vagas", "/register/**", "/register/empresa**", "/register/profissional**", "/login/**").permitAll() // Permite o acesso às rotas de registro
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/empresa/**").hasRole("EMPRESA")
                         .requestMatchers("/profissional/**").hasRole("PROFISSIONAL")
@@ -30,7 +30,9 @@ public class WebSecurityConfig {
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")  // Redireciona para a página de login após o logout
                         .permitAll()
-                );
+                )
+                .csrf(csrf -> csrf.disable());
+
 
         return http.build();
     }

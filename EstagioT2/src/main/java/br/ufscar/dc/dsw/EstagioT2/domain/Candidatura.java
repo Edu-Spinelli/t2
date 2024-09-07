@@ -1,6 +1,8 @@
 package br.ufscar.dc.dsw.EstagioT2.domain;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 @Entity
@@ -37,6 +39,8 @@ public class Candidatura {
     private String entrevistaLink;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+
     private Date entrevistaDataHora;
 
     // Getters e setters

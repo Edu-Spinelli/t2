@@ -6,7 +6,7 @@
         function mostrarCampoEntrevista() {
             var status = document.getElementById('status').value;
             var entrevistaDiv = document.getElementById('entrevistaDiv');
-            if (status === 'SELECIONADO') {
+            if (status === 'ENTREVISTA') {
                 entrevistaDiv.style.display = 'block';
             } else {
                 entrevistaDiv.style.display = 'none';
@@ -29,14 +29,17 @@
         <select id="status" th:field="*{candidatura.status.descricao}" required onchange="mostrarCampoEntrevista()">
             <option value="ABERTO" th:selected="${candidatura.status.descricao == 'ABERTO'}">ABERTO</option>
             <option value="NÃO SELECIONADO" th:selected="${candidatura.status.descricao == 'NÃO SELECIONADO'}">NÃO SELECIONADO</option>
-            <option value="SELECIONADO" th:selected="${candidatura.status.descricao == 'SELECIONADO'}">SELECIONADO</option>
+            <option value="ENTREVISTA" th:selected="${candidatura.status.descricao == 'ENTREVISTA'}">ENTREVISTA</option>
         </select>
     </div>
 
-    <!-- Link de entrevista, se o status for 'SELECIONADO' -->
+    <!-- Link e data de entrevista, se o status for 'SELECIONADO' -->
     <div id="entrevistaDiv" style="display:none;">
         <label for="entrevistaLink">Link da Entrevista:</label>
         <input type="text" id="entrevistaLink" th:field="*{candidatura.entrevistaLink}" />
+
+        <label for="entrevistaDataHora">Data e Hora da Entrevista:</label>
+        <input type="datetime-local" id="entrevistaDataHora" th:field="*{candidatura.entrevistaDataHora}" />
     </div>
 
     <div>

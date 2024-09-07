@@ -5,6 +5,15 @@
 </head>
 <body>
 <h1>Vagas Disponíveis</h1>
+
+<!-- Filtro de cidade -->
+<form th:action="@{/vagas}" method="post">
+    <label for="cidade">Pesquisar por Cidade:</label>
+    <input type="text" id="cidade" name="cidade" th:value="${cidadePesquisada}" placeholder="Digite a cidade" />
+    <button type="submit">Pesquisar</button>
+</form>
+
+<!-- Tabela de vagas -->
 <table border="1">
     <thead>
     <tr>
@@ -25,6 +34,7 @@
     </tr>
     </tbody>
 </table>
+
 <a th:href="@{/login}">Voltar para o Login</a>
 </body>
 </html>
