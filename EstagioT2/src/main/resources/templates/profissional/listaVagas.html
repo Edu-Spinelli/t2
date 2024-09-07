@@ -5,6 +5,17 @@
 </head>
 <body>
 <h1>Vagas Disponíveis</h1>
+
+<!-- Exibe a mensagem de erro, se houver -->
+<div th:if="${erro}" style="color: red;">
+    <p th:text="${erro}"></p>
+</div>
+
+<!-- Exibe a mensagem de sucesso, se houver -->
+<div th:if="${sucesso}" style="color: green;">
+    <p th:text="${sucesso}"></p>
+</div>
+
 <table border="1">
     <thead>
     <tr>
@@ -25,11 +36,11 @@
         <td th:text="${vaga.cidade}"></td>
         <td>
             <a th:href="@{/profissional/inscreverVaga/{id}(id=${vaga.id})}">Inscrever-se</a>
-            <a th:href="@{/profissional/downloadCurriculo/{id}(id=${vaga.id})}" target="_blank">Baixar Currículo</a>
         </td>
     </tr>
     </tbody>
 </table>
+
 <a href="/profissional/home">Voltar para a Home</a>
 </body>
 </html>

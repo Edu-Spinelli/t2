@@ -1,7 +1,11 @@
 package br.ufscar.dc.dsw.EstagioT2.domain;
+import jakarta.validation.constraints.NotBlank;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
+
 import java.util.List;
+
 
 @Entity
 @Table(name = "Empresas")
@@ -12,13 +16,18 @@ public class Empresa {
     private Long id;
 
     @Column(nullable = false)
+    @NotBlank(message = "O nome é obrigatório.")
     private String nome;
 
     @Column(unique = true, nullable = false)
+    @NotBlank(message = "O CNPJ é obrigatório.")
+    @Pattern(regexp = "^\\d{14}$", message = "O CNPJ deve conter exatamente 14 dígitos numéricos.")
+
     private String cnpj;
 
     private String descricao;
 
+    @NotBlank(message = "A cidade é obrigatória.")
     private String cidade;
 
     @OneToOne

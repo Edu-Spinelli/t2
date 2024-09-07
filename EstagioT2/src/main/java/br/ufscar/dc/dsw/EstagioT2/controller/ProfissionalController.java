@@ -118,7 +118,6 @@ public class ProfissionalController {
 
     @PostMapping("/inscreverVaga/{id}")
     public String inscreverVaga(@PathVariable("id") Long id,
-                                @ModelAttribute("candidatura") Candidatura candidatura,
                                 @RequestParam("curriculoFile") MultipartFile curriculoFile,
                                 Authentication authentication,
                                 RedirectAttributes attributes) {
@@ -157,18 +156,20 @@ public class ProfissionalController {
             return "redirect:/profissional/vagas";
         }
 
+        Candidatura novaCandidatura = new Candidatura();
+
         try {
-            candidatura.setCurriculo(curriculoFile.getBytes());
-            candidatura.setCurriculoNome(curriculoFile.getOriginalFilename());
+            novaCandidatura.setCurriculo(curriculoFile.getBytes());
+            novaCandidatura.setCurriculoNome(curriculoFile.getOriginalFilename());
         } catch (IOException e) {
             attributes.addFlashAttribute("erro", "Erro ao processar o arquivo do currículo.");
             return "redirect:/profissional/vagas";
         }
 
         // Definindo vaga, profissional e data de candidatura
-        candidatura.setVaga(vaga);
-        candidatura.setProfissional(profissional);
-        candidatura.setDataCandidatura(new Date());
+        novaCandidatura.setVaga(vaga);
+        novaCandidatura.setProfissional(profissional);
+        novaCandidatura.setDataCandidatura(new Date());
 
         // Definindo o status padrão da candidatura (exemplo: PENDENTE)
         StatusCandidatura statusPendente = statusCandidaturaService.buscarPorDescricao("ABERTO");
@@ -176,15 +177,16 @@ public class ProfissionalController {
             attributes.addFlashAttribute("erro", "Status de candidatura não encontrado.");
             return "redirect:/profissional/vagas";
         }
-        candidatura.setStatus(statusPendente);
+        novaCandidatura.setStatus(statusPendente);
 
         // Salvando a candidatura
-        candidaturaService.salvar(candidatura);
+        candidaturaService.salvar(novaCandidatura);
 
         attributes.addFlashAttribute("sucesso", "Inscrição realizada com sucesso!");
 
         return "redirect:/profissional/vagas";
     }
+
 
     @GetMapping("/downloadCurriculo/{vagaId}")
     public ResponseEntity<byte[]> downloadCurriculo(@PathVariable Long vagaId) {

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/register")
@@ -40,7 +42,11 @@ public class RegisterController {
 
     // Lida com o envio do formulário de registro de empresa
     @PostMapping("/empresa")
-    public String registerEmpresa(@ModelAttribute("empresa") Empresa empresa) {
+    public String registerEmpresa(@Valid @ModelAttribute("empresa") Empresa empresa, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "register/registerEmpresa"; // Retorna ao formulário se houver erros
+        }
+
         Usuario usuario = empresa.getUsuario();
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha())); // Criptografa a senha
         usuario.setTipo(Usuario.TipoUsuario.empresa); // Define o tipo de usuário como empresa
@@ -58,7 +64,11 @@ public class RegisterController {
 
     // Lida com o envio do formulário de registro de profissional
     @PostMapping("/profissional")
-    public String registerProfissional(@ModelAttribute("profissional") Profissional profissional) {
+    public String registerProfissional(@Valid @ModelAttribute("profissional") Profissional profissional, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "register/registerProfissional"; // Retorna ao formulário se houver erros
+        }
+
         Usuario usuario = profissional.getUsuario();
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha())); // Criptografa a senha
         usuario.setTipo(Usuario.TipoUsuario.profissional); // Define o tipo de usuário como profissional

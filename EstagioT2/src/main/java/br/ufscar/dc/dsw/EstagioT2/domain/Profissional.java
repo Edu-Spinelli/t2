@@ -2,7 +2,9 @@ package br.ufscar.dc.dsw.EstagioT2.domain;
 
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
-
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
@@ -15,11 +17,15 @@ public class Profissional {
     private Long id;
 
     @Column(nullable = false)
+    @NotBlank(message = "O nome é obrigatório.")
     private String nome;
 
     @Column(unique = true, nullable = false)
+    @NotBlank(message = "O CPF é obrigatório.")
+    @Pattern(regexp = "\\d{11}", message = "O CPF deve conter 11 dígitos numéricos.")
     private String cpf;
 
+    @Pattern(regexp = "\\d{10,11}", message = "O telefone deve conter entre 10 e 11 dígitos numéricos.")
     private String telefone;
 
     @Enumerated(EnumType.STRING)
