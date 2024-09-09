@@ -1,0 +1,129 @@
+/* Estilos gerais */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #ffffff; /* Fundo branco */
+    color: #000000; /* Texto preto */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: #f0f0f0; /* Fundo claro */
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra leve */
+}
+
+h1 {
+    text-align: center;
+    color: #000000; /* Título preto */
+    margin-bottom: 30px;
+}
+
+p {
+    color: #000000; /* Texto preto */
+    text-align: center;
+}
+
+/* Estilos para mensagens de sucesso e erro */
+.message {
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.error {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #ef9a9a;
+}
+
+.success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+}
+
+/* Estilos para a tabela de vagas */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #000000;
+    color: white;
+}
+
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+td a {
+    color: #3498db; /* Links de ação em azul */
+    text-decoration: none;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+td a:hover {
+    background-color: #000000; /* Fundo preto ao passar o mouse */
+    color: #ffffff;
+}
+
+/* Estilos para o link de voltar */
+a {
+    display: inline-block;
+    margin-top: 20px;
+    color: #ffffff;
+    background-color: #000000;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+a:hover {
+    background-color: #444444;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .container {
+        width: 90%;
+        margin: 20px auto;
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+
+    a {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}

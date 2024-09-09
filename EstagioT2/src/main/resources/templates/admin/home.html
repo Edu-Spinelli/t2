@@ -2,21 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Página Inicial</title>
+  <link rel="stylesheet" th:href="@{/css/admin/home.css}">
 </head>
 <body>
-<h1>Bem-vindo ao Sistema de Estágio e Emprego</h1>
-<p>O que deseja fazer, administrador?</p>
-<ul>
-  <li><a href="/admin/vaga">Ver todas as vagas cadastradas</a></li>
-  <li><a href="/admin/profissional">Ver todos os profissionais cadastrados</a></li>
-  <li><a href="/admin/empresa">Ver todas as empresas cadastradas</a></li>
-
-
+<div class="container">
+  <h1>Bem-vindo ao Sistema de Estágio e Emprego</h1>
+  <p>O que deseja fazer, administrador?</p>
+  <ul>
+    <li><a th:href="@{/admin/vaga}">Ver todas as vagas cadastradas</a></li>
+    <li><a th:href="@{/admin/profissional}">Ver todos os profissionais cadastrados</a></li>
+    <li><a th:href="@{/admin/empresa}">Ver todas as empresas cadastradas</a></li>
+  </ul>
   <form th:action="@{/logout}" method="post">
     <button type="submit">Logout</button>
   </form>
-
-
-</ul>
+</div>
 </body>
 </html>

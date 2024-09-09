@@ -19,6 +19,8 @@ public class WebSecurityConfig {
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/empresa/**").hasRole("EMPRESA")
                         .requestMatchers("/profissional/**").hasRole("PROFISSIONAL")
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/public/**").permitAll() // Permitir acesso a recursos estáticos
+
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form

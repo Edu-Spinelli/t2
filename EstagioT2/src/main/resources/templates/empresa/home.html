@@ -2,29 +2,31 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Página Inicial</title>
+    <link rel="stylesheet" th:href="@{/css/empresa/home.css}">
 </head>
 <body>
-<h1>Bem-vindo ao Sistema de Estágio e Emprego</h1>
-<!-- Exibe a mensagem de sucesso -->
-<div th:if="${sucesso}" style="color: green;">
-    <p th:text="${sucesso}"></p>
-</div>
+<div class="container">
+    <h1>Bem-vindo ao Sistema de Estágio e Emprego</h1>
 
-<!-- Exibe a mensagem de erro -->
-<div th:if="${erro}" style="color: red;">
-    <p th:text="${erro}"></p>
-</div>
+    <!-- Exibe a mensagem de sucesso -->
+    <div th:if="${sucesso}">
+        <p th:text="${sucesso}"></p>
+    </div>
 
-<p>Escolha uma opção:</p>
-<ul>
-    <li><a href="/empresa/cadastrarVaga">Cadastrar vaga de emprego</a></li>
-    <li><a href="/empresa/listaVagas">Ver minhas vagas cadastradas</a></li>
+    <!-- Exibe a mensagem de erro -->
+    <div th:if="${erro}">
+        <p th:text="${erro}"></p>
+    </div>
 
+    <p>Escolha uma opção:</p>
+    <ul>
+        <li><a th:href="@{/empresa/cadastrarVaga}">Cadastrar vaga de emprego</a></li>
+        <li><a th:href="@{/empresa/listaVagas}">Ver minhas vagas cadastradas</a></li>
+    </ul>
 
     <form th:action="@{/logout}" method="post">
         <button type="submit">Logout</button>
     </form>
-
-</ul>
+</div>
 </body>
 </html>

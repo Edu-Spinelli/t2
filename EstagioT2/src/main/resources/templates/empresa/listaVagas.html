@@ -2,45 +2,47 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Minhas Vagas Cadastradas</title>
+    <link rel="stylesheet" th:href="@{/css/empresa/listaVagas.css}">
 </head>
 <body>
-<h1>Minhas Vagas Cadastradas</h1>
-<!-- Exibe a mensagem de sucesso -->
-<div th:if="${sucesso}" style="color: green;">
-    <p th:text="${sucesso}"></p>
+<div class="container">
+    <h1>Minhas Vagas Cadastradas</h1>
+
+    <div th:if="${erro}" class="message error">
+        <p th:text="${error}"></p>
+    </div>
+
+    <!-- Exibe a mensagem de logout se houver -->
+    <div th:if="${sucesso}" class="message success">
+        <p th:text="${sucesso}"></p>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Descrição</th>
+            <th>Remuneração</th>
+            <th>Data Limite</th>
+            <th>Cidade</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="vaga : ${vagas}">
+            <td th:text="${vaga.descricao}"></td>
+            <td th:text="${vaga.remuneracao}"></td>
+            <td th:text="${#dates.format(vaga.dataLimiteInscricao, 'dd/MM/yyyy')}"></td>
+            <td th:text="${vaga.cidade}"></td>
+            <td>
+                <a th:href="@{/empresa/editarVaga/{id}(id=${vaga.id})}">Editar</a>
+                <a th:href="@{/empresa/excluirVaga/{id}(id=${vaga.id})}">Excluir</a>
+                <a th:href="@{/empresa/verCandidatos/{id}(id=${vaga.id})}">Ver Candidatos</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a href="/empresa/home">Voltar para a Home</a>
 </div>
-
-<!-- Exibe a mensagem de erro -->
-<div th:if="${erro}" style="color: red;">
-    <p th:text="${erro}"></p>
-</div>
-
-
-<table border="1">
-    <thead>
-    <tr>
-        <th>Descrição</th>
-        <th>Remuneração</th>
-        <th>Data Limite</th>
-        <th>Cidade</th>
-        <th>Açoes</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="vaga : ${vagas}">
-        <td th:text="${vaga.descricao}"></td>
-        <td th:text="${vaga.remuneracao}"></td>
-        <td th:text="${#dates.format(vaga.dataLimiteInscricao, 'dd/MM/yyyy')}"></td>
-        <td th:text="${vaga.cidade}"></td>
-        <td>
-            <a th:href="@{/empresa/editarVaga/{id}(id=${vaga.id})}">Editar</a>
-            <a th:href="@{/empresa/excluirVaga/{id}(id=${vaga.id})}">Excluir</a>
-            <A th:href="@{/empresa/verCandidatos/{id}(id=${vaga.id})}">Ver Candidatos</A>
-        </td>
-    </tr>
-    </tbody>
-</table>
-
-<a href="/empresa/home">Voltar para a Home</a>
 </body>
 </html>
