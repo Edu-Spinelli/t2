@@ -5,6 +5,16 @@
 </head>
 <body>
 <h1>Minhas Vagas Cadastradas</h1>
+<!-- Exibe a mensagem de sucesso -->
+<div th:if="${sucesso}" style="color: green;">
+    <p th:text="${sucesso}"></p>
+</div>
+
+<!-- Exibe a mensagem de erro -->
+<div th:if="${erro}" style="color: red;">
+    <p th:text="${erro}"></p>
+</div>
+
 
 <table border="1">
     <thead>

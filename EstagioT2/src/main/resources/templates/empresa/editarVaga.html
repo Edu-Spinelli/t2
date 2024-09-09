@@ -2,6 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Editar Vaga</title>
+    <script type="text/javascript">
+        // Função para impedir que letras sejam digitadas no campo de remuneração
+        function validarRemuneracao(event) {
+            var char = String.fromCharCode(event.which);
+            if (!(/[0-9.]/.test(char))) {
+                event.preventDefault();
+            }
+        }
+    </script>
 </head>
 <body>
 <h1>Editar Vaga</h1>
@@ -16,7 +25,7 @@
 
     <div>
         <label for="remuneracao">Remuneração:</label>
-        <input type="text" id="remuneracao" th:field="*{remuneracao}" />
+        <input type="text" id="remuneracao" th:field="*{remuneracao}" onkeypress="validarRemuneracao(event)" />
     </div>
 
     <div>

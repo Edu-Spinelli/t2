@@ -2,13 +2,83 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Editar Profissional</title>
+  <style>
+    .error {
+      color: red;
+    }
+  </style>
+  <script>
+    // Função para formatar CPF (somente números)
+    function formatarCPF(cpfInput) {
+      let cpf = cpfInput.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+
+      // Aplica a máscara: XXX.XXX.XXX-XX
+      if (cpf.length > 9) {
+        cpf = cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2}).*/, "$1.$2.$3-$4");
+      } else if (cpf.length > 6) {
+        cpf = cpf.replace(/^(\d{3})(\d{3})(\d{3}).*/, "$1.$2.$3");
+      } else if (cpf.length > 3) {
+        cpf = cpf.replace(/^(\d{3})(\d{3}).*/, "$1.$2");
+      }
+
+      cpfInput.value = cpf; // Atualiza o campo com a formatação
+    }
+
+    // Função para formatar telefone (somente números)
+    function formatarTelefone(telefoneInput) {
+      let telefone = telefoneInput.value.replace(/\D/g, '');
+
+      // Aplica a máscara: (XX) XXXXX-XXXX ou (XX) XXXX-XXXX
+      if (telefone.length > 10) {
+        telefone = telefone.replace(/^(\d{2})(\d{5})(\d{4}).*/, "($1) $2-$3");
+      } else if (telefone.length > 6) {
+        telefone = telefone.replace(/^(\d{2})(\d{4})(\d{4}).*/, "($1) $2-$3");
+      } else if (telefone.length > 2) {
+        telefone = telefone.replace(/^(\d{2})(\d{4}).*/, "($1) $2");
+      }
+
+      telefoneInput.value = telefone; // Atualiza o campo com a formatação
+    }
+
+    function validarCPF(cpfInput) {
+      let cpf = cpfInput.value.replace(/\D/g, '');
+      if (cpf.length !== 11) {
+        alert('O CPF deve conter exatamente 11 dígitos numéricos.');
+        return false;
+      }
+      return true;
+    }
+
+    function validarTelefone(telefoneInput) {
+      let telefone = telefoneInput.value.replace(/\D/g, '');
+      if (telefone.length !== 10 && telefone.length !== 11) {
+        alert('O telefone deve conter 10 ou 11 dígitos numéricos.');
+        return false;
+      }
+      return true;
+    }
+
+    function validarFormulario() {
+      return validarCPF(document.getElementById('cpf')) && validarTelefone(document.getElementById('telefone'));
+    }
+  </script>
 </head>
 <body>
 <h1>Editar Profissional</h1>
-<form th:action="@{'/admin/profissional/save/' + ${profissionais.id}}" th:object="${profissionais}" method="post">
 
+<!-- Exibe a mensagem de sucesso -->
+<div th:if="${sucesso}" style="color: green;">
+  <p th:text="${sucesso}"></p>
+</div>
 
-  <input type="hidden" th:field="*{id}"    />
+<!-- Exibe a mensagem de erro -->
+<div th:if="${erro}" style="color: red;">
+  <p th:text="${erro}"></p>
+</div>
+
+<form th:action="@{'/admin/profissional/save/' + ${profissionais.id}}" th:object="${profissionais}" method="post" onsubmit="return validarFormulario()">
+
+  <input type="hidden" th:field="*{id}"/>
 
   <div>
     <label for="nome">Nome:</label>
@@ -17,12 +87,14 @@
 
   <div>
     <label for="cpf">CPF:</label>
-    <input type="text" id="cpf" th:field="*{cpf}" required="required"/>
+    <input type="text" id="cpf" th:field="*{cpf}" oninput="formatarCPF(this)" maxlength="14" required="required"/>
+    <span th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}" class="error"></span>
   </div>
 
   <div>
     <label for="telefone">Telefone:</label>
-    <input type="text" id="telefone" th:field="*{telefone}" required="required"/>
+    <input type="text" id="telefone" th:field="*{telefone}" oninput="formatarTelefone(this)" maxlength="15" required="required"/>
+    <span th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}" class="error"></span>
   </div>
 
   <div>
@@ -40,5 +112,6 @@
     <a th:href="@{/admin/profissional}">Cancelar</a>
   </div>
 </form>
+
 </body>
 </html>

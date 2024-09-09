@@ -1,33 +1,46 @@
 package br.ufscar.dc.dsw.EstagioT2.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+
+import java.util.Locale;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
-    private final LocaleChangeInterceptor localeChangeInterceptor;
 
-    public MvcConfig(LocaleChangeInterceptor localeChangeInterceptor) {
-        this.localeChangeInterceptor = localeChangeInterceptor;
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/home").setViewName("login/login");
+        registry.addViewController("/").setViewName("login/login");
+        registry.addViewController("/login").setViewName("login/login");
+        registry.addViewController("/admin").setViewName("admin/home");
+        registry.addViewController("/register").setViewName("register/registerEmpresa");
+        registry.addViewController("/register/empresa").setViewName("register/registerEmpresa");
+        registry.addViewController("/register/profissional").setViewName("register/registerProfissional");
     }
 
+    @Bean
+    public LocaleResolver localeResolver() {
+        SessionLocaleResolver slr = new SessionLocaleResolver();
+        slr.setDefaultLocale(new Locale("pt", "BR"));
+        return slr;
+    }
 
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/home").setViewName("home");
-        registry.addViewController("/").setViewName("home");
-        registry.addViewController("/login").setViewName("login");
-        registry.addViewController("/admin").setViewName("admin/home");
-        registry.addViewController("/register").setViewName("register");
-        registry.addViewController("/register/empresa").setViewName("registerEmpresa");
-        registry.addViewController("/register/profissional").setViewName("registerProfissional");
+    @Bean
+    public LocaleChangeInterceptor localeChangeInterceptor() {
+        LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
+        lci.setParamName("lang");
+        return lci;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(localeChangeInterceptor);
+        registry.addInterceptor(localeChangeInterceptor());
     }
 }
-

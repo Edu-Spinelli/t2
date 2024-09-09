@@ -105,21 +105,17 @@
 						</goals>
 						<configuration>
 							<dest>${project.build.directory}/classes</dest>
-							<src>${project.resources[0].directory}</src>
+							<src>${project.basedir}/src/main/resources</src>
 							<encoding>UTF-8</encoding>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
-
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
-
-
-
 	</build>
 
 </project>

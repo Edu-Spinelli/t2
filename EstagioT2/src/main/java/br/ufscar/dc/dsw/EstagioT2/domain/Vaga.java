@@ -1,6 +1,8 @@
 package br.ufscar.dc.dsw.EstagioT2.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
@@ -22,6 +24,10 @@ public class Vaga {
     @Column(nullable = false)
     private String descricao;
 
+
+
+    @NotNull(message = "A remuneração é obrigatória.")
+    @Digits(integer = 10, fraction = 2, message = "A remuneração deve ser um número válido com até 2 casas decimais.")
     private BigDecimal remuneracao;
 
     @Temporal(TemporalType.DATE)

@@ -25,6 +25,7 @@ public class WebSecurityConfig {
                         .loginPage("/login")
                         .permitAll()
                         .successHandler(new CustomAuthenticationSuccessHandler())
+                        .failureUrl("/login?error=true")
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")

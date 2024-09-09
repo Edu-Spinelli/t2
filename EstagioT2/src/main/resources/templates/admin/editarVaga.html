@@ -2,12 +2,44 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Editar Vaga</title>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+    <script>
+        // Função para validar somente números e ponto para remuneração
+        function formatarRemuneracao(remuneracaoInput) {
+            let remuneracao = remuneracaoInput.value.replace(/[^\d.]/g, ''); // Remove tudo exceto números e ponto
+            remuneracaoInput.value = remuneracao; // Atualiza o campo com a formatação
+        }
+
+        function validarRemuneracao(remuneracaoInput) {
+            let remuneracao = remuneracaoInput.value.replace(/[^\d.]/g, '');
+            if (!/^\d+(\.\d{1,2})?$/.test(remuneracao)) {
+                alert('A remuneração deve ser um número com até duas casas decimais.');
+                return false;
+            }
+            return true;
+        }
+    </script>
 </head>
 <body>
 <h1>Editar Vaga</h1>
-<form th:action="@{'/admin/vaga/save/' + ${vaga.id}}" th:object="${vaga}" method="post">
 
-    <input type="hidden" th:field="*{id}" />
+<!-- Exibe a mensagem de sucesso -->
+<div th:if="${sucesso}" style="color: green;">
+    <p th:text="${sucesso}"></p>
+</div>
+
+<!-- Exibe a mensagem de erro -->
+<div th:if="${erro}" style="color: red;">
+    <p th:text="${erro}"></p>
+</div>
+
+<form th:action="@{'/admin/vaga/save/' + ${vaga.id}}" th:object="${vaga}" method="post" onsubmit="return validarRemuneracao(document.getElementById('remuneracao'))">
+
+    <input type="hidden" th:field="*{id}"/>
 
     <div>
         <label for="descricao">Descrição:</label>
@@ -16,12 +48,13 @@
 
     <div>
         <label for="remuneracao">Remuneração:</label>
-        <input type="text" id="remuneracao" th:field="*{remuneracao}" />
+        <input type="text" id="remuneracao" th:field="*{remuneracao}" oninput="formatarRemuneracao(this)" required="required"/>
+        <span th:if="${#fields.hasErrors('remuneracao')}" th:errors="*{remuneracao}" class="error"></span>
     </div>
 
     <div>
         <label for="dataLimiteInscricao">Data Limite de Inscrição:</label>
-        <input type="date" id="dataLimiteInscricao" th:field="*{dataLimiteInscricao}" />
+        <input type="date" id="dataLimiteInscricao" th:field="*{dataLimiteInscricao}" required="required"/>
     </div>
 
     <div>
@@ -29,12 +62,11 @@
         <input type="text" id="cidade" th:field="*{cidade}" required="required"/>
     </div>
 
-
-
     <div>
         <button type="submit">Salvar</button>
         <a th:href="@{/admin/vaga}">Cancelar</a>
     </div>
 </form>
+
 </body>
 </html>

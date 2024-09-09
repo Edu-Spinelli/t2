@@ -1,10 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
 <head>
     <title th:text="#{login.title}">Login</title>
 </head>
 <body>
 <h2 th:text="#{login.title}">Login</h2>
+
+<!-- Exibe a mensagem de erro se houver -->
+<div th:if="${errorMessage}" style="color: red;">
+    <p th:text="${errorMessage}"></p>
+</div>
+
+<!-- Exibe a mensagem de logout se houver -->
+<div th:if="${logoutMessage}" style="color: green;">
+    <p th:text="${logoutMessage}"></p>
+</div>
+
 <form th:action="@{/login}" method="post">
     <div>
         <label th:text="#{login.email}">Email: </label>
@@ -27,7 +38,6 @@
         <p>Selecione o idioma:</p>
         <a href="?lang=pt_BR">Português</a> |
         <a href="?lang=en">English</a>
-
     </div>
 </footer>
 </body>

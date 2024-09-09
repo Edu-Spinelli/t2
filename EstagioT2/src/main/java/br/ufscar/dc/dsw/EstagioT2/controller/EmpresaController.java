@@ -6,6 +6,7 @@ import br.ufscar.dc.dsw.EstagioT2.domain.StatusCandidatura;
 import br.ufscar.dc.dsw.EstagioT2.domain.Vaga;
 import br.ufscar.dc.dsw.EstagioT2.security.UsuarioDetails;
 import br.ufscar.dc.dsw.EstagioT2.service.*;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.text.SimpleDateFormat;
@@ -74,7 +76,15 @@ public class EmpresaController {
 
     // Lida com o envio do formulário de cadastro de vaga
     @PostMapping("/cadastrarVaga")
-    public String cadastrarVaga(@ModelAttribute("vaga") Vaga vaga, Authentication authentication, RedirectAttributes attributes) {
+    public String cadastrarVaga(@Valid @ModelAttribute("vaga") Vaga vaga,
+                                BindingResult result,
+                                Authentication authentication,
+                                RedirectAttributes attributes) {
+        // Verifica se há erros de validação
+        if (result.hasErrors()) {
+            return "empresa/cadastrarVaga"; // Volta ao formulário se houver erros
+        }
+
         // Valida a data limite da vaga (não pode ser anterior à data atual)
         if (vaga.getDataLimiteInscricao().before(new Date())) {
             attributes.addFlashAttribute("erro", "A data limite de inscrição não pode ser anterior à data atual.");
@@ -89,14 +99,13 @@ public class EmpresaController {
             vaga.setEmpresa(empresa);
 
             vagaService.salvar(vaga); // Salva a vaga no banco de dados
+            attributes.addFlashAttribute("sucesso", "Vaga cadastrada com sucesso!");
             return "redirect:/empresa/home"; // Redireciona para a página inicial da empresa
         } else {
             // Se a empresa não for encontrada, redireciona ou exibe uma mensagem de erro
             attributes.addFlashAttribute("erro", "Empresa não encontrada.");
-            return "redirect:/empresa/vaga/cadastrar"; // Redireciona de volta ao formulário de cadastro
+            return "redirect:/empresa/cadastrarVaga"; // Redireciona de volta ao formulário de cadastro
         }
-
-
     }
 
 
@@ -181,6 +190,7 @@ public class EmpresaController {
                 vagaService.salvar(vaga);
 
                 attributes.addFlashAttribute("sucesso", "Vaga atualizada com sucesso!");
+
                 return "redirect:/empresa/listaVagas"; // Redireciona para a lista de vagas após a edição
             } else {
                 return "redirect:/empresa/listaVagas"; // Redireciona se a vaga não pertencer à empresa

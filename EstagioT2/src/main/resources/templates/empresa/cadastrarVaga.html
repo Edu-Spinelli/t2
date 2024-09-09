@@ -2,15 +2,28 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Cadastrar Vaga</title>
+  <script>
+    // Função para impedir a entrada de letras no campo de remuneração
+    function validarRemuneracao(event) {
+      let charCode = (event.which) ? event.which : event.keyCode;
+      // Permite apenas números e ponto (.)
+      if (charCode !== 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+        event.preventDefault();
+        return false;
+      }
+      return true;
+    }
+  </script>
 </head>
 <body>
 <h1>Cadastrar Vaga</h1>
 
+<!-- Exibe a mensagem de erro geral -->
 <div th:if="${erro}" style="color: red;">
   <p th:text="${erro}"></p>
 </div>
 
-<!-- Exibe a mensagem de sucesso, se houver -->
+<!-- Exibe a mensagem de sucesso -->
 <div th:if="${sucesso}" style="color: green;">
   <p th:text="${sucesso}"></p>
 </div>
@@ -19,28 +32,31 @@
 
   <div>
     <label for="cnpj">CNPJ da Empresa:</label>
-    <input type="text" id="cnpj" th:field="*{empresa.cnpj}" disabled="disabled" />
+    <input type="text" id="cnpj" th:field="*{empresa.cnpj}" disabled="disabled" placeholder="CNPJ da Empresa"/>
   </div>
 
   <div>
     <label for="descricao">Descrição da Vaga:</label>
-    <textarea id="descricao" th:field="*{descricao}" required="required"></textarea>
+    <textarea id="descricao" th:field="*{descricao}" required="required" placeholder="Digite a descrição da vaga"></textarea>
   </div>
 
   <div>
     <label for="remuneracao">Remuneração:</label>
-    <input type="text" id="remuneracao" th:field="*{remuneracao}" required="required" />
+    <input type="text" id="remuneracao" th:field="*{remuneracao}" required="required" placeholder="Ex: 5000.00"
+           onkeypress="return validarRemuneracao(event)" />
+    <!-- Exibe erro específico do campo 'remuneracao' -->
+    <p th:if="${#fields.hasErrors('remuneracao')}" th:errors="*{remuneracao}" style="color: red;"></p>
   </div>
 
   <div>
     <label for="dataLimiteInscricao">Data Limite de Inscrição:</label>
-    <input type="date" id="dataLimiteInscricao" th:field="*{dataLimiteInscricao}" required="required" />
-
+    <input type="date" id="dataLimiteInscricao" th:field="*{dataLimiteInscricao}" required="required"
+           placeholder="Data limite de inscrição"/>
   </div>
 
   <div>
     <label for="cidade">Cidade:</label>
-    <input type="text" id="cidade" th:field="*{cidade}" required="required" />
+    <input type="text" id="cidade" th:field="*{cidade}" required="required" placeholder="Cidade"/>
   </div>
 
   <div>

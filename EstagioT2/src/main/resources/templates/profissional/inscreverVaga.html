@@ -16,10 +16,8 @@
         <input type="file" id="curriculo" name="curriculoFile" accept=".pdf" required="required"/>
     </div>
 
-    <div>
-        <label for="dataCandidatura">Data de Inscrição:</label>
-        <input type="text" id="dataCandidatura" th:field="*{dataCandidatura}" disabled="disabled" th:value="${#dates.format(candidatura.dataCandidatura, 'yyyy-MM-dd HH:mm:ss')}" />
-    </div>
+    <!-- Campo de data de inscrição escondido -->
+    <input type="hidden" id="dataCandidatura" th:field="*{dataCandidatura}" th:value="${#dates.format(candidatura.dataCandidatura, 'yyyy-MM-dd HH:mm:ss')}" />
 
     <div>
         <button type="submit">Inscrever-se</button>
