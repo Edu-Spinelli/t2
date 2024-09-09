@@ -8,11 +8,12 @@
 <div class="container">
     <h1>Minhas Vagas Cadastradas</h1>
 
+    <!-- Exibe a mensagem de erro -->
     <div th:if="${erro}" class="message error">
-        <p th:text="${error}"></p>
+        <p th:text="${erro}"></p>
     </div>
 
-    <!-- Exibe a mensagem de logout se houver -->
+    <!-- Exibe a mensagem de sucesso -->
     <div th:if="${sucesso}" class="message success">
         <p th:text="${sucesso}"></p>
     </div>

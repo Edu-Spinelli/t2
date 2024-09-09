@@ -2,11 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Editar Vaga</title>
-    <style>
-        .error {
-            color: red;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/admin/editarVaga.css}">
     <script>
         // Função para validar somente números e ponto para remuneração
         function formatarRemuneracao(remuneracaoInput) {
@@ -28,12 +24,12 @@
 <h1>Editar Vaga</h1>
 
 <!-- Exibe a mensagem de sucesso -->
-<div th:if="${sucesso}" style="color: green;">
+<div th:if="${sucesso}" class="success">
     <p th:text="${sucesso}"></p>
 </div>
 
 <!-- Exibe a mensagem de erro -->
-<div th:if="${erro}" style="color: red;">
+<div th:if="${erro}" class="error">
     <p th:text="${erro}"></p>
 </div>
 

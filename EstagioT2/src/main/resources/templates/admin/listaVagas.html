@@ -2,32 +2,34 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Lista de Vagas</title>
+    <link rel="stylesheet" th:href="@{/css/admin/listaVagas.css}">
 </head>
 <body>
 <h1>Lista de Vagas Cadastradas</h1>
+
 <!-- Exibe a mensagem de sucesso -->
-<div th:if="${sucesso}" style="color: green;">
+<div th:if="${sucesso}" class="success">
     <p th:text="${sucesso}"></p>
 </div>
 
 <!-- Exibe a mensagem de erro -->
-<div th:if="${erro}" style="color: red;">
+<div th:if="${erro}" class="error">
     <p th:text="${erro}"></p>
 </div>
 
-<table border="1">
+<!-- Tabela de vagas -->
+<table>
     <thead>
     <tr>
-
         <th>Descrição</th>
         <th>Salário</th>
         <th>Data Limite</th>
         <th>Empresa</th>
+        <th>Ações</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="vaga : ${vagas}">
-
         <td th:text="${vaga.descricao}"></td>
         <td th:text="${vaga.remuneracao}"></td>
         <td th:text="${#dates.format(vaga.dataLimiteInscricao, 'dd/MM/yyyy')}"></td>
@@ -35,9 +37,12 @@
         <td>
             <a th:href="@{/admin/editarVaga/{id}(id=${vaga.id})}">Editar</a>
             <a th:href="@{/admin/excluirVaga/{id}(id=${vaga.id})}">Excluir</a>
+        </td>
     </tr>
     </tbody>
 </table>
+
+<!-- Botão de voltar -->
 <a href="/admin/home">Voltar para tela inicial</a>
 
 </body>

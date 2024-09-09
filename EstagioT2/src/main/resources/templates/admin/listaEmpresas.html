@@ -2,20 +2,23 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Lista de Empresas</title>
+    <link rel="stylesheet" th:href="@{/css/admin/listaEmpresas.css}">
 </head>
 <body>
 <h1>Lista de Empresas Cadastradas</h1>
+
 <!-- Exibe a mensagem de sucesso -->
-<div th:if="${sucesso}" style="color: green;">
+<div th:if="${sucesso}" class="success">
     <p th:text="${sucesso}"></p>
 </div>
 
 <!-- Exibe a mensagem de erro -->
-<div th:if="${erro}" style="color: red;">
+<div th:if="${erro}" class="error">
     <p th:text="${erro}"></p>
 </div>
 
-<table border="1">
+<!-- Tabela de empresas -->
+<table>
     <thead>
     <tr>
         <th>Nome</th>
@@ -40,8 +43,9 @@
     </tr>
     </tbody>
 </table>
-<a href="/admin/home">Voltar para tela inicial</a>
 
+<!-- Botão de voltar -->
+<a href="/admin/home">Voltar para tela inicial</a>
 
 </body>
 </html>

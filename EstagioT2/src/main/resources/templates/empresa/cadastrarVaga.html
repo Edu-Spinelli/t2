@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Cadastrar Vaga</title>
+  <link rel="stylesheet" th:href="@{/css/empresa/cadastrarVaga.css}">
   <script>
     // Função para impedir a entrada de letras no campo de remuneração
     function validarRemuneracao(event) {
@@ -16,54 +17,54 @@
   </script>
 </head>
 <body>
-<h1>Cadastrar Vaga</h1>
+<div class="container">
+  <h1>Cadastrar Vaga</h1>
 
-<!-- Exibe a mensagem de erro geral -->
-<div th:if="${erro}" style="color: red;">
-  <p th:text="${erro}"></p>
+  <!-- Exibe a mensagem de erro geral -->
+  <div th:if="${erro}" class="error">
+    <p th:text="${erro}"></p>
+  </div>
+
+  <!-- Exibe a mensagem de sucesso -->
+  <div th:if="${sucesso}" class="success">
+    <p th:text="${sucesso}"></p>
+  </div>
+
+  <form th:action="@{/empresa/cadastrarVaga}" th:object="${vaga}" method="post">
+    <div class="form-group">
+      <label for="cnpj">CNPJ da Empresa:</label>
+      <input type="text" id="cnpj" th:field="*{empresa.cnpj}" disabled="disabled" placeholder="CNPJ da Empresa"/>
+    </div>
+
+    <div class="form-group">
+      <label for="descricao">Descrição da Vaga:</label>
+      <textarea id="descricao" th:field="*{descricao}" required="required" placeholder="Digite a descrição da vaga"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="remuneracao">Remuneração:</label>
+      <input type="text" id="remuneracao" th:field="*{remuneracao}" required="required" placeholder="Ex: 5000.00"
+             onkeypress="return validarRemuneracao(event)" />
+      <!-- Exibe erro específico do campo 'remuneracao' -->
+      <p th:if="${#fields.hasErrors('remuneracao')}" th:errors="*{remuneracao}" class="error"></p>
+    </div>
+
+    <div class="form-group">
+      <label for="dataLimiteInscricao">Data Limite de Inscrição:</label>
+      <input type="date" id="dataLimiteInscricao" th:field="*{dataLimiteInscricao}" required="required"
+             placeholder="Data limite de inscrição"/>
+    </div>
+
+    <div class="form-group">
+      <label for="cidade">Cidade:</label>
+      <input type="text" id="cidade" th:field="*{cidade}" required="required" placeholder="Cidade"/>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit">Cadastrar Vaga</button>
+      <a href="/empresa/home" class="cancel-btn">Cancelar</a>
+    </div>
+  </form>
 </div>
-
-<!-- Exibe a mensagem de sucesso -->
-<div th:if="${sucesso}" style="color: green;">
-  <p th:text="${sucesso}"></p>
-</div>
-
-<form th:action="@{/empresa/cadastrarVaga}" th:object="${vaga}" method="post">
-
-  <div>
-    <label for="cnpj">CNPJ da Empresa:</label>
-    <input type="text" id="cnpj" th:field="*{empresa.cnpj}" disabled="disabled" placeholder="CNPJ da Empresa"/>
-  </div>
-
-  <div>
-    <label for="descricao">Descrição da Vaga:</label>
-    <textarea id="descricao" th:field="*{descricao}" required="required" placeholder="Digite a descrição da vaga"></textarea>
-  </div>
-
-  <div>
-    <label for="remuneracao">Remuneração:</label>
-    <input type="text" id="remuneracao" th:field="*{remuneracao}" required="required" placeholder="Ex: 5000.00"
-           onkeypress="return validarRemuneracao(event)" />
-    <!-- Exibe erro específico do campo 'remuneracao' -->
-    <p th:if="${#fields.hasErrors('remuneracao')}" th:errors="*{remuneracao}" style="color: red;"></p>
-  </div>
-
-  <div>
-    <label for="dataLimiteInscricao">Data Limite de Inscrição:</label>
-    <input type="date" id="dataLimiteInscricao" th:field="*{dataLimiteInscricao}" required="required"
-           placeholder="Data limite de inscrição"/>
-  </div>
-
-  <div>
-    <label for="cidade">Cidade:</label>
-    <input type="text" id="cidade" th:field="*{cidade}" required="required" placeholder="Cidade"/>
-  </div>
-
-  <div>
-    <button type="submit">Cadastrar Vaga</button>
-    <a href="/empresa/home">Cancelar</a>
-  </div>
-</form>
-
 </body>
 </html>

@@ -2,11 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Editar Profissional</title>
-  <style>
-    .error {
-      color: red;
-    }
-  </style>
+  <link rel="stylesheet" th:href="@{/css/admin/editarProfissional.css}">
   <script>
     // Função para formatar CPF (somente números)
     function formatarCPF(cpfInput) {
@@ -64,54 +60,55 @@
   </script>
 </head>
 <body>
-<h1>Editar Profissional</h1>
+<div class="container">
+  <h1>Editar Profissional</h1>
 
-<!-- Exibe a mensagem de sucesso -->
-<div th:if="${sucesso}" style="color: green;">
-  <p th:text="${sucesso}"></p>
+  <!-- Exibe a mensagem de sucesso -->
+  <div th:if="${sucesso}" class="message success">
+    <p th:text="${sucesso}"></p>
+  </div>
+
+  <!-- Exibe a mensagem de erro -->
+  <div th:if="${erro}" class="message error">
+    <p th:text="${erro}"></p>
+  </div>
+
+  <form th:action="@{'/admin/profissional/save/' + ${profissionais.id}}" th:object="${profissionais}" method="post" onsubmit="return validarFormulario()">
+
+    <input type="hidden" th:field="*{id}"/>
+
+    <div class="form-group">
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" th:field="*{nome}" required="required"/>
+    </div>
+
+    <div class="form-group">
+      <label for="cpf">CPF:</label>
+      <input type="text" id="cpf" th:field="*{cpf}" oninput="formatarCPF(this)" maxlength="14" required="required"/>
+      <span th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}" class="error"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="telefone">Telefone:</label>
+      <input type="text" id="telefone" th:field="*{telefone}" oninput="formatarTelefone(this)" maxlength="15" required="required"/>
+      <span th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}" class="error"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" id="email" th:field="*{usuario.email}" required="required"/>
+    </div>
+
+    <div class="form-group">
+      <label for="senha">Senha:</label>
+      <input type="password" id="senha" th:field="*{usuario.senha}"/>
+    </div>
+
+    <div class="form-group">
+      <button type="submit">Salvar</button>
+      <a th:href="@{/admin/profissional}">Cancelar</a>
+    </div>
+  </form>
 </div>
-
-<!-- Exibe a mensagem de erro -->
-<div th:if="${erro}" style="color: red;">
-  <p th:text="${erro}"></p>
-</div>
-
-<form th:action="@{'/admin/profissional/save/' + ${profissionais.id}}" th:object="${profissionais}" method="post" onsubmit="return validarFormulario()">
-
-  <input type="hidden" th:field="*{id}"/>
-
-  <div>
-    <label for="nome">Nome:</label>
-    <input type="text" id="nome" th:field="*{nome}" required="required"/>
-  </div>
-
-  <div>
-    <label for="cpf">CPF:</label>
-    <input type="text" id="cpf" th:field="*{cpf}" oninput="formatarCPF(this)" maxlength="14" required="required"/>
-    <span th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}" class="error"></span>
-  </div>
-
-  <div>
-    <label for="telefone">Telefone:</label>
-    <input type="text" id="telefone" th:field="*{telefone}" oninput="formatarTelefone(this)" maxlength="15" required="required"/>
-    <span th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}" class="error"></span>
-  </div>
-
-  <div>
-    <label for="email">Email:</label>
-    <input type="email" id="email" th:field="*{usuario.email}" required="required"/>
-  </div>
-
-  <div>
-    <label for="senha">Senha:</label>
-    <input type="password" id="senha" th:field="*{usuario.senha}"/>
-  </div>
-
-  <div>
-    <button type="submit">Salvar</button>
-    <a th:href="@{/admin/profissional}">Cancelar</a>
-  </div>
-</form>
-
 </body>
 </html>

@@ -2,11 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Editar Empresa</title>
-    <style>
-        .error {
-            color: red;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/admin/editarEmpresa.css}">
     <script>
         // Função para formatar e validar CNPJ (somente números)
         function formatarCNPJ(cnpjInput) {
@@ -35,58 +31,59 @@
     </script>
 </head>
 <body>
-<h1>Editar Empresa</h1>
+<div class="container">
+    <h1>Editar Empresa</h1>
 
-<!-- Exibe a mensagem de sucesso -->
-<div th:if="${sucesso}" style="color: green;">
-    <p th:text="${sucesso}"></p>
+    <!-- Exibe a mensagem de sucesso -->
+    <div th:if="${sucesso}" class="message success">
+        <p th:text="${sucesso}"></p>
+    </div>
+
+    <!-- Exibe a mensagem de erro -->
+    <div th:if="${erro}" class="message error">
+        <p th:text="${erro}"></p>
+    </div>
+
+    <form th:action="@{'/admin/empresa/save/' + ${empresa.id}}" th:object="${empresa}" method="post" onsubmit="return validarCNPJ(document.getElementById('cnpj'))">
+
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="form-group">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" th:field="*{nome}" required="required"/>
+        </div>
+
+        <div class="form-group">
+            <label for="cnpj">CNPJ:</label>
+            <input type="text" id="cnpj" th:field="*{cnpj}" oninput="formatarCNPJ(this)" maxlength="18" required="required"/>
+            <span th:if="${#fields.hasErrors('cnpj')}" th:errors="*{cnpj}" class="error"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="descricao">Descrição:</label>
+            <input type="text" id="descricao" th:field="*{descricao}" required="required"/>
+        </div>
+
+        <div class="form-group">
+            <label for="cidade">Cidade:</label>
+            <input type="text" id="cidade" th:field="*{cidade}" required="required"/>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" th:field="*{usuario.email}" required="required"/>
+        </div>
+
+        <div class="form-group">
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha" th:field="*{usuario.senha}"/>
+        </div>
+
+        <div class="form-group">
+            <button type="submit">Salvar</button>
+            <a th:href="@{/admin/empresa}">Cancelar</a>
+        </div>
+    </form>
 </div>
-
-<!-- Exibe a mensagem de erro -->
-<div th:if="${erro}" style="color: red;">
-    <p th:text="${erro}"></p>
-</div>
-
-<form th:action="@{'/admin/empresa/save/' + ${empresa.id}}" th:object="${empresa}" method="post" onsubmit="return validarCNPJ(document.getElementById('cnpj'))">
-
-    <input type="hidden" th:field="*{id}" />
-
-    <div>
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" th:field="*{nome}" required="required"/>
-    </div>
-
-    <div>
-        <label for="cnpj">CNPJ:</label>
-        <input type="text" id="cnpj" th:field="*{cnpj}" oninput="formatarCNPJ(this)" maxlength="18" required="required"/>
-        <span th:if="${#fields.hasErrors('cnpj')}" th:errors="*{cnpj}" class="error"></span>
-    </div>
-
-    <div>
-        <label for="descricao">Descrição:</label>
-        <input type="text" id="descricao" th:field="*{descricao}" required="required"/>
-    </div>
-
-    <div>
-        <label for="cidade">Cidade:</label>
-        <input type="text" id="cidade" th:field="*{cidade}" required="required"/>
-    </div>
-
-    <div>
-        <label for="email">Email:</label>
-        <input type="email" id="email" th:field="*{usuario.email}" required="required"/>
-    </div>
-
-    <div>
-        <label for="senha">Senha:</label>
-        <input type="password" id="senha" th:field="*{usuario.senha}"/>
-    </div>
-
-    <div>
-        <button type="submit">Salvar</button>
-        <a th:href="@{/admin/empresa}">Cancelar</a>
-    </div>
-</form>
-
 </body>
 </html>

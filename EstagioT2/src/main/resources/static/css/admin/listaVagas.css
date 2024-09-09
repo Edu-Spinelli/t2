@@ -1,28 +1,25 @@
 /* Estilos gerais */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-    margin: 0;
-    padding: 0;
-}
-
-.container {
-    max-width: 1000px;
-    margin: 50px auto;
-    background-color: #ffffff;
+    line-height: 1.6;
+    color: #333;
+    max-width: 800px;
+    margin: 0 auto;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: #f4f4f4;
 }
 
 h1 {
+    color: #2c3e50;
     text-align: center;
-    color: #333;
     margin-bottom: 30px;
 }
 
-/* Estilos para mensagens de erro e sucesso */
-.message {
+/* Estilos para mensagens de sucesso e erro */
+.success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
     padding: 10px;
     border-radius: 4px;
     margin-bottom: 20px;
@@ -32,24 +29,18 @@ h1 {
     background-color: #ffebee;
     color: #c62828;
     border: 1px solid #ef9a9a;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
 }
 
-.success {
-    background-color: #e8f5e9;
-    color: #2e7d32;
-    border: 1px solid #a5d6a7;
-}
-
-/* Estilos para a tabela */
+/* Estilos para a tabela de profissionais */
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-}
-
-thead {
-    background-color: #333;
-    color: white;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 th, td {
@@ -58,15 +49,20 @@ th, td {
     border-bottom: 1px solid #ddd;
 }
 
+th {
+    background-color: #000000;
+    color: white;
+}
+
+td {
+    color: #333;
+}
+
 tr:hover {
     background-color: #f5f5f5;
 }
 
-th {
-    background-color: #333;
-    color: white;
-}
-
+/* Estilos para os links de ações */
 a {
     color: #3498db;
     text-decoration: none;
@@ -77,25 +73,25 @@ a:hover {
     text-decoration: underline;
 }
 
-/* Estilos para o link de voltar */
-a[href="/empresa/home"] {
+/* Estilos para o botão de voltar */
+a[href="/admin/home"] {
     display: inline-block;
     margin-top: 20px;
     padding: 10px 15px;
-    background-color: #333;
+    background-color: #000000;
     color: white;
-    border-radius: 4px;
     text-decoration: none;
-    transition: background-color 0.3s ease;
+    border-radius: 4px;
+    transition: background-color 0.3s;
 }
 
-a[href="/empresa/home"]:hover {
-    background-color: #555;
+a[href="/admin/home"]:hover {
+    background-color: #4f5657;
 }
 
 /* Responsividade */
-@media (max-width: 768px) {
-    .container {
+@media (max-width: 600px) {
+    body {
         padding: 10px;
     }
 
@@ -105,9 +101,5 @@ a[href="/empresa/home"]:hover {
 
     th, td {
         padding: 8px;
-    }
-
-    a[href="/empresa/home"] {
-        padding: 8px 12px;
     }
 }

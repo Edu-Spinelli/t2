@@ -2,26 +2,30 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Lista de Profissionais</title>
+  <link rel="stylesheet" th:href="@{/css/admin/listaProfissionais.css}">
 </head>
 <body>
 <h1>Lista de Profissionais</h1>
+
 <!-- Exibe a mensagem de sucesso -->
-<div th:if="${sucesso}" style="color: green;">
+<div th:if="${sucesso}" class="success">
   <p th:text="${sucesso}"></p>
 </div>
 
 <!-- Exibe a mensagem de erro -->
-<div th:if="${erro}" style="color: red;">
+<div th:if="${erro}" class="error">
   <p th:text="${erro}"></p>
 </div>
 
-<table border="1">
+<!-- Tabela de profissionais -->
+<table>
   <thead>
   <tr>
     <th>Nome</th>
     <th>Email</th>
     <th>CPF</th>
     <th>Telefone</th>
+    <th>Ações</th>
   </tr>
   </thead>
   <tbody>
@@ -31,12 +35,14 @@
     <td th:text="${profissional.cpf}"></td>
     <td th:text="${profissional.telefone}"></td>
     <td>
-        <a th:href="@{/admin/editarProfissional/{id}(id=${profissional.id})}">Editar</a>
-        <a th:href="@{/admin/excluirProfissional/{id}(id=${profissional.id})}">Excluir</a>
+      <a th:href="@{/admin/editarProfissional/{id}(id=${profissional.id})}">Editar</a>
+      <a th:href="@{/admin/excluirProfissional/{id}(id=${profissional.id})}">Excluir</a>
     </td>
   </tr>
   </tbody>
 </table>
+
+<!-- Botão de voltar -->
 <a href="/admin/home">Voltar para tela inicial</a>
 
 </body>
