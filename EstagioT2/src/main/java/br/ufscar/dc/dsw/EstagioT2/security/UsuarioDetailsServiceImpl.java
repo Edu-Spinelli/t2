@@ -1,13 +1,13 @@
 package br.ufscar.dc.dsw.EstagioT2.security;
 
-import br.ufscar.dc.dsw.EstagioT2.repository.UsuarioRepository;
-import br.ufscar.dc.dsw.EstagioT2.domain.Usuario;
-import br.ufscar.dc.dsw.EstagioT2.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import br.ufscar.dc.dsw.EstagioT2.domain.Usuario;
+import br.ufscar.dc.dsw.EstagioT2.repository.UsuarioRepository;
 
 @Service
 public class UsuarioDetailsServiceImpl implements UserDetailsService {

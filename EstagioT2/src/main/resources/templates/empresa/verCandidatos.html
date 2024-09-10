@@ -2,44 +2,46 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Candidatos da Vaga</title>
+  <link rel="stylesheet" th:href="@{/css/empresa/verCandidatos.css}">
 </head>
 <body>
-<h1>Candidatos Inscritos na Vaga: <span th:text="${vaga.descricao}"></span></h1>
+<div class="container">
+  <h1>Candidatos Inscritos na Vaga: <span th:text="${vaga.descricao}"></span></h1>
 
-<table border="1">
-  <thead>
-  <tr>
-    <th>Nome do Candidato</th>
-    <th>Email</th>
-    <th>Data de Inscrição</th>
-    <th>Currículo</th>
-    <th>Ações</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="candidatura : ${candidaturas}">
-    <td th:text="${candidatura.profissional.nome}"></td>
-    <td th:text="${candidatura.profissional.usuario.email}"></td>
-    <td th:text="${#dates.format(candidatura.dataCandidatura, 'dd/MM/yyyy')}"></td>
-    <td>
-      <a th:href="@{/empresa/downloadCurriculo/{candidaturaId}(candidaturaId=${candidatura.id})}">
-        <span th:text="${candidatura.curriculoNome}">Download Currículo</span>
-      </a>
-    </td>
-    <td>
-      <!-- Exibir o link Avaliar Candidato apenas se a data limite já passou -->
-      <a th:if="${vaga.dataLimiteInscricao.time <= #dates.createNow().time}"
-         th:href="@{/empresa/avaliarCandidato/{candidaturaId}(candidaturaId=${candidatura.id})}">
-        Avaliar Candidato
-      </a>
-      <span th:if="${vaga.dataLimiteInscricao.time > #dates.createNow().time}">
-        Avaliação disponível após a data limite.
-      </span>
-    </td>
-  </tr>
-  </tbody>
-</table>
+  <table>
+    <thead>
+    <tr>
+      <th>Nome do Candidato</th>
+      <th>Email</th>
+      <th>Data de Inscrição</th>
+      <th>Currículo</th>
+      <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="candidatura : ${candidaturas}">
+      <td th:text="${candidatura.profissional.nome}"></td>
+      <td th:text="${candidatura.profissional.usuario.email}"></td>
+      <td th:text="${#dates.format(candidatura.dataCandidatura, 'dd/MM/yyyy')}"></td>
+      <td>
+        <a th:href="@{/empresa/downloadCurriculo/{candidaturaId}(candidaturaId=${candidatura.id})}">
+          <span th:text="${candidatura.curriculoNome}">Download Currículo</span>
+        </a>
+      </td>
+      <td>
+        <a th:if="${vaga.dataLimiteInscricao.time <= #dates.createNow().time}"
+           th:href="@{/empresa/avaliarCandidato/{candidaturaId}(candidaturaId=${candidatura.id})}">
+          Avaliar Candidato
+        </a>
+        <span th:if="${vaga.dataLimiteInscricao.time > #dates.createNow().time}">
+                    Avaliação disponível após a data limite.
+                </span>
+      </td>
+    </tr>
+    </tbody>
+  </table>
 
-<a href="/empresa/listaVagas">Voltar para lista de vagas</a>
+  <a href="/empresa/listaVagas" class="back-btn">Voltar para lista de vagas</a>
+</div>
 </body>
 </html>

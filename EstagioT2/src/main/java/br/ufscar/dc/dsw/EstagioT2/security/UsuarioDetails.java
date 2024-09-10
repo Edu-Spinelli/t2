@@ -10,7 +10,8 @@ import java.util.Collection;
 
 public class UsuarioDetails implements UserDetails {
 
-    private Usuario usuario;
+    private static final long serialVersionUID = 1L;
+	private Usuario usuario;
 
     public UsuarioDetails(Usuario usuario) {
         this.usuario = usuario;

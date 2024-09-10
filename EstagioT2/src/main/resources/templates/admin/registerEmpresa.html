@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Registrar Empresa</title>
-    <link rel="stylesheet" th:href="@{/css/register.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/register.css}">
     <script>
         // Função para formatar o CNPJ enquanto o usuário digita
         function formatarCNPJ(cnpjInput) {
@@ -36,19 +36,9 @@
 </head>
 <body>
 <h1>Registrar Empresa</h1>
-<a th:href="@{/register/profissional}">Registrar Profissional</a>
+<a th:href="@{/admin/registerProfissional}">Registrar Profissional</a>
 
-<!-- Exibe a mensagem de erro se houver -->
-<div th:if="${errorMessage}" class="message error">
-    <p th:text="${errorMessage}"></p>
-</div>
-
-<!-- Exibe a mensagem de sucesso se houver -->
-<div th:if="${sucessoMessage}" class="message success">
-    <p th:text="${sucessoMessage}"></p>
-</div>
-
-<form th:action="@{/register/empresa}" th:object="${empresa}" method="post" onsubmit="return validarFormulario()">
+<form th:action="@{/admin/registerEmpresa}" th:object="${empresa}" method="post" onsubmit="return validarFormulario()">
 
     <div>
         <label for="nome">Nome:</label>
@@ -89,7 +79,7 @@
 
     <div>
         <button type="submit">Registrar</button>
-        <a th:href="@{/login}">Voltar para login</a>
+        <a th:href="@{/admin/home}">Voltar para home</a>
     </div>
 </form>
 

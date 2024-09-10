@@ -2,28 +2,29 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Inscrição na Vaga</title>
+    <link rel="stylesheet" th:href="@{/css/profissional/inscreverVaga.css}">
 </head>
 <body>
-<h1>Inscrever-se na Vaga</h1>
+<div class="container">
+    <h1>Inscrever-se na Vaga</h1>
 
-<form th:action="@{'/profissional/inscreverVaga/' + ${vaga.id}}" th:object="${candidatura}" method="post" enctype="multipart/form-data">
+    <form th:action="@{'/profissional/inscreverVaga/' + ${vaga.id}}" th:object="${candidatura}" method="post" enctype="multipart/form-data">
+        <input type="hidden" th:field="*{vaga.id}" th:value="${vaga.id}" />
+        <input type="hidden" th:field="*{profissional.id}" th:value="${profissional.id}" />
 
-    <input type="hidden" th:field="*{vaga.id}" th:value="${vaga.id}" />
-    <input type="hidden" th:field="*{profissional.id}" th:value="${profissional.id}" />
+        <div class="form-group">
+            <label for="curriculo">Currículo (PDF):</label>
+            <input type="file" id="curriculo" name="curriculoFile" accept=".pdf" required="required"/>
+        </div>
 
-    <div>
-        <label for="curriculo">Currículo (PDF):</label>
-        <input type="file" id="curriculo" name="curriculoFile" accept=".pdf" required="required"/>
-    </div>
+        <!-- Campo de data de inscrição escondido -->
+        <input type="hidden" id="dataCandidatura" th:field="*{dataCandidatura}" th:value="${#dates.format(candidatura.dataCandidatura, 'yyyy-MM-dd HH:mm:ss')}" />
 
-    <!-- Campo de data de inscrição escondido -->
-    <input type="hidden" id="dataCandidatura" th:field="*{dataCandidatura}" th:value="${#dates.format(candidatura.dataCandidatura, 'yyyy-MM-dd HH:mm:ss')}" />
-
-    <div>
-        <button type="submit">Inscrever-se</button>
-        <a th:href="@{/profissional/vagas}">Cancelar</a>
-    </div>
-</form>
-
+        <div class="form-group">
+            <button type="submit" class="btn-submit">Inscrever-se</button>
+            <a th:href="@{/profissional/vagas}" class="btn-cancel">Cancelar</a>
+        </div>
+    </form>
+</div>
 </body>
 </html>

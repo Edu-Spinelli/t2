@@ -18,6 +18,12 @@
         <p th:text="${logoutMessage}"></p>
     </div>
 
+    <div th:if="${sucesso}" class="message success">
+        <p th:text="${sucesso}"></p>
+    </div>
+
+
+
     <form th:action="@{/login}" method="post">
         <div class="form-group">
             <label th:text="#{login.email}">Email: </label>
@@ -41,8 +47,10 @@
 <!-- Footer com os botões para alterar idioma -->
 <footer>
     <p>Selecione o idioma:</p>
-    <a href="?lang=pt_BR">Português</a> |
-    <a href="?lang=en">English</a>
+
+
+    <a th:href="@{''(lang='pt')}">Português</a> |
+    <a th:href="@{''(lang='en')}">English</a>
 </footer>
 </body>
 </html>

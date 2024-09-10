@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Avaliar Candidato</title>
+    <link rel="stylesheet" th:href="@{/css/empresa/avaliarCandidato.css}">
     <script>
         function mostrarCampoEntrevista() {
             var status = document.getElementById('status').value;
@@ -20,32 +21,34 @@
     </script>
 </head>
 <body>
-<h1>Avaliar Candidato: <span th:text="${candidatura.profissional.nome}"></span></h1>
+<div class="container">
+    <h1>Avaliar Candidato: <span th:text="${candidatura.profissional.nome}"></span></h1>
 
-<form th:action="@{/empresa/avaliarCandidato/{candidaturaId}(candidaturaId=${candidatura.id})}" method="post">
-    <!-- Campo de status -->
-    <div>
-        <label for="status">Status da Candidatura:</label>
-        <select id="status" th:field="*{candidatura.status.descricao}" required onchange="mostrarCampoEntrevista()">
-            <option value="ABERTO" th:selected="${candidatura.status.descricao == 'ABERTO'}">ABERTO</option>
-            <option value="NÃO SELECIONADO" th:selected="${candidatura.status.descricao == 'NÃO SELECIONADO'}">NÃO SELECIONADO</option>
-            <option value="ENTREVISTA" th:selected="${candidatura.status.descricao == 'ENTREVISTA'}">ENTREVISTA</option>
-        </select>
-    </div>
+    <form th:action="@{/empresa/avaliarCandidato/{candidaturaId}(candidaturaId=${candidatura.id})}" method="post">
+        <!-- Campo de status -->
+        <div class="form-group">
+            <label for="status">Status da Candidatura:</label>
+            <select id="status" th:field="*{candidatura.status.descricao}" required onchange="mostrarCampoEntrevista()">
+                <option value="ABERTO" th:selected="${candidatura.status.descricao == 'ABERTO'}">ABERTO</option>
+                <option value="NÃO SELECIONADO" th:selected="${candidatura.status.descricao == 'NÃO SELECIONADO'}">NÃO SELECIONADO</option>
+                <option value="ENTREVISTA" th:selected="${candidatura.status.descricao == 'ENTREVISTA'}">ENTREVISTA</option>
+            </select>
+        </div>
 
-    <!-- Link e data de entrevista, se o status for 'SELECIONADO' -->
-    <div id="entrevistaDiv" style="display:none;">
-        <label for="entrevistaLink">Link da Entrevista:</label>
-        <input type="text" id="entrevistaLink" th:field="*{candidatura.entrevistaLink}" />
+        <!-- Link e data de entrevista, se o status for 'ENTREVISTA' -->
+        <div id="entrevistaDiv" class="form-group" style="display:none;">
+            <label for="entrevistaLink">Link da Entrevista:</label>
+            <input type="text" id="entrevistaLink" th:field="*{candidatura.entrevistaLink}" />
 
-        <label for="entrevistaDataHora">Data e Hora da Entrevista:</label>
-        <input type="datetime-local" id="entrevistaDataHora" th:field="*{candidatura.entrevistaDataHora}" />
-    </div>
+            <label for="entrevistaDataHora">Data e Hora da Entrevista:</label>
+            <input type="datetime-local" id="entrevistaDataHora" th:field="*{candidatura.entrevistaDataHora}" />
+        </div>
 
-    <div>
-        <button type="submit">Salvar Avaliação</button>
-        <a th:href="@{/empresa/listaVagas}">Cancelar</a>
-    </div>
-</form>
+        <div class="form-actions">
+            <button type="submit">Salvar Avaliação</button>
+            <a th:href="@{/empresa/listaVagas}" class="btn-cancel">Cancelar</a>
+        </div>
+    </form>
+</div>
 </body>
 </html>

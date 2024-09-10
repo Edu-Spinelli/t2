@@ -1,25 +1,25 @@
 package br.ufscar.dc.dsw.EstagioT2;
 
-import br.ufscar.dc.dsw.EstagioT2.domain.*;
-import br.ufscar.dc.dsw.EstagioT2.repository.VagaRepository;
-import br.ufscar.dc.dsw.EstagioT2.repository.EmpresaRepository;
-import br.ufscar.dc.dsw.EstagioT2.repository.ProfissionalRepository;
-import br.ufscar.dc.dsw.EstagioT2.repository.UsuarioRepository;
-import br.ufscar.dc.dsw.EstagioT2.service.StatusCandidaturaService;
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import java.math.BigDecimal;
+import br.ufscar.dc.dsw.EstagioT2.domain.Empresa;
+import br.ufscar.dc.dsw.EstagioT2.domain.Profissional;
+import br.ufscar.dc.dsw.EstagioT2.domain.StatusCandidatura;
+import br.ufscar.dc.dsw.EstagioT2.domain.Usuario;
+import br.ufscar.dc.dsw.EstagioT2.domain.Vaga;
+import br.ufscar.dc.dsw.EstagioT2.repository.EmpresaRepository;
+import br.ufscar.dc.dsw.EstagioT2.repository.ProfissionalRepository;
+import br.ufscar.dc.dsw.EstagioT2.repository.UsuarioRepository;
+import br.ufscar.dc.dsw.EstagioT2.repository.VagaRepository;
+import br.ufscar.dc.dsw.EstagioT2.service.StatusCandidaturaService;
 
-@SpringBootApplication(exclude = {
-		org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration.class,
-		org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration.class
-})@EnableWebMvc
-
+@SpringBootApplication
 public class EstagioT2Application implements CommandLineRunner {
 
 	@Autowired
@@ -162,6 +162,11 @@ public class EstagioT2Application implements CommandLineRunner {
 			profissional3.setDataNascimento(java.sql.Date.valueOf("1990-01-01"));
 			profissional3.setUsuario(usuarioProfissional3);
 			profissionalRepository.save(profissional3);
+
+
+
+
+
 
 
 

@@ -8,6 +8,7 @@ import br.ufscar.dc.dsw.EstagioT2.service.EmpresaService;
 import br.ufscar.dc.dsw.EstagioT2.service.ProfissionalService;
 import br.ufscar.dc.dsw.EstagioT2.service.UsuarioService;
 import br.ufscar.dc.dsw.EstagioT2.service.VagaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -65,7 +66,7 @@ public class AdminController {
     @GetMapping("/vaga")
     public String listarVagas(Model model) {
         List<Vaga> vagas = vagaService.listarTodas();
-        model.addAttribute("vagas", vagaService.listarTodas());
+        model.addAttribute("vagas", vagas);
         return "admin/listaVagas";  // Certifique-se de que o template exista
     }
 
@@ -335,6 +336,50 @@ public class AdminController {
         return "redirect:/admin/vaga";
     }
 
+    @GetMapping("/registerProfissional")
+    public String showRegisterProfissionalForm(Profissional profissional, Model model) {
+        model.addAttribute("profissional", new Profissional());
+        return "admin/registerProfissional"; // Certifique-se de criar essa página HTML
+    }
+
+    // Método para processar o formulário de criação de Profissional
+    @PostMapping("/registerProfissional")
+    public String registerProfissional(@Valid @ModelAttribute("profissional") Profissional profissional, BindingResult result, Model model, RedirectAttributes attributes) {
+        if (result.hasErrors()) {
+            return "admin/registerProfissional"; // Retorna ao formulário se houver erros
+        }
+
+        Usuario usuario = profissional.getUsuario();
+        usuario.setSenha(passwordEncoder.encode(usuario.getSenha())); // Criptografa a senha
+        usuario.setTipo(Usuario.TipoUsuario.profissional); // Define o tipo de usuário como profissional
+        usuarioService.salvar(usuario);
+        profissionalService.salvar(profissional);
+        attributes.addFlashAttribute("sucesso", "Profissional criado com sucesso!");
+        return "redirect:/admin/profissional"; // Redireciona para a lista de profissionais após o registro
+    }
+
+    // Método para exibir o formulário de criação de Empresa
+    @GetMapping("/registerEmpresa")
+    public String showRegisterEmpresaForm(Empresa empresa, Model model) {
+        model.addAttribute("empresa", new Empresa());
+        return "admin/registerEmpresa"; // Certifique-se de criar essa página HTML
+    }
+
+    // Método para processar o formulário de criação de Empresa
+    @PostMapping("/registerEmpresa")
+    public String registerEmpresa(@Valid @ModelAttribute("empresa") Empresa empresa, BindingResult result, Model model, RedirectAttributes attributes) {
+        if (result.hasErrors()) {
+            return "admin/registerEmpresa"; // Retorna ao formulário se houver erros
+        }
+
+        Usuario usuario = empresa.getUsuario();
+        usuario.setSenha(passwordEncoder.encode(usuario.getSenha())); // Criptografa a senha
+        usuario.setTipo(Usuario.TipoUsuario.empresa); // Define o tipo de usuário como empresa
+        usuarioService.salvar(usuario);
+        empresaService.salvar(empresa);
+        attributes.addFlashAttribute("sucesso", "Empresa criada com sucesso!");
+        return "redirect:/admin/home"; // Redireciona para a lista de empresas após o registro
+    }
 
 
 
