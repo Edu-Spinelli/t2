@@ -8,6 +8,7 @@ import br.ufscar.dc.dsw.EstagioT2.security.UsuarioDetails;
 import br.ufscar.dc.dsw.EstagioT2.service.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,16 +19,25 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.text.SimpleDateFormat;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/empresa")
 public class EmpresaController {
+
+    @Autowired
+    private MessageSource messageSource;
+
+    @Autowired
+    private LocaleResolver localeResolver;
+
 
     @Autowired
     private EmpresaService empresaService;
@@ -80,7 +90,8 @@ public class EmpresaController {
     public String cadastrarVaga(@Valid @ModelAttribute("vaga") Vaga vaga,
                                 BindingResult result,
                                 Authentication authentication,
-                                RedirectAttributes attributes) {
+                                RedirectAttributes attributes,
+                                Locale locale) {
         // Verifica se há erros de validação
         if (result.hasErrors()) {
             return "empresa/cadastrarVaga"; // Volta ao formulário se houver erros
@@ -88,7 +99,7 @@ public class EmpresaController {
 
         // Valida a data limite da vaga (não pode ser anterior à data atual)
         if (vaga.getDataLimiteInscricao().before(new Date())) {
-            attributes.addFlashAttribute("erro", "A data limite de inscrição não pode ser anterior à data atual.");
+            attributes.addFlashAttribute("erro", messageSource.getMessage("vaga.date_error", null, locale));
             return "redirect:/empresa/cadastrarVaga"; // Redireciona com erro se a data estiver incorreta
         }
 
@@ -100,11 +111,11 @@ public class EmpresaController {
             vaga.setEmpresa(empresa);
 
             vagaService.salvar(vaga); // Salva a vaga no banco de dados
-            attributes.addFlashAttribute("sucesso", "Vaga cadastrada com sucesso!");
+            attributes.addFlashAttribute("sucesso", messageSource.getMessage("vaga.success", null, locale));
             return "redirect:/empresa/home"; // Redireciona para a página inicial da empresa
         } else {
             // Se a empresa não for encontrada, redireciona ou exibe uma mensagem de erro
-            attributes.addFlashAttribute("erro", "Empresa não encontrada.");
+            attributes.addFlashAttribute("erro", messageSource.getMessage("empresa.not_found", null, locale));
             return "redirect:/empresa/cadastrarVaga"; // Redireciona de volta ao formulário de cadastro
         }
     }
@@ -166,7 +177,7 @@ public class EmpresaController {
 
 
     @PostMapping("/editarVaga/{id}")
-    public String editarVaga(@PathVariable("id") Long id, @ModelAttribute("vaga") Vaga vagaEditada, Authentication authentication, RedirectAttributes attributes) {
+    public String editarVaga(@PathVariable("id") Long id, @ModelAttribute("vaga") Vaga vagaEditada, Authentication authentication, RedirectAttributes attributes, Locale locale) {
         // Recupera o email do usuário autenticado
         String email = authentication.getName();
 
@@ -190,7 +201,7 @@ public class EmpresaController {
                 // Salva a vaga atualizada no banco de dados
                 vagaService.salvar(vaga);
 
-                attributes.addFlashAttribute("sucesso", "Vaga atualizada com sucesso!");
+                attributes.addFlashAttribute("sucesso", messageSource.getMessage("vaga.updated", null, locale));
 
                 return "redirect:/empresa/listaVagas"; // Redireciona para a lista de vagas após a edição
             } else {
@@ -203,7 +214,7 @@ public class EmpresaController {
 
 
     @GetMapping("/excluirVaga/{id}")
-    public String excluirVaga(@PathVariable("id") Long id, Authentication authentication, RedirectAttributes attributes) {
+    public String excluirVaga(@PathVariable("id") Long id, Authentication authentication, RedirectAttributes attributes, Locale locale) {
         // Recupera o email do usuário autenticado
         String email = authentication.getName();
 
@@ -219,7 +230,7 @@ public class EmpresaController {
             // Verifica se a vaga pertence à empresa logada
             if (vaga != null && vaga.getEmpresa().getId().equals(empresa.getId())) {
                 vagaService.excluir(id);  // Exclui a vaga do banco de dados
-                attributes.addFlashAttribute("sucesso", "Vaga excluída com sucesso!");
+                attributes.addFlashAttribute("sucesso", messageSource.getMessage("vaga.deleted", null, locale) );
             } else {
                 attributes.addFlashAttribute("erro", "Vaga não encontrada ou você não tem permissão para excluí-la.");
             }
@@ -297,7 +308,8 @@ public class EmpresaController {
     @PostMapping("/avaliarCandidato/{candidaturaId}")
     public String avaliarCandidato(@PathVariable("candidaturaId") Long candidaturaId,
                                    @ModelAttribute("candidatura") Candidatura candidatura,
-                                   RedirectAttributes attributes) {
+                                   RedirectAttributes attributes,
+                                   Locale locale) {
         // Busca a candidatura pelo ID
         Candidatura candidaturaExistente = candidaturaService.buscarPorId(candidaturaId);
         if (candidaturaExistente == null) {
@@ -351,7 +363,7 @@ public class EmpresaController {
             emailService.sendEmail(emailProfissional, subject, body);
         }
 
-        attributes.addFlashAttribute("sucesso", "Avaliação enviada e e-mail enviado ao candidato.");
+        attributes.addFlashAttribute("sucesso", messageSource.getMessage("candidatura.success", null, locale));
         return "redirect:/empresa/listaVagas";
     }
 

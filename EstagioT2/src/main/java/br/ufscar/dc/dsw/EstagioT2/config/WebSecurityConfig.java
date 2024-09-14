@@ -9,6 +9,11 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class WebSecurityConfig {
+    private final CustomLogoutSuccessHandler logoutSuccessHandler;
+
+    public WebSecurityConfig(CustomLogoutSuccessHandler logoutSuccessHandler) {
+        this.logoutSuccessHandler = logoutSuccessHandler;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -30,7 +35,7 @@ public class WebSecurityConfig {
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")  // Redireciona para a página de login após o logout
+                        .logoutSuccessHandler(logoutSuccessHandler) // Usando o handler customizado
                         .permitAll()
                 )
                 .csrf(csrf -> csrf.disable());

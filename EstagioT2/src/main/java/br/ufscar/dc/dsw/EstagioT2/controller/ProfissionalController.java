@@ -3,10 +3,12 @@ package br.ufscar.dc.dsw.EstagioT2.controller;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.ufscar.dc.dsw.EstagioT2.domain.Candidatura;
@@ -35,6 +38,12 @@ import br.ufscar.dc.dsw.EstagioT2.service.VagaService;
 @Controller
 @RequestMapping("/profissional")
 public class ProfissionalController {
+
+    @Autowired
+    private MessageSource messageSource;
+
+    @Autowired
+    private LocaleResolver localeResolver;
 
     @Autowired
     private ProfissionalService profissionalService;
@@ -85,11 +94,11 @@ public class ProfissionalController {
     }
 
     @GetMapping("/inscreverVaga/{id}")
-    public String exibirFormularioInscricao(@PathVariable("id") Long id, Model model, Authentication authentication, RedirectAttributes attributes) {
+    public String exibirFormularioInscricao(@PathVariable("id") Long id, Model model, Authentication authentication, RedirectAttributes attributes, Locale locale) {
         // Busca a vaga pelo ID
         Vaga vaga = vagaService.buscarPorId(id);
         if (vaga == null) {
-            attributes.addFlashAttribute("erro", "Vaga não encontrada.");
+            attributes.addFlashAttribute("erro", messageSource.getMessage("vaga.not_found", null, locale));
             return "redirect:/profissional/vagas";
         }
 
@@ -97,7 +106,8 @@ public class ProfissionalController {
         String email = authentication.getName();
         Optional<Profissional> optionalProfissional = profissionalService.buscarPorEmail(email);
         if (!optionalProfissional.isPresent()) {
-            attributes.addFlashAttribute("erro", "Profissional não encontrado.");
+            attributes.addFlashAttribute("erro", messageSource.getMessage("profissional.not_found", null, locale));
+
             return "redirect:/profissional/vagas";
         }
 
@@ -106,7 +116,7 @@ public class ProfissionalController {
         List<Candidatura> candidaturasExistentes = candidaturaService.buscarPorProfissionalEVaga(profissional, vaga);
         if (!candidaturasExistentes.isEmpty()) {
             // Se já houver uma candidatura, redireciona para a lista de vagas com uma mensagem
-            attributes.addFlashAttribute("erro", "Você já se candidatou a esta vaga.");
+            attributes.addFlashAttribute("erro", messageSource.getMessage("candidatura.already_exists", null, locale));
             return "redirect:/profissional/vagas";
         }
 
@@ -131,12 +141,13 @@ public class ProfissionalController {
     public String inscreverVaga(@PathVariable("id") Long id,
                                 @RequestParam("curriculoFile") MultipartFile curriculoFile,
                                 Authentication authentication,
-                                RedirectAttributes attributes) {
+                                RedirectAttributes attributes, Locale locale) {
 
         // Busca da vaga
         Vaga vaga = vagaService.buscarPorId(id);
         if (vaga == null) {
-            attributes.addFlashAttribute("erro", "Vaga não encontrada.");
+            attributes.addFlashAttribute("erro", messageSource.getMessage("vaga.not_found", null, locale));
+
             return "redirect:/profissional/vagas";
         }
 
@@ -144,7 +155,7 @@ public class ProfissionalController {
         String email = authentication.getName();
         Optional<Profissional> optionalProfissional = profissionalService.buscarPorEmail(email);
         if (!optionalProfissional.isPresent()) {
-            attributes.addFlashAttribute("erro", "Profissional não encontrado.");
+            attributes.addFlashAttribute("erro", messageSource.getMessage("profissional.not_found", null, locale));
             return "redirect:/profissional/vagas";
         }
         Profissional profissional = optionalProfissional.get();
@@ -158,12 +169,13 @@ public class ProfissionalController {
 
         // Verificar e processar o upload do arquivo PDF
         if (curriculoFile.isEmpty()) {
-            attributes.addFlashAttribute("erro", "Por favor, selecione um arquivo PDF para o currículo.");
+            attributes.addFlashAttribute("erro", messageSource.getMessage("curriculo.empty", null, locale));
             return "redirect:/profissional/vagas";
         }
 
         if (!curriculoFile.getContentType().equals("application/pdf")) {
-            attributes.addFlashAttribute("erro", "Por favor, envie apenas arquivos PDF.");
+            attributes.addFlashAttribute("erro", messageSource.getMessage("curriculo.not_pdf", null, locale));
+
             return "redirect:/profissional/vagas";
         }
 
@@ -173,7 +185,8 @@ public class ProfissionalController {
             novaCandidatura.setCurriculo(curriculoFile.getBytes());
             novaCandidatura.setCurriculoNome(curriculoFile.getOriginalFilename());
         } catch (IOException e) {
-            attributes.addFlashAttribute("erro", "Erro ao processar o arquivo do currículo.");
+            attributes.addFlashAttribute("erro", messageSource.getMessage("curriculo.process_error", null, locale));
+
             return "redirect:/profissional/vagas";
         }
 
@@ -185,7 +198,7 @@ public class ProfissionalController {
         // Definindo o status padrão da candidatura (exemplo: PENDENTE)
         StatusCandidatura statusPendente = statusCandidaturaService.buscarPorDescricao("ABERTO");
         if (statusPendente == null) {
-            attributes.addFlashAttribute("erro", "Status de candidatura não encontrado.");
+            attributes.addFlashAttribute("erro", messageSource.getMessage("status.not_found", null, locale));
             return "redirect:/profissional/vagas";
         }
         novaCandidatura.setStatus(statusPendente);
@@ -193,7 +206,8 @@ public class ProfissionalController {
         // Salvando a candidatura
         candidaturaService.salvar(novaCandidatura);
 
-        attributes.addFlashAttribute("sucesso", "Inscrição realizada com sucesso!");
+        attributes.addFlashAttribute("sucesso", messageSource.getMessage("candidatura.success", null, locale));
+
 
         return "redirect:/profissional/vagas";
     }

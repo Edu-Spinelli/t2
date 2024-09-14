@@ -10,21 +10,30 @@ import br.ufscar.dc.dsw.EstagioT2.service.UsuarioService;
 import br.ufscar.dc.dsw.EstagioT2.service.VagaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
+
+    @Autowired
+    private MessageSource messageSource;
+
+    @Autowired
+    private LocaleResolver localeResolver;
 
 
     @Autowired
@@ -79,7 +88,7 @@ public class AdminController {
     }
 
     @PostMapping("/profissional/save/{id}")
-    public String salvarProfissional(@PathVariable("id") Long id, @ModelAttribute("profissional") Profissional profissional, BindingResult result, RedirectAttributes attributes) {
+    public String salvarProfissional(@PathVariable("id") Long id, @ModelAttribute("profissional") Profissional profissional, BindingResult result, RedirectAttributes attributes, Locale locale) {
         if (result.hasErrors()) {
             // Em caso de erro, retorna à página de edição com o objeto "profissional"
             return "admin/editarProfissional";
@@ -94,7 +103,7 @@ public class AdminController {
                 Optional<Profissional> profissionalComMesmoCpf = Optional.ofNullable(profissionalService.buscarPorCpf(profissional.getCpf()));
                 if (profissionalComMesmoCpf.isPresent()) {
                     // Se o CPF já está em uso por outro profissional, retorna erro
-                    attributes.addFlashAttribute("erro", "O CPF já está em uso por outro profissional.");
+                    attributes.addFlashAttribute("erro", messageSource.getMessage("admin.profissional.cpf_exists", null, locale));
                     return "redirect:/admin/editarProfissional/" + id;
                 }
             }
@@ -108,7 +117,7 @@ public class AdminController {
 
                 if (usuarioComNovoEmail.isPresent()) {
                     // Se o email já está em uso por outro usuário, retorna erro
-                    attributes.addFlashAttribute("erro", "O email já está em uso por outro profissional.");
+                    attributes.addFlashAttribute("erro", messageSource.getMessage("admin.profissional.email_exists", null, locale));
                     return "redirect:/admin/editarProfissional/" + id;
                 } else {
                     // Se o email não está em uso, atualiza o email
@@ -130,7 +139,7 @@ public class AdminController {
 
             // Salva as atualizações no banco de dados
             profissionalService.salvar(profissionalExistente);
-            attributes.addFlashAttribute("sucesso", "Profissional salvo com sucesso!");
+            attributes.addFlashAttribute("sucesso", messageSource.getMessage("admin.profissional.save_success", null, locale));
 
         } catch (Exception e) {
             // Lida com exceções e redireciona de volta à página de edição
@@ -142,7 +151,7 @@ public class AdminController {
     }
 
     @GetMapping("/excluirProfissional/{id}")
-    public String excluirProfissional(@PathVariable("id") Long id, RedirectAttributes attributes) {
+    public String excluirProfissional(@PathVariable("id") Long id, RedirectAttributes attributes, Locale locale) {
         try {
             // Busca o profissional pelo ID
             Profissional profissional = profissionalService.buscarPorId(id);
@@ -159,14 +168,15 @@ public class AdminController {
                     usuarioService.excluir(usuario.getId());
                 }
 
-                attributes.addFlashAttribute("sucesso", "Profissional e usuário excluídos com sucesso!");
+                attributes.addFlashAttribute("sucesso", messageSource.getMessage("admin.profissional.delete_success", null, locale));
             } else {
-                attributes.addFlashAttribute("erro", "Profissional não encontrado.");
+                attributes.addFlashAttribute("erro", messageSource.getMessage("admin.profissional.not_found", null, locale));
+
             }
 
         } catch (Exception e) {
             // Lida com exceções
-            attributes.addFlashAttribute("erro", "Erro ao excluir o profissional: " + e.getMessage());
+            attributes.addFlashAttribute("erro", messageSource.getMessage("admin.profissional.delete_error", null, locale));
         }
 
         // Redireciona para a lista de profissionais após a exclusão
@@ -184,7 +194,7 @@ public class AdminController {
     }
 
     @PostMapping("/empresa/save/{id}")
-    public String salvarEmpresa(@PathVariable("id") Long id, @ModelAttribute("empresa") Empresa empresa, BindingResult result, RedirectAttributes attributes) {
+    public String salvarEmpresa(@PathVariable("id") Long id, @ModelAttribute("empresa") Empresa empresa, BindingResult result, RedirectAttributes attributes, Locale locale) {
         if (result.hasErrors()) {
             // Em caso de erro, retorna à página de edição com o objeto "empresa"
             return "admin/editarEmpresa";
@@ -202,7 +212,7 @@ public class AdminController {
 
                 if (usuarioComNovoEmail.isPresent()) {
                     // Se o email já está em uso por outra empresa, retorna erro
-                    attributes.addFlashAttribute("erro", "O email já está em uso por outra empresa.");
+                    attributes.addFlashAttribute("erro", messageSource.getMessage("admin.empresa.email_exists", null, locale));
                     return "redirect:/admin/editarEmpresa/" + id;
                 } else {
                     // Se o email não está em uso, atualiza o email
@@ -213,7 +223,7 @@ public class AdminController {
             Optional<Empresa> empresaComMesmoCnpj = Optional.ofNullable(empresaService.buscarPorCnpj(empresa.getCnpj()));
             if (empresaComMesmoCnpj.isPresent() && !empresaComMesmoCnpj.get().getId().equals(id)) {
                 // Se o CNPJ já está em uso por outra empresa, retorna erro
-                attributes.addFlashAttribute("erro", "O CNPJ já está em uso por outra empresa.");
+                attributes.addFlashAttribute("erro", messageSource.getMessage("admin.empresa.cnpj_exists", null, locale));
                 return "redirect:/admin/editarEmpresa/" + id;
             }
 
@@ -232,7 +242,7 @@ public class AdminController {
 
             // Salva as atualizações no banco de dados
             empresaService.salvar(empresaExistente);
-            attributes.addFlashAttribute("sucesso", "Empresa salva com sucesso!");
+            attributes.addFlashAttribute("sucesso", messageSource.getMessage("admin.empresa.save_success", null, locale));
 
         } catch (Exception e) {
             // Lida com exceções e redireciona de volta à página de edição
@@ -243,7 +253,7 @@ public class AdminController {
     }
 
     @GetMapping("/excluirEmpresa/{id}")
-    public String excluirEmpresa(@PathVariable("id") Long id, RedirectAttributes attributes) {
+    public String excluirEmpresa(@PathVariable("id") Long id, RedirectAttributes attributes, Locale locale) {
         try {
             // Busca a empresa pelo ID
             Empresa empresa = empresaService.buscarPorId(id);
@@ -260,14 +270,15 @@ public class AdminController {
                     usuarioService.excluir(usuario.getId());
                 }
 
-                attributes.addFlashAttribute("sucesso", "Empresa e usuário excluídos com sucesso!");
+                attributes.addFlashAttribute("sucesso", messageSource.getMessage("admin.empresa.delete_success", null, locale));
             } else {
-                attributes.addFlashAttribute("erro", "Empresa não encontrada.");
+                attributes.addFlashAttribute("erro", messageSource.getMessage("admin.empresa.not_found", null, locale));
             }
 
         } catch (Exception e) {
             // Lida com exceções
-            attributes.addFlashAttribute("erro", "Erro ao excluir a empresa: " + e.getMessage());
+            attributes.addFlashAttribute("erro", messageSource.getMessage("admin.empresa.delete_error", null, locale));
+
         }
 
         // Redireciona para a lista de empresas após a exclusão
@@ -283,7 +294,7 @@ public class AdminController {
     }
 
     @PostMapping("/vaga/save/{id}")
-    public String salvarVaga(@PathVariable("id") Long id, @ModelAttribute("vaga") Vaga vaga, BindingResult result, RedirectAttributes attributes) {
+    public String salvarVaga(@PathVariable("id") Long id, @ModelAttribute("vaga") Vaga vaga, BindingResult result, RedirectAttributes attributes, Locale locale) {
         System.out.println("Iniciando o processo de salvar vaga");
 
         if (result.hasErrors()) {
@@ -313,18 +324,19 @@ public class AdminController {
                 System.out.println("Salvando vaga atualizada");
                 vagaService.salvar(vagaExistente);
 
-                attributes.addFlashAttribute("sucesso", "Vaga salva com sucesso!");
+                attributes.addFlashAttribute("sucesso", messageSource.getMessage("admin.vaga.save_success", null, locale));
                 System.out.println("Vaga salva com sucesso");
             } else {
                 System.out.println("Vaga não encontrada");
-                attributes.addFlashAttribute("erro", "Vaga não encontrada.");
+                attributes.addFlashAttribute("erro", messageSource.getMessage("admin.vaga.not_found", null, locale));
                 return "redirect:/admin/vaga";
             }
 
         } catch (Exception e) {
             System.out.println("Erro ao salvar vaga: " + e.getMessage());
             e.printStackTrace(); // Loga a exceção completa no console
-            attributes.addFlashAttribute("erro", "Erro ao salvar a vaga: " + e.getMessage());
+            attributes.addFlashAttribute("erro", messageSource.getMessage("admin.vaga.save_error", null, locale));
+
             return "redirect:/admin/editarVaga/" + id;
         }
 
@@ -332,7 +344,7 @@ public class AdminController {
     }
 
     @GetMapping("/excluirVaga/{id}")
-    public String excluirVaga(@PathVariable("id") Long id, RedirectAttributes attributes) {
+    public String excluirVaga(@PathVariable("id") Long id, RedirectAttributes attributes, Locale locale) {
         try {
             // Busca a vaga pelo ID
             Vaga vaga = vagaService.buscarPorId(id);
@@ -340,14 +352,16 @@ public class AdminController {
             if (vaga != null) {
                 // Exclui a vaga
                 vagaService.excluir(id);
-                attributes.addFlashAttribute("sucesso", "Vaga excluída com sucesso!");
+                attributes.addFlashAttribute("sucesso", messageSource.getMessage("admin.vaga.delete_success", null, locale));
             } else {
-                attributes.addFlashAttribute("erro", "Vaga não encontrada.");
+                attributes.addFlashAttribute("erro", messageSource.getMessage("admin.vaga.not_found", null, locale));
+
             }
 
         } catch (Exception e) {
             // Lida com exceções
-            attributes.addFlashAttribute("erro", "Erro ao excluir a vaga: " + e.getMessage());
+            attributes.addFlashAttribute("erro", messageSource.getMessage("admin.vaga.delete_error", null, locale));
+
         }
 
         // Redireciona para a lista de vagas após a exclusão
@@ -365,7 +379,8 @@ public class AdminController {
     public String registerProfissional(@Valid @ModelAttribute("profissional") Profissional profissional,
                                        BindingResult result,
                                        Model model,
-                                       RedirectAttributes attributes) {
+                                       RedirectAttributes attributes,
+                                       Locale locale) {
         // Verifica se há erros de validação
         if (result.hasErrors()) {
             return "admin/registerProfissional"; // Retorna ao formulário se houver erros de validação
@@ -373,13 +388,13 @@ public class AdminController {
 
         // Verifica se o CPF já está em uso por outro profissional
         if (profissionalService.buscarPorCpf(profissional.getCpf()) != null) {
-            attributes.addFlashAttribute("erro", "O CPF já está em uso por outro profissional.");
+            attributes.addFlashAttribute("erro", messageSource.getMessage("admin.profissional.cpf_exists", null, locale));
             return "redirect:/admin/registerProfissional"; // Redireciona ao formulário de registro com mensagem de erro
         }
 
         // Verifica se o e-mail já está em uso por outro usuário
         if (usuarioService.buscarPorEmail(profissional.getUsuario().getEmail()).isPresent()) {
-            attributes.addFlashAttribute("erro", "O e-mail já está em uso por outro usuário.");
+            attributes.addFlashAttribute("erro", messageSource.getMessage("admin.profissional.email_exists", null, locale));
             return "redirect:/admin/registerProfissional"; // Redireciona ao formulário de registro com mensagem de erro
         }
 
@@ -392,7 +407,7 @@ public class AdminController {
         profissionalService.salvar(profissional); // Salva o profissional no banco de dados
 
         // Define uma mensagem de sucesso
-        attributes.addFlashAttribute("sucesso", "Profissional criado com sucesso!");
+        attributes.addFlashAttribute("sucesso", messageSource.getMessage("admin.profissional.save_success", null, locale));
 
         return "redirect:/admin/profissional"; // Redireciona para a lista de profissionais após o registro
     }
@@ -410,7 +425,8 @@ public class AdminController {
     public String registerEmpresa(@Valid @ModelAttribute("empresa") Empresa empresa,
                                   BindingResult result,
                                   Model model,
-                                  RedirectAttributes attributes) {
+                                  RedirectAttributes attributes,
+                                  Locale locale) {
         // Verifica se há erros de validação
         if (result.hasErrors()) {
             return "admin/registerEmpresa"; // Retorna ao formulário se houver erros de validação
@@ -418,13 +434,13 @@ public class AdminController {
 
         // Verifica se o CNPJ já está em uso por outra empresa
         if (empresaService.buscarPorCnpj(empresa.getCnpj()) != null) {
-            attributes.addFlashAttribute("erro", "O CNPJ já está em uso por outra empresa.");
+            attributes.addFlashAttribute("erro", messageSource.getMessage("admin.empresa.cnpj_exists", null, locale));
             return "redirect:/admin/registerEmpresa"; // Redireciona ao formulário de registro com mensagem de erro
         }
 
         // Verifica se o e-mail já está em uso por outro usuário
         if (usuarioService.buscarPorEmail(empresa.getUsuario().getEmail()).isPresent()) {
-            attributes.addFlashAttribute("erro", "O e-mail já está em uso por outro usuário.");
+            attributes.addFlashAttribute("erro", messageSource.getMessage("admin.empresa.email_exists", null, locale));
             return "redirect:/admin/registerEmpresa"; // Redireciona ao formulário de registro com mensagem de erro
         }
 
@@ -437,7 +453,7 @@ public class AdminController {
         empresaService.salvar(empresa); // Salva a empresa no banco de dados
 
         // Define uma mensagem de sucesso
-        attributes.addFlashAttribute("sucesso", "Empresa criada com sucesso!");
+        attributes.addFlashAttribute("sucesso", messageSource.getMessage("admin.empresa.save_success", null, locale));
 
         return "redirect:/admin/home"; // Redireciona para a home após o registro
     }

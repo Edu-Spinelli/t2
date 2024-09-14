@@ -1,6 +1,7 @@
 package br.ufscar.dc.dsw.EstagioT2.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,11 +21,18 @@ import br.ufscar.dc.dsw.EstagioT2.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Locale;
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/register")
 public class RegisterController implements WebMvcConfigurer {
+
+    private final MessageSource messageSource;
+
+    public RegisterController(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
 
     @Autowired
     private EmpresaService empresaService;
@@ -47,7 +55,7 @@ public class RegisterController implements WebMvcConfigurer {
 
     // Lida com o envio do formulário de registro de empresa
     @PostMapping("/empresa")
-    public String registerEmpresa(@Valid @ModelAttribute("empresa") Empresa empresa, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+    public String registerEmpresa(@Valid @ModelAttribute("empresa") Empresa empresa, BindingResult result, Model model, RedirectAttributes redirectAttributes, Locale locale) {
         if (result.hasErrors()) {
             return "register/registerEmpresa"; // Retorna ao formulário se houver erros
         }
@@ -55,13 +63,13 @@ public class RegisterController implements WebMvcConfigurer {
         Optional<Usuario> usuarioExistente = usuarioService.buscarPorEmail(empresa.getUsuario().getEmail());
         if (usuarioExistente.isPresent()) {
             // Adiciona a mensagem de erro ao modelo e retorna ao formulário
-            model.addAttribute("errorMessage", "Já existe um usuário com o email informado.");
+            model.addAttribute("errorMessage", messageSource.getMessage("register.email_exists", null, locale));
             return "register/registerEmpresa";
         }
 
         Empresa empresaExistente = empresaService.buscarPorCnpj(empresa.getCnpj());
         if (empresaExistente != null) {
-            model.addAttribute("errorMessage", "O CNPJ já está em uso.");
+            model.addAttribute("errorMessage", messageSource.getMessage("register.cnpj_exists", null, locale));
             return "register/registerEmpresa"; // Retorna ao formulário com mensagem de erro
         }
 
@@ -72,7 +80,8 @@ public class RegisterController implements WebMvcConfigurer {
         usuarioService.salvar(usuario);
         empresaService.salvar(empresa);
 
-        redirectAttributes.addFlashAttribute("sucesso", "Registro realizado com sucesso! Por favor, faça login.");
+        String successMessage = messageSource.getMessage("register.success", null, locale);
+        redirectAttributes.addFlashAttribute("sucesso", successMessage);
         return "redirect:/login";
     }
 
@@ -87,7 +96,7 @@ public class RegisterController implements WebMvcConfigurer {
     public String registerProfissional(@Valid @ModelAttribute("profissional") Profissional profissional,
                                        BindingResult result,
                                        Model model,
-                                       RedirectAttributes redirectAttributes) {
+                                       RedirectAttributes redirectAttributes, Locale locale) {
         if (result.hasErrors()) {
             return "register/registerProfissional"; // Retorna ao formulário se houver erros de validação
         }
@@ -95,21 +104,22 @@ public class RegisterController implements WebMvcConfigurer {
         // Verifica se o email já está em uso
         Optional<Usuario> usuarioExistente = usuarioService.buscarPorEmail(profissional.getUsuario().getEmail());
         if (usuarioExistente.isPresent()) {
-            model.addAttribute("errorMessage", "O email já está em uso.");
+            model.addAttribute("errorMessage", messageSource.getMessage("register.email_exists", null, locale));
             return "register/registerProfissional"; // Retorna ao formulário se o email já estiver em uso
         }
 
         // Verifica se o CPF já está em uso
         Optional<Profissional> profissionalExistentePorCpf = Optional.ofNullable(profissionalService.buscarPorCpf(profissional.getCpf()));
         if (profissionalExistentePorCpf.isPresent()) {
-            model.addAttribute("errorMessage", "O CPF já está em uso.");
+            model.addAttribute("errorMessage", messageSource.getMessage("register.cpf_exists", null, locale));
+
             return "register/registerProfissional"; // Retorna ao formulário se o CPF já estiver em uso
         }
 
         // Verifica se o telefone já está em uso
         Optional<Profissional> profissionalExistentePorTelefone = Optional.ofNullable(profissionalService.buscarPorTelefone(profissional.getTelefone()));
         if (profissionalExistentePorTelefone.isPresent()) {
-            model.addAttribute("errorMessage", "O telefone já está em uso.");
+            model.addAttribute("errorMessage", messageSource.getMessage("register.phone_exists", null, locale));
             return "register/registerProfissional"; // Retorna ao formulário se o telefone já estiver em uso
         }
 
@@ -121,9 +131,9 @@ public class RegisterController implements WebMvcConfigurer {
         profissionalService.salvar(profissional);
 
         // Adiciona uma mensagem de sucesso ao redirecionar para o login
-        redirectAttributes.addFlashAttribute("sucesso", "Registro realizado com sucesso! Por favor, faça login.");
-
-        return "redirect:/login"; // Redireciona para a página de login após o registro
+        String successMessage = messageSource.getMessage("register.success", null, locale);
+        redirectAttributes.addFlashAttribute("sucesso", successMessage);
+        return "redirect:/login";
     }
 
 }
