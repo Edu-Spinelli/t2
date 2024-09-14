@@ -11,7 +11,7 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Long> {
 
     Optional<Empresa> findByUsuarioEmail(String email);
 
-
+    Empresa findByCnpj(String cnpj);
 
 
 }

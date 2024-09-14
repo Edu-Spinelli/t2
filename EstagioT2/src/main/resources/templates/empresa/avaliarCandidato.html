@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Avaliar Candidato</title>
+    <title th:text="#{eac.avaliarCandidato.title}">Avaliar Candidato</title>
     <link rel="stylesheet" th:href="@{/css/empresa/avaliarCandidato.css}">
     <script>
         function mostrarCampoEntrevista() {
@@ -14,7 +14,6 @@
             }
         }
 
-        // Executa quando a página carrega para verificar o valor inicial
         window.onload = function() {
             mostrarCampoEntrevista();
         };
@@ -22,33 +21,37 @@
 </head>
 <body>
 <div class="container">
-    <h1>Avaliar Candidato: <span th:text="${candidatura.profissional.nome}"></span></h1>
+    <h1 th:text="#{eac.avaliarCandidato.header(${candidatura.profissional.nome})}">Avaliar Candidato: [Nome do Candidato]</h1>
 
     <form th:action="@{/empresa/avaliarCandidato/{candidaturaId}(candidaturaId=${candidatura.id})}" method="post">
-        <!-- Campo de status -->
         <div class="form-group">
-            <label for="status">Status da Candidatura:</label>
+            <label for="status" th:text="#{eac.avaliarCandidato.status.label}">Status da Candidatura:</label>
             <select id="status" th:field="*{candidatura.status.descricao}" required onchange="mostrarCampoEntrevista()">
-                <option value="ABERTO" th:selected="${candidatura.status.descricao == 'ABERTO'}">ABERTO</option>
-                <option value="NÃO SELECIONADO" th:selected="${candidatura.status.descricao == 'NÃO SELECIONADO'}">NÃO SELECIONADO</option>
-                <option value="ENTREVISTA" th:selected="${candidatura.status.descricao == 'ENTREVISTA'}">ENTREVISTA</option>
+                <option value="ABERTO" th:text="#{eac.avaliarCandidato.status.aberto}" th:selected="${candidatura.status.descricao == 'ABERTO'}">ABERTO</option>
+                <option value="NÃO SELECIONADO" th:text="#{eac.avaliarCandidato.status.naoSelecionado}" th:selected="${candidatura.status.descricao == 'NÃO SELECIONADO'}">NÃO SELECIONADO</option>
+                <option value="ENTREVISTA" th:text="#{eac.avaliarCandidato.status.entrevista}" th:selected="${candidatura.status.descricao == 'ENTREVISTA'}">ENTREVISTA</option>
             </select>
         </div>
 
-        <!-- Link e data de entrevista, se o status for 'ENTREVISTA' -->
         <div id="entrevistaDiv" class="form-group" style="display:none;">
-            <label for="entrevistaLink">Link da Entrevista:</label>
+            <label for="entrevistaLink" th:text="#{eac.avaliarCandidato.entrevista.link}">Link da Entrevista:</label>
             <input type="text" id="entrevistaLink" th:field="*{candidatura.entrevistaLink}" />
 
-            <label for="entrevistaDataHora">Data e Hora da Entrevista:</label>
+            <label for="entrevistaDataHora" th:text="#{eac.avaliarCandidato.entrevista.dataHora}">Data e Hora da Entrevista:</label>
             <input type="datetime-local" id="entrevistaDataHora" th:field="*{candidatura.entrevistaDataHora}" />
         </div>
 
         <div class="form-actions">
-            <button type="submit">Salvar Avaliação</button>
-            <a th:href="@{/empresa/listaVagas}" class="btn-cancel">Cancelar</a>
+            <button type="submit" th:text="#{eac.avaliarCandidato.btn.salvar}">Salvar Avaliação</button>
+            <a th:href="@{/empresa/listaVagas}" class="btn-cancel" th:text="#{eac.avaliarCandidato.btn.cancelar}">Cancelar</a>
         </div>
     </form>
 </div>
+
+<footer>
+    <p th:text="#{ph.select_language}">Selecione o idioma:</p>
+    <a href="?lang=pt_BR" th:text="#{ph.portuguese}">Português</a> |
+    <a href="?lang=en" th:text="#{ph.english}">English</a>
+</footer>
 </body>
 </html>

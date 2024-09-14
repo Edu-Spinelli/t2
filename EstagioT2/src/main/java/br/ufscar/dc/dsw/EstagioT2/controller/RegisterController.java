@@ -59,6 +59,12 @@ public class RegisterController implements WebMvcConfigurer {
             return "register/registerEmpresa";
         }
 
+        Empresa empresaExistente = empresaService.buscarPorCnpj(empresa.getCnpj());
+        if (empresaExistente != null) {
+            model.addAttribute("errorMessage", "O CNPJ já está em uso.");
+            return "register/registerEmpresa"; // Retorna ao formulário com mensagem de erro
+        }
+
 
         Usuario usuario = empresa.getUsuario();
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha())); // Criptografa a senha
@@ -78,17 +84,47 @@ public class RegisterController implements WebMvcConfigurer {
 
     // Lida com o envio do formulário de registro de profissional
     @PostMapping("/profissional")
-    public String registerProfissional(@Valid @ModelAttribute("profissional") Profissional profissional, BindingResult result, Model model) {
+    public String registerProfissional(@Valid @ModelAttribute("profissional") Profissional profissional,
+                                       BindingResult result,
+                                       Model model,
+                                       RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            return "register/registerProfissional"; // Retorna ao formulário se houver erros
+            return "register/registerProfissional"; // Retorna ao formulário se houver erros de validação
         }
 
+        // Verifica se o email já está em uso
+        Optional<Usuario> usuarioExistente = usuarioService.buscarPorEmail(profissional.getUsuario().getEmail());
+        if (usuarioExistente.isPresent()) {
+            model.addAttribute("errorMessage", "O email já está em uso.");
+            return "register/registerProfissional"; // Retorna ao formulário se o email já estiver em uso
+        }
+
+        // Verifica se o CPF já está em uso
+        Optional<Profissional> profissionalExistentePorCpf = Optional.ofNullable(profissionalService.buscarPorCpf(profissional.getCpf()));
+        if (profissionalExistentePorCpf.isPresent()) {
+            model.addAttribute("errorMessage", "O CPF já está em uso.");
+            return "register/registerProfissional"; // Retorna ao formulário se o CPF já estiver em uso
+        }
+
+        // Verifica se o telefone já está em uso
+        Optional<Profissional> profissionalExistentePorTelefone = Optional.ofNullable(profissionalService.buscarPorTelefone(profissional.getTelefone()));
+        if (profissionalExistentePorTelefone.isPresent()) {
+            model.addAttribute("errorMessage", "O telefone já está em uso.");
+            return "register/registerProfissional"; // Retorna ao formulário se o telefone já estiver em uso
+        }
+
+        // Se tudo estiver correto, criptografa a senha e salva o profissional
         Usuario usuario = profissional.getUsuario();
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha())); // Criptografa a senha
         usuario.setTipo(Usuario.TipoUsuario.profissional); // Define o tipo de usuário como profissional
         usuarioService.salvar(usuario);
         profissionalService.salvar(profissional);
+
+        // Adiciona uma mensagem de sucesso ao redirecionar para o login
+        redirectAttributes.addFlashAttribute("sucesso", "Registro realizado com sucesso! Por favor, faça login.");
+
         return "redirect:/login"; // Redireciona para a página de login após o registro
     }
+
 }
 

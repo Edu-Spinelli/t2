@@ -76,7 +76,28 @@ button:hover {
 .btn-cancel:hover {
     background-color: #eee;
 }
+footer {
+    margin-top: auto;
+    text-align: center;
+    padding: 20px;
+    background-color: #ffffff;
+    border-top: 1px solid #ddd;
+}
 
+footer p {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+footer a {
+    color: #000000;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
 /* Responsividade */
 @media (max-width: 600px) {
     .container {

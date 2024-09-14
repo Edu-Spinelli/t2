@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Minhas Vagas Cadastradas</title>
+    <title th:text="#{elv.title}">Minhas Vagas Cadastradas</title>
     <link rel="stylesheet" th:href="@{/css/empresa/listaVagas.css}">
 </head>
 <body>
 <div class="container">
-    <h1>Minhas Vagas Cadastradas</h1>
+    <h1 th:text="#{elv.my_registered_jobs}">Minhas Vagas Cadastradas</h1>
 
     <!-- Exibe a mensagem de erro -->
     <div th:if="${erro}" class="message error">
@@ -21,11 +21,11 @@
     <table>
         <thead>
         <tr>
-            <th>Descrição</th>
-            <th>Remuneração</th>
-            <th>Data Limite</th>
-            <th>Cidade</th>
-            <th>Ações</th>
+            <th th:text="#{elv.description}">Descrição</th>
+            <th th:text="#{elv.salary}">Remuneração</th>
+            <th th:text="#{elv.deadline}">Data Limite</th>
+            <th th:text="#{elv.city}">Cidade</th>
+            <th th:text="#{elv.actions}">Ações</th>
         </tr>
         </thead>
         <tbody>
@@ -35,15 +35,20 @@
             <td th:text="${#dates.format(vaga.dataLimiteInscricao, 'dd/MM/yyyy')}"></td>
             <td th:text="${vaga.cidade}"></td>
             <td>
-                <a th:href="@{/empresa/editarVaga/{id}(id=${vaga.id})}">Editar</a>
-                <a th:href="@{/empresa/excluirVaga/{id}(id=${vaga.id})}">Excluir</a>
-                <a th:href="@{/empresa/verCandidatos/{id}(id=${vaga.id})}">Ver Candidatos</a>
+                <a th:href="@{/empresa/editarVaga/{id}(id=${vaga.id})}" th:text="#{elv.edit}">Editar</a>
+                <a th:href="@{/empresa/excluirVaga/{id}(id=${vaga.id})}" th:text="#{elv.delete}">Excluir</a>
+                <a th:href="@{/empresa/verCandidatos/{id}(id=${vaga.id})}" th:text="#{elv.view_candidates}">Ver Candidatos</a>
             </td>
         </tr>
         </tbody>
     </table>
 
-    <a href="/empresa/home">Voltar para a Home</a>
+    <a href="/empresa/home" th:text="#{elv.back_home}">Voltar para a Home</a>
 </div>
+<footer>
+    <p th:text="#{ph.select_language}">Selecione o idioma:</p>
+    <a href="?lang=pt_BR" th:text="#{ph.portuguese}">Português</a> |
+    <a href="?lang=en" th:text="#{ph.english}">English</a>
+</footer>
 </body>
 </html>

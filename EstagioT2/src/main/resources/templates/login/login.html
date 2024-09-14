@@ -46,11 +46,12 @@
 
 <!-- Footer com os botões para alterar idioma -->
 <footer>
-    <p>Selecione o idioma:</p>
-
-
-    <a th:href="@{''(lang='pt')}">Português</a> |
-    <a th:href="@{''(lang='en')}">English</a>
+    <div>
+        <p th:text="#{pvi.select_language}">Selecione o idioma:</p>
+        <a href="?lang=pt_BR" th:text="#{pvi.portuguese}">Português</a> |
+        <a href="?lang=en" th:text="#{pvi.english}">English</a>
+    </div>
 </footer>
+
 </body>
 </html>

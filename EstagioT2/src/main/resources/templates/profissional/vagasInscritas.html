@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Vagas Inscritas</title>
+    <title th:text="#{pvi.title}">Vagas Inscritas</title>
     <link rel="stylesheet" th:href="@{/css/profissional/vagasInscritas.css}">
 </head>
 <body>
 <div class="container">
-    <h1>Vagas Inscritas</h1>
+    <h1 th:text="#{pvi.registered_jobs}">Vagas Inscritas</h1>
 
     <table>
         <thead>
         <tr>
-            <th>Descrição da Vaga</th>
-            <th>Cidade</th>
-            <th>Status</th>
-            <th>Link da Entrevista</th>
-            <th>Data e Hora da Entrevista</th>
-            <th>Currículo</th>
+            <th th:text="#{pvi.job_description}">Descrição da Vaga</th>
+            <th th:text="#{pvi.city}">Cidade</th>
+            <th th:text="#{pvi.status}">Status</th>
+            <th th:text="#{pvi.interview_link}">Link da Entrevista</th>
+            <th th:text="#{pvi.interview_date_time}">Data e Hora da Entrevista</th>
+            <th th:text="#{pvi.resume}">Currículo</th>
         </tr>
         </thead>
         <tbody>
@@ -25,24 +25,33 @@
             <td th:text="${candidatura.vaga.cidade}"></td>
             <td th:text="${candidatura.status.descricao}"></td>
             <td>
-                <a th:href="${candidatura.entrevistaLink}" th:if="${candidatura.entrevistaLink != null}">Link</a>
-                <span th:if="${candidatura.entrevistaLink == null}">Sem link</span>
+                <a th:href="${candidatura.entrevistaLink}" th:if="${candidatura.entrevistaLink != null}" th:text="#{pvi.link}">Link</a>
+                <span th:if="${candidatura.entrevistaLink == null}" th:text="#{pvi.no_link}">Sem link</span>
             </td>
             <td>
                 <span th:if="${candidatura.entrevistaDataHora != null}" th:text="${#dates.format(candidatura.entrevistaDataHora, 'dd/MM/yyyy HH:mm')}"></span>
-                <span th:if="${candidatura.entrevistaDataHora == null}">Sem data de entrevista</span>
+                <span th:if="${candidatura.entrevistaDataHora == null}" th:text="#{pvi.no_interview_date}">Sem data de entrevista</span>
             </td>
             <td>
                 <a th:href="@{/profissional/downloadCurriculo/{vagaId}(vagaId=${candidatura.vaga.id})}" th:if="${candidatura.curriculo != null}">
                     <span th:text="${candidatura.curriculoNome}"></span> <!-- Exibe o nome do currículo -->
                 </a>
-                <span th:if="${candidatura.curriculo == null}">Nenhum currículo</span>
+                <span th:if="${candidatura.curriculo == null}" th:text="#{pvi.no_resume}">Nenhum currículo</span>
             </td>
         </tr>
         </tbody>
     </table>
 
-    <a href="/profissional/home" class="btn-back">Voltar</a>
+    <a href="/profissional/home" class="btn-back" th:text="#{pvi.back}">Voltar</a>
 </div>
+
+<footer>
+    <div>
+        <p th:text="#{pvi.select_language}">Selecione o idioma:</p>
+        <a href="?lang=pt_BR" th:text="#{pvi.portuguese}">Português</a> |
+        <a href="?lang=en" th:text="#{pvi.english}">English</a>
+    </div>
+</footer>
+
 </body>
 </html>

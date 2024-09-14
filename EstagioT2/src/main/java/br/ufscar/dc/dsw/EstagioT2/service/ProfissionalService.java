@@ -26,11 +26,20 @@ public class ProfissionalService {
         return profissionalRepository.findByUsuarioEmail(email);
     }
 
+    public Profissional buscarPorCpf(String cpf) {
+        return profissionalRepository.findByCpf(cpf);
+    }
+
 
     public Profissional buscarPorId(Long id) {
         Optional<Profissional> profissional = profissionalRepository.findById(id);
         return profissional.orElse(null);
     }
+
+    public Profissional buscarPorTelefone(String telefone) {
+        return profissionalRepository.findByTelefone(telefone);
+    }
+
 
     public void excluir(Long id) {
         profissionalRepository.deleteById(id);

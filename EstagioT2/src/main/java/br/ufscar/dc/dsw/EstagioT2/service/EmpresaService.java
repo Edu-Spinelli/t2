@@ -22,6 +22,10 @@ public class EmpresaService {
         return empresaRepository.findByUsuarioEmail(email);
     }
 
+    public Empresa buscarPorCnpj(String cnpj) {
+        return empresaRepository.findByCnpj(cnpj);
+    }
+
     public void salvar(Empresa empresa) {
         empresaRepository.save(empresa);
     }

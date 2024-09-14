@@ -1,32 +1,39 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Página Inicial</title>
+    <title th:text="#{eh.home_title}">Página Inicial</title>
     <link rel="stylesheet" th:href="@{/css/empresa/home.css}">
 </head>
 <body>
 <div class="container">
-    <h1>Bem-vindo ao Sistema de Estágio e Emprego</h1>
-
-    <!-- Exibe a mensagem de sucesso -->
-    <div th:if="${sucesso}">
-        <p th:text="${sucesso}"></p>
-    </div>
+    <h1 th:text="#{eh.welcome_message}">Bem-vindo ao Sistema de Estágio e Emprego</h1>
 
     <!-- Exibe a mensagem de erro -->
-    <div th:if="${erro}">
+    <div th:if="${erro}" class="message error">
         <p th:text="${erro}"></p>
     </div>
 
-    <p>Escolha uma opção:</p>
+    <!-- Exibe a mensagem de sucesso -->
+    <div th:if="${sucesso}" class="message success">
+        <p th:text="${sucesso}"></p>
+    </div>
+
+    <p th:text="#{eh.choose_option}">Escolha uma opção:</p>
     <ul>
-        <li><a th:href="@{/empresa/cadastrarVaga}">Cadastrar vaga de emprego</a></li>
-        <li><a th:href="@{/empresa/listaVagas}">Ver minhas vagas cadastradas</a></li>
+        <li><a th:href="@{/empresa/cadastrarVaga}" th:text="#{eh.register_job}">Cadastrar vaga de emprego</a></li>
+        <li><a th:href="@{/empresa/listaVagas}" th:text="#{eh.view_registered_jobs}">Ver minhas vagas cadastradas</a></li>
     </ul>
 
     <form th:action="@{/logout}" method="post">
-        <button type="submit">Logout</button>
+        <button type="submit" th:text="#{eh.logout}">Logout</button>
     </form>
 </div>
+<footer>
+    <div>
+        <p th:text="#{eh.select_language}">Selecione o idioma:</p>
+        <a href="?lang=pt_BR" th:text="#{eh.portuguese}">Português</a> |
+        <a href="?lang=en" th:text="#{eh.english}">English</a>
+    </div>
+</footer>
 </body>
 </html>

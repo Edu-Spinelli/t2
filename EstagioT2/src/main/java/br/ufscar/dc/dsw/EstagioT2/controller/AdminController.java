@@ -90,6 +90,17 @@ public class AdminController {
             Profissional profissionalExistente = profissionalService.buscarPorId(id);
             Usuario usuarioExistente = profissionalExistente.getUsuario();
 
+            if (!profissionalExistente.getCpf().equals(profissional.getCpf())) {
+                Optional<Profissional> profissionalComMesmoCpf = Optional.ofNullable(profissionalService.buscarPorCpf(profissional.getCpf()));
+                if (profissionalComMesmoCpf.isPresent()) {
+                    // Se o CPF já está em uso por outro profissional, retorna erro
+                    attributes.addFlashAttribute("erro", "O CPF já está em uso por outro profissional.");
+                    return "redirect:/admin/editarProfissional/" + id;
+                }
+            }
+
+
+
             // Verifica se o email do formulário é diferente do email atual no banco de dados
             if (!usuarioExistente.getEmail().equals(profissional.getUsuario().getEmail())) {
                 // Verifica se o novo email já está em uso por outro profissional
@@ -197,6 +208,13 @@ public class AdminController {
                     // Se o email não está em uso, atualiza o email
                     usuarioExistente.setEmail(empresa.getUsuario().getEmail());
                 }
+            }
+
+            Optional<Empresa> empresaComMesmoCnpj = Optional.ofNullable(empresaService.buscarPorCnpj(empresa.getCnpj()));
+            if (empresaComMesmoCnpj.isPresent() && !empresaComMesmoCnpj.get().getId().equals(id)) {
+                // Se o CNPJ já está em uso por outra empresa, retorna erro
+                attributes.addFlashAttribute("erro", "O CNPJ já está em uso por outra empresa.");
+                return "redirect:/admin/editarEmpresa/" + id;
             }
 
             // Atualiza a senha apenas se o campo não estiver vazio
@@ -344,19 +362,41 @@ public class AdminController {
 
     // Método para processar o formulário de criação de Profissional
     @PostMapping("/registerProfissional")
-    public String registerProfissional(@Valid @ModelAttribute("profissional") Profissional profissional, BindingResult result, Model model, RedirectAttributes attributes) {
+    public String registerProfissional(@Valid @ModelAttribute("profissional") Profissional profissional,
+                                       BindingResult result,
+                                       Model model,
+                                       RedirectAttributes attributes) {
+        // Verifica se há erros de validação
         if (result.hasErrors()) {
-            return "admin/registerProfissional"; // Retorna ao formulário se houver erros
+            return "admin/registerProfissional"; // Retorna ao formulário se houver erros de validação
         }
 
+        // Verifica se o CPF já está em uso por outro profissional
+        if (profissionalService.buscarPorCpf(profissional.getCpf()) != null) {
+            attributes.addFlashAttribute("erro", "O CPF já está em uso por outro profissional.");
+            return "redirect:/admin/registerProfissional"; // Redireciona ao formulário de registro com mensagem de erro
+        }
+
+        // Verifica se o e-mail já está em uso por outro usuário
+        if (usuarioService.buscarPorEmail(profissional.getUsuario().getEmail()).isPresent()) {
+            attributes.addFlashAttribute("erro", "O e-mail já está em uso por outro usuário.");
+            return "redirect:/admin/registerProfissional"; // Redireciona ao formulário de registro com mensagem de erro
+        }
+
+        // Se CPF e e-mail não estiverem em uso, prossegue com o registro
         Usuario usuario = profissional.getUsuario();
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha())); // Criptografa a senha
         usuario.setTipo(Usuario.TipoUsuario.profissional); // Define o tipo de usuário como profissional
-        usuarioService.salvar(usuario);
-        profissionalService.salvar(profissional);
+
+        usuarioService.salvar(usuario); // Salva o usuário no banco de dados
+        profissionalService.salvar(profissional); // Salva o profissional no banco de dados
+
+        // Define uma mensagem de sucesso
         attributes.addFlashAttribute("sucesso", "Profissional criado com sucesso!");
+
         return "redirect:/admin/profissional"; // Redireciona para a lista de profissionais após o registro
     }
+
 
     // Método para exibir o formulário de criação de Empresa
     @GetMapping("/registerEmpresa")
@@ -367,22 +407,40 @@ public class AdminController {
 
     // Método para processar o formulário de criação de Empresa
     @PostMapping("/registerEmpresa")
-    public String registerEmpresa(@Valid @ModelAttribute("empresa") Empresa empresa, BindingResult result, Model model, RedirectAttributes attributes) {
+    public String registerEmpresa(@Valid @ModelAttribute("empresa") Empresa empresa,
+                                  BindingResult result,
+                                  Model model,
+                                  RedirectAttributes attributes) {
+        // Verifica se há erros de validação
         if (result.hasErrors()) {
-            return "admin/registerEmpresa"; // Retorna ao formulário se houver erros
+            return "admin/registerEmpresa"; // Retorna ao formulário se houver erros de validação
         }
 
+        // Verifica se o CNPJ já está em uso por outra empresa
+        if (empresaService.buscarPorCnpj(empresa.getCnpj()) != null) {
+            attributes.addFlashAttribute("erro", "O CNPJ já está em uso por outra empresa.");
+            return "redirect:/admin/registerEmpresa"; // Redireciona ao formulário de registro com mensagem de erro
+        }
+
+        // Verifica se o e-mail já está em uso por outro usuário
+        if (usuarioService.buscarPorEmail(empresa.getUsuario().getEmail()).isPresent()) {
+            attributes.addFlashAttribute("erro", "O e-mail já está em uso por outro usuário.");
+            return "redirect:/admin/registerEmpresa"; // Redireciona ao formulário de registro com mensagem de erro
+        }
+
+        // Se CNPJ e e-mail não estiverem em uso, prossegue com o registro
         Usuario usuario = empresa.getUsuario();
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha())); // Criptografa a senha
         usuario.setTipo(Usuario.TipoUsuario.empresa); // Define o tipo de usuário como empresa
-        usuarioService.salvar(usuario);
-        empresaService.salvar(empresa);
+
+        usuarioService.salvar(usuario); // Salva o usuário no banco de dados
+        empresaService.salvar(empresa); // Salva a empresa no banco de dados
+
+        // Define uma mensagem de sucesso
         attributes.addFlashAttribute("sucesso", "Empresa criada com sucesso!");
-        return "redirect:/admin/home"; // Redireciona para a lista de empresas após o registro
+
+        return "redirect:/admin/home"; // Redireciona para a home após o registro
     }
-
-
-
 
 
 

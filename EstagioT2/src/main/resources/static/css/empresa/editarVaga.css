@@ -1,9 +1,16 @@
 /* Estilos gerais */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
-    margin: 0;
-    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .container {
@@ -13,6 +20,7 @@ body {
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    flex: 1;
 }
 
 h1 {
@@ -75,4 +83,44 @@ a.cancel-btn {
 
 a.cancel-btn:hover {
     background-color: #aaa;
+}
+
+/* Footer */
+footer {
+    background-color: #ffffff;
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid #ddd;
+    margin-top: auto; /* Mantém o footer no final da página */
+}
+
+footer p {
+    margin: 0;
+    color: #333;
+}
+
+footer a {
+    color: #000;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+    }
+
+    button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    a.cancel-btn {
+        width: 100%;
+    }
 }

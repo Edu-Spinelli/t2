@@ -9,5 +9,5 @@ import java.util.List;
 public interface VagaRepository extends JpaRepository<Vaga, Long> {
     List<Vaga> findByEmpresa(Empresa empresa);
     List<Vaga> findByCidade(String cidade); // Esse método faz a busca por cidade
-
+    List<Vaga> findByCidadeContainingIgnoreCase(String cidade); // Esse método faz a busca por cidade
 }

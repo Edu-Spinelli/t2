@@ -49,6 +49,7 @@ public class EmpresaController {
         Empresa empresa = empresaService.buscarPorEmail(user.getUsername())
                 .orElseThrow(() -> new IllegalArgumentException("Empresa não encontrada: " + user.getUsername()));
         model.addAttribute("empresa", empresa);
+
         return "empresa/home";
     }
 

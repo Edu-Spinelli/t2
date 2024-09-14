@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Inscrição na Vaga</title>
+    <title th:text="#{piv.title}">Inscrição na Vaga</title>
     <link rel="stylesheet" th:href="@{/css/profissional/inscreverVaga.css}">
 </head>
 <body>
 <div class="container">
-    <h1>Inscrever-se na Vaga</h1>
+    <h1 th:text="#{piv.apply_job_title}">Inscrever-se na Vaga</h1>
 
     <form th:action="@{'/profissional/inscreverVaga/' + ${vaga.id}}" th:object="${candidatura}" method="post" enctype="multipart/form-data">
         <input type="hidden" th:field="*{vaga.id}" th:value="${vaga.id}" />
         <input type="hidden" th:field="*{profissional.id}" th:value="${profissional.id}" />
 
         <div class="form-group">
-            <label for="curriculo">Currículo (PDF):</label>
+            <label for="curriculo" th:text="#{piv.resume_label}">Currículo (PDF):</label>
             <input type="file" id="curriculo" name="curriculoFile" accept=".pdf" required="required"/>
         </div>
 
@@ -21,10 +21,17 @@
         <input type="hidden" id="dataCandidatura" th:field="*{dataCandidatura}" th:value="${#dates.format(candidatura.dataCandidatura, 'yyyy-MM-dd HH:mm:ss')}" />
 
         <div class="form-group">
-            <button type="submit" class="btn-submit">Inscrever-se</button>
-            <a th:href="@{/profissional/vagas}" class="btn-cancel">Cancelar</a>
+            <button type="submit" class="btn-submit" th:text="#{piv.submit}">Inscrever-se</button>
+            <a th:href="@{/profissional/vagas}" class="btn-cancel" th:text="#{piv.cancel}">Cancelar</a>
         </div>
     </form>
 </div>
+<footer>
+    <div>
+        <p th:text="#{ph.select_language}">Selecione o idioma:</p>
+        <a href="?lang=pt_BR" th:text="#{ph.portuguese}">Português</a> |
+        <a href="?lang=en" th:text="#{ph.english}">English</a>
+    </div>
+</footer>
 </body>
 </html>

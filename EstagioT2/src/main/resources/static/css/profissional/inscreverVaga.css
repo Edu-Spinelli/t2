@@ -1,14 +1,22 @@
 /* Estilos gerais */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
-    margin: 0;
-    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .container {
+    flex: 1; /* Garante que o container ocupe o espaço necessário */
     max-width: 600px;
-    margin: 0 auto;
+    margin: 20px auto;
     padding: 20px;
     background-color: #fff;
     border-radius: 8px;
@@ -68,6 +76,29 @@ a.btn-cancel {
 a.btn-cancel:hover {
     background-color: #555;
     color: white;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #ffffff;
+    border-top: 1px solid #ddd;
+    margin-top: auto; /* Isso garante que o footer fique no fim da página */
+}
+
+footer p {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+footer a {
+    color: #000000;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+footer a:hover {
+    text-decoration: underline;
 }
 
 /* Responsividade */

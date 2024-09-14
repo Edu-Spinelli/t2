@@ -62,6 +62,15 @@
 </head>
 <body>
 <h1>Registrar Profissional</h1>
+<div th:if="${sucesso}" class="success">
+    <p th:text="${sucesso}"></p>
+</div>
+
+<!-- Exibe a mensagem de erro -->
+<div th:if="${erro}" class="error">
+    <p th:text="${erro}"></p>
+</div>
+
 <a th:href="@{/admin/registerEmpresa}">Registrar Empresa</a>
 <form th:action="@{/admin/registerProfissional}" th:object="${profissional}" method="post" onsubmit="return validarFormulario()">
     <div>
