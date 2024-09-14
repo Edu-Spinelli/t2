@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Editar Empresa</title>
+    <title th:text="#{aee.title}">Editar Empresa</title>
     <link rel="stylesheet" th:href="@{/css/admin/editarEmpresa.css}">
     <script>
         // Função para formatar e validar CNPJ (somente números)
@@ -32,7 +32,7 @@
 </head>
 <body>
 <div class="container">
-    <h1>Editar Empresa</h1>
+    <h1 th:text="#{aee.title}">Editar Empresa</h1>
 
     <!-- Exibe a mensagem de sucesso -->
     <div th:if="${sucesso}" class="message success">
@@ -49,41 +49,48 @@
         <input type="hidden" th:field="*{id}" />
 
         <div class="form-group">
-            <label for="nome">Nome:</label>
+            <label for="nome" th:text="#{aee.name}">Nome:</label>
             <input type="text" id="nome" th:field="*{nome}" required="required"/>
         </div>
 
         <div class="form-group">
-            <label for="cnpj">CNPJ:</label>
+            <label for="cnpj" th:text="#{aee.cnpj}">CNPJ:</label>
             <input type="text" id="cnpj" th:field="*{cnpj}" oninput="formatarCNPJ(this)" maxlength="18" required="required"/>
             <span th:if="${#fields.hasErrors('cnpj')}" th:errors="*{cnpj}" class="error"></span>
         </div>
 
         <div class="form-group">
-            <label for="descricao">Descrição:</label>
+            <label for="descricao" th:text="#{aee.description}">Descrição:</label>
             <input type="text" id="descricao" th:field="*{descricao}" required="required"/>
         </div>
 
         <div class="form-group">
-            <label for="cidade">Cidade:</label>
+            <label for="cidade" th:text="#{aee.city}">Cidade:</label>
             <input type="text" id="cidade" th:field="*{cidade}" required="required"/>
         </div>
 
         <div class="form-group">
-            <label for="email">Email:</label>
+            <label for="email" th:text="#{aee.email}">Email:</label>
             <input type="email" id="email" th:field="*{usuario.email}" required="required"/>
         </div>
 
         <div class="form-group">
-            <label for="senha">Senha:</label>
+            <label for="senha" th:text="#{aee.password}">Senha:</label>
             <input type="password" id="senha" th:field="*{usuario.senha}"/>
         </div>
 
         <div class="form-group">
-            <button type="submit">Salvar</button>
-            <a th:href="@{/admin/empresa}">Cancelar</a>
+            <button type="submit" th:text="#{aee.save}">Salvar</button>
+            <a th:href="@{/admin/empresa}" th:text="#{aee.cancel}">Cancelar</a>
         </div>
     </form>
 </div>
+<footer>
+    <div>
+        <p th:text="#{ph.select_language}">Selecione o idioma:</p>
+        <a href="?lang=pt_BR" th:text="#{ph.portuguese}">Português</a> |
+        <a href="?lang=en" th:text="#{ph.english}">English</a>
+    </div>
+</footer>
 </body>
 </html>

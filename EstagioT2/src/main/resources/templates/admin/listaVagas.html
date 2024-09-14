@@ -1,49 +1,58 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Lista de Vagas</title>
+    <title th:text="#{alv.title}">Lista de Vagas</title>
     <link rel="stylesheet" th:href="@{/css/admin/listaVagas.css}">
 </head>
 <body>
-<h1>Lista de Vagas Cadastradas</h1>
+<div class="container">
+    <h1 th:text="#{alv.list_jobs}">Lista de Vagas Cadastradas</h1>
 
-<!-- Exibe a mensagem de sucesso -->
-<div th:if="${sucesso}" class="success">
-    <p th:text="${sucesso}"></p>
+    <!-- Exibe a mensagem de sucesso -->
+    <div th:if="${sucesso}" class="success">
+        <p th:text="${sucesso}"></p>
+    </div>
+
+    <!-- Exibe a mensagem de erro -->
+    <div th:if="${erro}" class="error">
+        <p th:text="${erro}"></p>
+    </div>
+
+    <!-- Tabela de vagas -->
+    <table>
+        <thead>
+        <tr>
+            <th th:text="#{alv.description}">Descrição</th>
+            <th th:text="#{alv.salary}">Salário</th>
+            <th th:text="#{alv.deadline}">Data Limite</th>
+            <th th:text="#{alv.company}">Empresa</th>
+            <th th:text="#{alv.actions}">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="vaga : ${vagas}">
+            <td th:text="${vaga.descricao}"></td>
+            <td th:text="${vaga.remuneracao}"></td>
+            <td th:text="${#dates.format(vaga.dataLimiteInscricao, 'dd/MM/yyyy')}"></td>
+            <td th:text="${vaga.empresa.nome}"></td>
+            <td>
+                <a th:href="@{/admin/editarVaga/{id}(id=${vaga.id})}" th:text="#{alv.edit}">Editar</a>
+                <a th:href="@{/admin/excluirVaga/{id}(id=${vaga.id})}" th:text="#{alv.delete}">Excluir</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Botão de voltar -->
+    <a href="/admin/home" class="btn-back" th:text="#{alv.back_to_home}">Voltar para tela inicial</a>
 </div>
 
-<!-- Exibe a mensagem de erro -->
-<div th:if="${erro}" class="error">
-    <p th:text="${erro}"></p>
-</div>
-
-<!-- Tabela de vagas -->
-<table>
-    <thead>
-    <tr>
-        <th>Descrição</th>
-        <th>Salário</th>
-        <th>Data Limite</th>
-        <th>Empresa</th>
-        <th>Ações</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="vaga : ${vagas}">
-        <td th:text="${vaga.descricao}"></td>
-        <td th:text="${vaga.remuneracao}"></td>
-        <td th:text="${#dates.format(vaga.dataLimiteInscricao, 'dd/MM/yyyy')}"></td>
-        <td th:text="${vaga.empresa.nome}"></td>
-        <td>
-            <a th:href="@{/admin/editarVaga/{id}(id=${vaga.id})}">Editar</a>
-            <a th:href="@{/admin/excluirVaga/{id}(id=${vaga.id})}">Excluir</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
-
-<!-- Botão de voltar -->
-<a href="/admin/home">Voltar para tela inicial</a>
-
+<footer>
+    <div>
+        <p th:text="#{ph.select_language}">Selecione o idioma:</p>
+        <a href="?lang=pt_BR" th:text="#{ph.portuguese}">Português</a> |
+        <a href="?lang=en" th:text="#{ph.english}">English</a>
+    </div>
+</footer>
 </body>
 </html>

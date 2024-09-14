@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Lista de Empresas</title>
+    <title th:text="#{ale.title}">Lista de Empresas</title>
     <link rel="stylesheet" th:href="@{/css/admin/listaEmpresas.css}">
 </head>
 <body>
-<h1>Lista de Empresas Cadastradas</h1>
+<h1 th:text="#{ale.heading}">Lista de Empresas Cadastradas</h1>
 
 <!-- Exibe a mensagem de sucesso -->
 <div th:if="${sucesso}" class="success">
@@ -21,12 +21,12 @@
 <table>
     <thead>
     <tr>
-        <th>Nome</th>
-        <th>CNPJ</th>
-        <th>Descrição</th>
-        <th>Cidade</th>
-        <th>Email</th>
-        <th>Ações</th>
+        <th th:text="#{ale.name}">Nome</th>
+        <th th:text="#{ale.cnpj}">CNPJ</th>
+        <th th:text="#{ale.description}">Descri&#xE7;&#xE3;o</th>
+        <th th:text="#{ale.city}">Cidade</th>
+        <th th:text="#{ale.email}">Email</th>
+        <th th:text="#{ale.actions}">Ações</th>
     </tr>
     </thead>
     <tbody>
@@ -37,15 +37,22 @@
         <td th:text="${empresa.cidade}"></td>
         <td th:text="${empresa.usuario.email}"></td>
         <td>
-            <a th:href="@{/admin/editarEmpresa/{id}(id=${empresa.id})}">Editar</a>
-            <a th:href="@{/admin/excluirEmpresa/{id}(id=${empresa.id})}">Excluir</a>
+            <a th:href="@{/admin/editarEmpresa/{id}(id=${empresa.id})}" th:text="#{ale.edit}">Editar</a>
+            <a th:href="@{/admin/excluirEmpresa/{id}(id=${empresa.id})}" th:text="#{ale.delete}">Excluir</a>
         </td>
     </tr>
     </tbody>
 </table>
 
 <!-- Botão de voltar -->
-<a href="/admin/home">Voltar para tela inicial</a>
+<a href="/admin/home" th:text="#{ale.back}">Voltar para tela inicial</a>
 
+<footer>
+    <div>
+        <p th:text="#{ph.select_language}">Selecione o idioma:</p>
+        <a href="?lang=pt_BR" th:text="#{ph.portuguese}">Português</a> |
+        <a href="?lang=en" th:text="#{ph.english}">English</a>
+    </div>
+</footer>
 </body>
 </html>

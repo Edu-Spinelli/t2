@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Registrar Empresa</title>
+    <title th:text="#{are.title}">Registrar Empresa</title>
     <link rel="stylesheet" th:href="@{/css/admin/register.css}">
     <script>
         // Função para formatar o CNPJ enquanto o usuário digita
@@ -35,7 +35,7 @@
     </script>
 </head>
 <body>
-<h1>Registrar Empresa</h1>
+<h1 th:text="#{are.register_company}">Registrar Empresa</h1>
 <div th:if="${sucesso}" class="success">
     <p th:text="${sucesso}"></p>
 </div>
@@ -45,59 +45,58 @@
     <p th:text="${erro}"></p>
 </div>
 
-<a th:href="@{/admin/registerProfissional}">Registrar Profissional</a>
+<a th:href="@{/admin/registerProfissional}" th:text="#{are.register_professional}">Registrar Profissional</a>
 
 <form th:action="@{/admin/registerEmpresa}" th:object="${empresa}" method="post" onsubmit="return validarFormulario()">
 
     <div>
-        <label for="nome">Nome:</label>
+        <label for="nome" th:text="#{are.name}">Nome:</label>
         <input type="text" id="nome" th:field="*{nome}" required="required"/>
-        <p th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}">Erro no nome</p>
+        <p th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" th:text="#{are.error_name}">Erro no nome</p>
     </div>
 
     <div>
-        <label for="cnpj">CNPJ:</label>
+        <label for="cnpj" th:text="#{are.cnpj}">CNPJ:</label>
         <input type="text" id="cnpj" th:field="*{cnpj}" required="required"
                placeholder="00.000.000/0000-00" maxlength="18" oninput="formatarCNPJ(this)" />
-        <p th:if="${#fields.hasErrors('cnpj')}" th:errors="*{cnpj}">O CNPJ deve conter exatamente 14 dígitos numéricos</p>
+        <p th:if="${#fields.hasErrors('cnpj')}" th:errors="*{cnpj}" th:text="#{are.error_cnpj}">O CNPJ deve conter exatamente 14 dígitos numéricos</p>
     </div>
 
     <div>
-        <label for="descricao">Descrição:</label>
+        <label for="descricao" th:text="#{are.description}">Descri&#xE7;&#xE3;o:</label>
         <textarea id="descricao" th:field="*{descricao}"></textarea>
-        <p th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}">Erro na descrição</p>
+        <p th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}" th:text="#{are.error_description}">Erro na descri&#xE7;&#xE3;o</p>
     </div>
 
     <div>
-        <label for="cidade">Cidade:</label>
+        <label for="cidade" th:text="#{are.city}">Cidade:</label>
         <input type="text" id="cidade" th:field="*{cidade}" required="required"/>
-        <p th:if="${#fields.hasErrors('cidade')}" th:errors="*{cidade}">Erro na cidade</p>
+        <p th:if="${#fields.hasErrors('cidade')}" th:errors="*{cidade}" th:text="#{are.error_city}">Erro na cidade</p>
     </div>
 
     <div>
-        <label for="email">Email:</label>
+        <label for="email" th:text="#{are.email}">Email:</label>
         <input type="email" id="email" th:field="*{usuario.email}" required="required"/>
-        <p th:if="${#fields.hasErrors('usuario.email')}" th:errors="*{usuario.email}">Erro no email</p>
+        <p th:if="${#fields.hasErrors('usuario.email')}" th:errors="*{usuario.email}" th:text="#{are.error_email}">Erro no email</p>
     </div>
 
     <div>
-        <label for="senha">Senha:</label>
+        <label for="senha" th:text="#{are.password}">Senha:</label>
         <input type="password" id="senha" th:field="*{usuario.senha}" required="required"/>
-        <p th:if="${#fields.hasErrors('usuario.senha')}" th:errors="*{usuario.senha}">Erro na senha</p>
+        <p th:if="${#fields.hasErrors('usuario.senha')}" th:errors="*{usuario.senha}" th:text="#{are.error_password}">Erro na senha</p>
     </div>
 
     <div>
-        <button type="submit">Registrar</button>
-        <a th:href="@{/admin/home}">Voltar para home</a>
+        <button type="submit" th:text="#{are.register}">Registrar</button>
+        <a th:href="@{/admin/home}" th:text="#{are.back_home}">Voltar para home</a>
     </div>
 </form>
 
 <footer>
     <div>
-        <p>Selecione o idioma:</p>
-        <a href="?lang=pt_BR">Português</a> |
-        <a href="?lang=en">English</a>
-
+        <p th:text="#{ph.select_language}">Selecione o idioma:</p>
+        <a href="?lang=pt_BR" th:text="#{ph.portuguese}">Portugu&#xEA;s</a> |
+        <a href="?lang=en" th:text="#{ph.english}">English</a>
     </div>
 </footer>
 

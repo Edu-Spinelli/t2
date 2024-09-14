@@ -1,23 +1,30 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Página Inicial</title>
+  <title th:text="#{ah.page_title}">Página Inicial</title>
   <link rel="stylesheet" th:href="@{/css/admin/home.css}">
 </head>
 <body>
 <div class="container">
-  <h1>Bem-vindo ao Sistema de Estágio e Emprego</h1>
-  <p>O que deseja fazer, administrador?</p>
+  <h1 th:text="#{ah.welcome_message}">Bem-vindo ao Sistema de Estágio e Emprego</h1>
+  <p th:text="#{ah.admin_prompt}">O que deseja fazer, administrador?</p>
   <ul>
-    <li><a th:href="@{/admin/vaga}">Ver todas as vagas cadastradas</a></li>
-    <li><a th:href="@{/admin/profissional}">Ver todos os profissionais cadastrados</a></li>
-    <li><a th:href="@{/admin/empresa}">Ver todas as empresas cadastradas</a></li>
-    <li><a th:href="@{/admin/registerEmpresa}">Registrar Empresa</a></li>
-    <li><a th:href="@{/admin/registerProfissional}">Registrar Profissional</a></li>
+    <li><a th:href="@{/admin/vaga}" th:text="#{ah.view_all_jobs}">Ver todas as vagas cadastradas</a></li>
+    <li><a th:href="@{/admin/profissional}" th:text="#{ah.view_all_professionals}">Ver todos os profissionais cadastrados</a></li>
+    <li><a th:href="@{/admin/empresa}" th:text="#{ah.view_all_companies}">Ver todas as empresas cadastradas</a></li>
+    <li><a th:href="@{/admin/registerEmpresa}" th:text="#{ah.register_company}">Registrar Empresa</a></li>
+    <li><a th:href="@{/admin/registerProfissional}" th:text="#{ah.register_professional}">Registrar Profissional</a></li>
   </ul>
   <form th:action="@{/logout}" method="post">
-    <button type="submit">Logout</button>
+    <button type="submit" th:text="#{ah.logout_button}">Logout</button>
   </form>
 </div>
+<footer>
+  <div>
+    <p th:text="#{ph.select_language}">Selecione o idioma:</p>
+    <a href="?lang=pt_BR" th:text="#{ph.portuguese}">Português</a> |
+    <a href="?lang=en" th:text="#{ph.english}">English</a>
+  </div>
+</footer>
 </body>
 </html>

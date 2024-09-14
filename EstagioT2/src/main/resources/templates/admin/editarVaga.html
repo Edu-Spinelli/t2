@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Editar Vaga</title>
+    <title th:text="#{aev.title}">Editar Vaga</title>
     <link rel="stylesheet" th:href="@{/css/admin/editarVaga.css}">
     <script>
         // Função para validar somente números e ponto para remuneração
@@ -21,7 +21,7 @@
     </script>
 </head>
 <body>
-<h1>Editar Vaga</h1>
+<h1 th:text="#{aev.title}">Editar Vaga</h1>
 
 <!-- Exibe a mensagem de sucesso -->
 <div th:if="${sucesso}" class="success">
@@ -38,31 +38,38 @@
     <input type="hidden" th:field="*{id}"/>
 
     <div>
-        <label for="descricao">Descrição:</label>
+        <label for="descricao" th:text="#{aev.description}">Descrição:</label>
         <textarea id="descricao" th:field="*{descricao}" required="required"></textarea>
     </div>
 
     <div>
-        <label for="remuneracao">Remuneração:</label>
+        <label for="remuneracao" th:text="#{aev.salary}">Remuneração:</label>
         <input type="text" id="remuneracao" th:field="*{remuneracao}" oninput="formatarRemuneracao(this)" required="required"/>
         <span th:if="${#fields.hasErrors('remuneracao')}" th:errors="*{remuneracao}" class="error"></span>
     </div>
 
     <div>
-        <label for="dataLimiteInscricao">Data Limite de Inscrição:</label>
+        <label for="dataLimiteInscricao" th:text="#{aev.deadline}">Data Limite de Inscrição:</label>
         <input type="date" id="dataLimiteInscricao" th:field="*{dataLimiteInscricao}" required="required"/>
     </div>
 
     <div>
-        <label for="cidade">Cidade:</label>
+        <label for="cidade" th:text="#{aev.city}">Cidade:</label>
         <input type="text" id="cidade" th:field="*{cidade}" required="required"/>
     </div>
 
     <div>
-        <button type="submit">Salvar</button>
-        <a th:href="@{/admin/vaga}">Cancelar</a>
+        <button type="submit" th:text="#{aev.save}">Salvar</button>
+        <a th:href="@{/admin/vaga}" th:text="#{aev.cancel}">Cancelar</a>
     </div>
 </form>
 
+<footer>
+    <div>
+        <p th:text="#{ph.select_language}">Selecione o idioma:</p>
+        <a href="?lang=pt_BR" th:text="#{ph.portuguese}">Português</a> |
+        <a href="?lang=en" th:text="#{ph.english}">English</a>
+    </div>
+</footer>
 </body>
 </html>
