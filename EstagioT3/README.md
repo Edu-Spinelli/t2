@@ -157,3 +157,7 @@ Nenhuma autenticação é necessária para esses endpoints da API, com base na c
 - O banco de dados criará automaticamente as tabelas necessárias ao iniciar, caso não existam.
 - Utilize ferramentas como Postman ou cURL para interagir com a API.
 
+## Video
+- [Video explicando o T3 - link](https://drive.google.com/file/d/1KSwyPli_v6bvRA6AvMjUgFPYrNTmlOC1/view?usp=sharing)
+
+
