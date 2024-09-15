@@ -1,87 +1,159 @@
-# Estagio T2
 
-Repositório para o Trabalho 2 -> EstagioT2
+# Trabalho AA3
 
-### SGBD Utilizado
-- **MySQL**
-
-### Script de Criação
-- mvn spring-boot:run
-
----
+Este projeto implementa uma API REST para gerenciar profissionais, empresas e vagas de emprego. O sistema oferece operações completas de CRUD (Criar, Ler, Atualizar, Excluir) para cada entidade, bem como consultas específicas, como a recuperação de vagas de emprego abertas.
 
 
 
+## Endpoints da API
 
-### Usuários do site
-#### ADMIN:
+### 1. **Profissionais**
 
-Login - admin@example.com
+#### Criar um Novo Profissional
 
-Senha - admin123
+- **Método**: `POST`
+- **URL**: `/api/profissionais`
+- **Corpo (JSON)**:
+  ```json
+  {
+      "nome": "João da Silva",
+      "cpf": "12345678901",
+      "telefone": "11987654321",
+      "sexo": "M",
+      "dataNascimento": "1990-05-15",
+      "email": "joao@example.com",
+      "senha": "senha123"
+  }
+  ```
 
----
+#### Buscar Todos os Profissionais
 
-#### EMPRESA:
-Login - empresa1@example.com
+- **Método**: `GET`
+- **URL**: `/api/profissionais`
 
-Senha - empresa123
+#### Buscar um Profissional por ID
 
----
-Login - empresa2@example.com
+- **Método**: `GET`
+- **URL**: `/api/profissionais/{id}`
 
-Senha - empresa123
+#### Atualizar um Profissional por ID
 
----
-Login - empresa3@example.com
+- **Método**: `PUT`
+- **URL**: `/api/profissionais/{id}`
+- **Corpo (JSON)**: Pode enviar todos ou alguns dos campos.
+  ```json
+  {
+      "nome": "Nome Atualizado",
+      "telefone": "1123456789"
+  }
+  ```
 
-Senha - empresa123
+#### Excluir um Profissional por ID
 
----
-
-#### PROFISSIONAL:
-Login - profissional1@example.com
-
-Senha - profissional123
-
----
-
-Login - profissional2@example.com
-
-Senha - profissional123
-
----
-
-Login - profissional3@example.com
-
-Senha - profissional123
+- **Método**: `DELETE`
+- **URL**: `/api/profissionais/{id}`
 
 ---
 
-## Responsabilidades de Implementação
+### 2. **Empresas**
 
-| Requisito | Status                     | Eduardo Spinelli |
-|-----------|----------------------------|------------------|
-| **R1**    | ☑️ Implementado            | 100%             |
-| **R2**    | ☑️ Implementado            | 100%             |
-| **R3**    | ☑️ Implementado            | 100%             |
-| **R4**    | ☑️ Implementado            | 100%             |
-| **R5**    | ☑️ Implementado            | 100%             |
-| **R6**    | ☑️ Implementado            | 100%             |
-| **R7**    | ☑️ Implementado            | 100%             |
-| **R8**    | ☑️ Implementado            | 100%             |
-| **R9**    | ☑️ Implementado            | 100%             |
-| **R10**   | ☑️ Implementado            | 100%             |
+#### Criar uma Nova Empresa
 
+- **Método**: `POST`
+- **URL**: `/api/empresas`
+- **Corpo (JSON)**:
+  ```json
+  {
+      "nome": "Tech Solutions",
+      "cnpj": "12345678000199",
+      "descricao": "Empresa especializada em desenvolvimento de software.",
+      "cidade": "São Paulo",
+      "email": "contato@techsolutions.com",
+      "senha": "senha123"
+  }
+  ```
+
+#### Buscar Todas as Empresas
+
+- **Método**: `GET`
+- **URL**: `/api/empresas`
+
+#### Buscar uma Empresa por ID
+
+- **Método**: `GET`
+- **URL**: `/api/empresas/{id}`
+
+#### Buscar Todas as Empresas em uma Cidade pelo Nome
+
+- **Método**: `GET`
+- **URL**: `/api/empresas/cidades/{nome}`
+
+#### Atualizar uma Empresa por ID
+
+- **Método**: `PUT`
+- **URL**: `/api/empresas/{id}`
+- **Corpo (JSON)**: Pode enviar todos ou alguns dos campos.
+  ```json
+  {
+      "descricao": "Descrição Atualizada",
+      "cidade": "Rio de Janeiro"
+  }
+  ```
+
+#### Excluir uma Empresa por ID
+
+- **Método**: `DELETE`
+- **URL**: `/api/empresas/{id}`
 
 ---
 
-### Contribuidores
-- **Eduardo Spinelli**
+### 3. **Vagas de Emprego**
 
+#### Buscar Todas as Vagas de Emprego
+
+- **Método**: `GET`
+- **URL**: `/api/vagas`
+
+#### Buscar uma Vaga de Emprego por ID
+
+- **Método**: `GET`
+- **URL**: `/api/vagas/{id}`
+
+#### Buscar Vagas de Emprego Abertas de uma Empresa por ID
+
+- **Método**: `GET`
+- **URL**: `/api/vagas/empresas/{id}`
+- **Nota**: Vagas abertas são aquelas cuja data limite de inscrição ainda não passou.
 
 ---
 
-> Projeto desenvolvido como parte da disciplina de **Desenvolvimento de Softwares para Web 1**.
+## Autenticação
+
+Nenhuma autenticação é necessária para esses endpoints da API, com base na configuração fornecida.
 
 ---
+
+## Instruções de Configuração
+
+1. Clone o repositório e navegue até a pasta do projeto.
+2. Certifique-se de que o Maven está instalado e execute o seguinte comando para compilar o projeto:
+
+   ```bash
+   mvn clean install
+   ```
+
+3. Execute o projeto:
+
+   ```bash
+   mvn spring-boot:run
+   ```
+
+4. A API estará disponível em `http://localhost:8080`.
+
+---
+
+## Notas
+
+- O banco de dados criará automaticamente as tabelas necessárias ao iniciar, caso não existam.
+- Utilize ferramentas como Postman ou cURL para interagir com a API.
+
