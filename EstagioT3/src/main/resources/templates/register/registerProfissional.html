@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{rp.title}">Registrar Profissional</title>
+    <link rel="stylesheet" th:href="@{/css/register.css}">
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+    <script>
+        // Função para formatar e validar CPF (somente números)
+        function formatarCPF(cpfInput) {
+            let cpf = cpfInput.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+
+            // Aplica a máscara: XXX.XXX.XXX-XX
+            if (cpf.length > 9) {
+                cpf = cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2}).*/, "$1.$2.$3-$4");
+            } else if (cpf.length > 6) {
+                cpf = cpf.replace(/^(\d{3})(\d{3})(\d{3}).*/, "$1.$2.$3");
+            } else if (cpf.length > 3) {
+                cpf = cpf.replace(/^(\d{3})(\d{3}).*/, "$1.$2");
+            }
+
+            cpfInput.value = cpf; // Atualiza o campo com a formatação
+        }
+
+        // Função para validar telefone (somente números, 10 ou 11 dígitos)
+        function formatarTelefone(telefoneInput) {
+            let telefone = telefoneInput.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+
+            // Aplica a máscara: (XX) XXXXX-XXXX ou (XX) XXXX-XXXX
+            if (telefone.length > 10) {
+                telefone = telefone.replace(/^(\d{2})(\d{5})(\d{4}).*/, "($1) $2-$3");
+            } else if (telefone.length > 6) {
+                telefone = telefone.replace(/^(\d{2})(\d{4})(\d{4}).*/, "($1) $2-$3");
+            } else if (telefone.length > 2) {
+                telefone = telefone.replace(/^(\d{2})(\d{4}).*/, "($1) $2");
+            }
+
+            telefoneInput.value = telefone; // Atualiza o campo com a formatação
+        }
+
+        // Função de validação final antes de enviar o formulário
+        function validarFormulario() {
+            var cpf = document.getElementById('cpf').value.replace(/\D/g, ''); // Remove a formatação do CPF
+            var telefone = document.getElementById('telefone').value.replace(/\D/g, ''); // Remove a formatação do telefone
+
+            if (cpf.length !== 11) {
+                alert('O CPF deve conter exatamente 11 dígitos numéricos.');
+                return false; // Impede o envio do formulário
+            }
+
+            if (telefone.length !== 10 && telefone.length !== 11) {
+                alert('O telefone deve conter 10 ou 11 dígitos numéricos.');
+                return false; // Impede o envio do formulário
+            }
+
+            return true; // Permite o envio do formulário
+        }
+
+        function validarDataNascimento() {
+            var dataInput = document.getElementById("dataNascimento").value;
+            var dataNascimento = new Date(dataInput);
+            var dataAtual = new Date();
+
+            if (dataNascimento > dataAtual) {
+                alert("A data de nascimento não pode ser uma data futura.");
+                document.getElementById("dataNascimento").value = ""; // Limpa o campo
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</head>
+<body>
+<h1 th:text="#{rp.title}">Registrar Profissional</h1>
+
+<!-- Exibe a mensagem de erro se houver -->
+<div th:if="${errorMessage}" class="message error">
+    <p th:text="${errorMessage}"></p>
+</div>
+
+<!-- Exibe a mensagem de logout se houver -->
+<div th:if="${logoutMessage}" class="message success">
+    <p th:text="${logoutMessage}"></p>
+</div>
+
+<!-- Exibe a mensagem de sucesso se houver -->
+<div th:if="${sucesso}" class="message success">
+    <p th:text="${sucesso}"></p>
+</div>
+
+<a th:href="@{/register/empresa}" th:text="#{rp.register_empresa}">Registrar Empresa</a>
+
+<form th:action="@{/register/profissional}" th:object="${profissional}" method="post"
+      onsubmit="return validarFormulario()">
+    <div>
+        <label for="nome" th:text="#{rp.name}">Nome:</label>
+        <input type="text" id="nome" th:field="*{nome}"/>
+        <span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="error"></span>
+    </div>
+
+    <div>
+        <label for="cpf" th:text="#{rp.cpf}">CPF:</label>
+        <input type="text" id="cpf" th:field="*{cpf}" oninput="formatarCPF(this)" maxlength="14" />
+        <span th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}" class="error"></span>
+    </div>
+
+    <div>
+        <label for="telefone" th:text="#{rp.phone}">Telefone:</label>
+        <input type="text" id="telefone" th:field="*{telefone}" oninput="formatarTelefone(this)" maxlength="15" />
+        <span th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}" class="error"></span>
+    </div>
+
+    <div>
+        <label for="sexo" th:text="#{rp.gender}">Sexo:</label>
+        <select id="sexo" th:field="*{sexo}">
+            <option value="" th:text="#{rp.gender_select}">Selecione</option>
+            <option value="M" th:text="#{rp.gender_male}">Masculino</option>
+            <option value="F" th:text="#{rp.gender_female}">Feminino</option>
+            <option value="Outro" th:text="#{rp.gender_other}">Outro</option>
+        </select>
+        <span th:if="${#fields.hasErrors('sexo')}" th:errors="*{sexo}" class="error"></span>
+    </div>
+
+    <div>
+        <label for="dataNascimento" th:text="#{rp.birthdate}">Data de Nascimento:</label>
+        <input type="date" id="dataNascimento" th:field="*{dataNascimento}" onchange="validarDataNascimento()" />
+        <span th:if="${#fields.hasErrors('dataNascimento')}" th:errors="*{dataNascimento}" class="error"></span>
+    </div>
+
+    <div>
+        <label for="email" th:text="#{rp.email}">Email:</label>
+        <input type="email" id="email" th:field="*{usuario.email}" />
+        <span th:if="${#fields.hasErrors('usuario.email')}" th:errors="*{usuario.email}" class="error"></span>
+    </div>
+
+    <div>
+        <label for="senha" th:text="#{rp.password}">Senha:</label>
+        <input type="password" id="senha" th:field="*{usuario.senha}" />
+        <span th:if="${#fields.hasErrors('usuario.senha')}" th:errors="*{usuario.senha}" class="error"></span>
+    </div>
+
+    <div>
+        <button type="submit" th:text="#{rp.submit}">Registrar</button>
+        <a th:href="@{/login}" th:text="#{rp.back_to_login}">Voltar para login</a>
+    </div>
+</form>
+
+<footer>
+    <div>
+        <p th:text="#{rp.select_language}">Selecione o idioma:</p>
+        <a href="?lang=pt_BR" th:text="#{rp.portuguese}">Português</a> |
+        <a href="?lang=en" th:text="#{rp.english}">English</a>
+    </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{aee.title}">Editar Empresa</title>
+    <link rel="stylesheet" th:href="@{/css/admin/editarEmpresa.css}">
+    <script>
+        // Função para formatar e validar CNPJ (somente números)
+        function formatarCNPJ(cnpjInput) {
+            let cnpj = cnpjInput.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+
+            // Aplica a máscara: XX.XXX.XXX/XXXX-XX
+            if (cnpj.length > 12) {
+                cnpj = cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2}).*/, "$1.$2.$3/$4-$5");
+            } else if (cnpj.length > 8) {
+                cnpj = cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4}).*/, "$1.$2.$3/$4");
+            } else if (cnpj.length > 5) {
+                cnpj = cnpj.replace(/^(\d{2})(\d{3})(\d{3}).*/, "$1.$2.$3");
+            }
+
+            cnpjInput.value = cnpj; // Atualiza o campo com a formatação
+        }
+
+        function validarCNPJ(cnpjInput) {
+            let cnpj = cnpjInput.value.replace(/\D/g, '');
+            if (cnpj.length !== 14) {
+                alert('O CNPJ deve conter exatamente 14 dígitos numéricos.');
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1 th:text="#{aee.title}">Editar Empresa</h1>
+
+    <!-- Exibe a mensagem de sucesso -->
+    <div th:if="${sucesso}" class="message success">
+        <p th:text="${sucesso}"></p>
+    </div>
+
+    <!-- Exibe a mensagem de erro -->
+    <div th:if="${erro}" class="message error">
+        <p th:text="${erro}"></p>
+    </div>
+
+    <form th:action="@{'/admin/empresa/save/' + ${empresa.id}}" th:object="${empresa}" method="post" onsubmit="return validarCNPJ(document.getElementById('cnpj'))">
+
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="form-group">
+            <label for="nome" th:text="#{aee.name}">Nome:</label>
+            <input type="text" id="nome" th:field="*{nome}" required="required"/>
+        </div>
+
+        <div class="form-group">
+            <label for="cnpj" th:text="#{aee.cnpj}">CNPJ:</label>
+            <input type="text" id="cnpj" th:field="*{cnpj}" oninput="formatarCNPJ(this)" maxlength="18" required="required"/>
+            <span th:if="${#fields.hasErrors('cnpj')}" th:errors="*{cnpj}" class="error"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="descricao" th:text="#{aee.description}">Descrição:</label>
+            <input type="text" id="descricao" th:field="*{descricao}" required="required"/>
+        </div>
+
+        <div class="form-group">
+            <label for="cidade" th:text="#{aee.city}">Cidade:</label>
+            <input type="text" id="cidade" th:field="*{cidade}" required="required"/>
+        </div>
+
+        <div class="form-group">
+            <label for="email" th:text="#{aee.email}">Email:</label>
+            <input type="email" id="email" th:field="*{usuario.email}" required="required"/>
+        </div>
+
+        <div class="form-group">
+            <label for="senha" th:text="#{aee.password}">Senha:</label>
+            <input type="password" id="senha" th:field="*{usuario.senha}"/>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" th:text="#{aee.save}">Salvar</button>
+            <a th:href="@{/admin/empresa}" th:text="#{aee.cancel}">Cancelar</a>
+        </div>
+    </form>
+</div>
+<footer>
+    <div>
+        <p th:text="#{ph.select_language}">Selecione o idioma:</p>
+        <a href="?lang=pt_BR" th:text="#{ph.portuguese}">Português</a> |
+        <a href="?lang=en" th:text="#{ph.english}">English</a>
+    </div>
+</footer>
+</body>
+</html>

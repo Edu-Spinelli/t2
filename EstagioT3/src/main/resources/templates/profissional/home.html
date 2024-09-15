@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="#{ph.title}">Página Inicial</title>
+  <link rel="stylesheet" th:href="@{/css/profissional/home.css}">
+</head>
+<body>
+<div class="container">
+  <h1>
+    <span th:text="#{ph.welcomeMessage}"></span> <span th:text="${nomeUsuario}">Usuário</span> <span th:text="#{ph.systemMessage}"></span>
+  </h1>
+  <p th:text="#{ph.chooseOption}">Escolha uma opção:</p>
+  <ul>
+    <li><a th:href="@{/profissional/vagas}" th:text="#{ph.viewJobs}">Ver Vagas Disponíveis</a></li>
+    <li><a th:href="@{/profissional/vagasInscritas}" th:text="#{ph.viewApplications}">Ver Minhas Inscrições</a></li>
+  </ul>
+
+  <form th:action="@{/logout}" method="post">
+    <button type="submit" th:text="#{ph.logout}">Logout</button>
+  </form>
+</div>
+
+<footer>
+  <div>
+    <p th:text="#{ph.selectLanguage}">Selecione o idioma:</p>
+    <a href="?lang=pt_BR" th:text="#{ph.portuguese}">Português</a> |
+    <a href="?lang=en" th:text="#{ph.english}">English</a>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{eev.title}">Editar Vaga</title>
+    <link rel="stylesheet" th:href="@{/css/empresa/editarVaga.css}">
+    <script type="text/javascript">
+        // Função para impedir que letras sejam digitadas no campo de remuneração
+        function validarRemuneracao(event) {
+            var char = String.fromCharCode(event.which);
+            if (!(/[0-9.]/.test(char))) {
+                event.preventDefault();
+            }
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1 th:text="#{eev.edit_job_title}">Editar Vaga</h1>
+
+    <form th:action="@{/empresa/editarVaga/{id}(id=${vaga.id})}" th:object="${vaga}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="form-group">
+            <label for="descricao" th:text="#{eev.description_label}">Descrição:</label>
+            <textarea id="descricao" th:field="*{descricao}" required="required" placeholder="Digite a descrição da vaga"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="remuneracao" th:text="#{eev.salary_label}">Remuneração:</label>
+            <input type="text" id="remuneracao" th:field="*{remuneracao}" onkeypress="validarRemuneracao(event)" placeholder="Ex: 5000.00" />
+        </div>
+
+        <div class="form-group">
+            <label for="dataLimiteInscricao" th:text="#{eev.deadline_label}">Data Limite de Inscrição:</label>
+            <input type="date" id="dataLimiteInscricao" th:field="*{dataLimiteInscricao}" />
+        </div>
+
+        <div class="form-group">
+            <label for="cidade" th:text="#{eev.city_label}">Cidade:</label>
+            <input type="text" id="cidade" th:field="*{cidade}" required="required" placeholder="Cidade" />
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" th:text="#{eev.save_button}">Salvar</button>
+            <a href="/empresa/listaVagas" class="cancel-btn" th:text="#{eev.cancel_button}">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<footer>
+    <div>
+        <p th:text="#{eev.select_language}">Selecione o idioma:</p>
+        <a href="?lang=pt_BR" th:text="#{eev.portuguese}">Português</a> |
+        <a href="?lang=en" th:text="#{eev.english}">English</a>
+    </div>
+</footer>
+
+</body>
+</html>

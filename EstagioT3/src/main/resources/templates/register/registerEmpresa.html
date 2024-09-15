@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{re.title}">Registrar Empresa</title>
+    <link rel="stylesheet" th:href="@{/css/register.css}">
+    <script>
+        // Função para formatar o CNPJ enquanto o usuário digita
+        function formatarCNPJ(cnpjInput) {
+            let cnpj = cnpjInput.value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+
+            // Aplica a formatação: XX.XXX.XXX/XXXX-XX
+            if (cnpj.length > 12) {
+                cnpj = cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2}).*/, "$1.$2.$3/$4-$5");
+            } else if (cnpj.length > 8) {
+                cnpj = cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4}).*/, "$1.$2.$3/$4");
+            } else if (cnpj.length > 5) {
+                cnpj = cnpj.replace(/^(\d{2})(\d{3})(\d{3}).*/, "$1.$2.$3");
+            } else if (cnpj.length > 2) {
+                cnpj = cnpj.replace(/^(\d{2})(\d{3}).*/, "$1.$2");
+            }
+
+            cnpjInput.value = cnpj; // Atualiza o campo com a formatação
+        }
+
+        // Função de validação do formulário
+        function validarFormulario() {
+            var cnpj = document.getElementById('cnpj').value.replace(/\D/g, ''); // Remove os não numéricos para validação
+
+            if (cnpj.length !== 14) {
+                alert('O CNPJ deve conter exatamente 14 dígitos numéricos.');
+                return false; // Impede o envio do formulário
+            }
+            return true; // Permite o envio do formulário se estiver correto
+        }
+    </script>
+</head>
+<body>
+<h1 th:text="#{re.title}">Registrar Empresa</h1>
+<a th:href="@{/register/profissional}" th:text="#{re.register_professional}">Registrar Profissional</a>
+
+<!-- Exibe a mensagem de erro se houver -->
+<div th:if="${errorMessage}" class="message error">
+    <p th:text="${errorMessage}"></p>
+</div>
+
+<!-- Exibe a mensagem de sucesso se houver -->
+<div th:if="${sucessoMessage}" class="message success">
+    <p th:text="${sucessoMessage}"></p>
+</div>
+
+<form th:action="@{/register/empresa}" th:object="${empresa}" method="post" onsubmit="return validarFormulario()">
+
+    <div>
+        <label for="nome" th:text="#{re.name}">Nome:</label>
+        <input type="text" id="nome" th:field="*{nome}" required="required"/>
+        <p th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" th:text="#{re.name_error}">Erro no nome</p>
+    </div>
+
+    <div>
+        <label for="cnpj" th:text="#{re.cnpj}">CNPJ:</label>
+        <input type="text" id="cnpj" th:field="*{cnpj}" required="required"
+               placeholder="00.000.000/0000-00" maxlength="18" oninput="formatarCNPJ(this)" />
+        <p th:if="${#fields.hasErrors('cnpj')}" th:errors="*{cnpj}" th:text="#{re.cnpj_error}">O CNPJ deve conter exatamente 14 dígitos numéricos</p>
+    </div>
+
+    <div>
+        <label for="descricao" th:text="#{re.description}">Descrição:</label>
+        <textarea id="descricao" th:field="*{descricao}"></textarea>
+        <p th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}" th:text="#{re.description_error}">Erro na descrição</p>
+    </div>
+
+    <div>
+        <label for="cidade" th:text="#{re.city}">Cidade:</label>
+        <input type="text" id="cidade" th:field="*{cidade}" required="required"/>
+        <p th:if="${#fields.hasErrors('cidade')}" th:errors="*{cidade}" th:text="#{re.city_error}">Erro na cidade</p>
+    </div>
+
+    <div>
+        <label for="email" th:text="#{re.email}">Email:</label>
+        <input type="email" id="email" th:field="*{usuario.email}" required="required"/>
+        <p th:if="${#fields.hasErrors('usuario.email')}" th:errors="*{usuario.email}" th:text="#{re.email_error}">Erro no email</p>
+    </div>
+
+    <div>
+        <label for="senha" th:text="#{re.password}">Senha:</label>
+        <input type="password" id="senha" th:field="*{usuario.senha}" required="required"/>
+        <p th:if="${#fields.hasErrors('usuario.senha')}" th:errors="*{usuario.senha}" th:text="#{re.password_error}">Erro na senha</p>
+    </div>
+
+    <div>
+        <button type="submit" th:text="#{re.submit}">Registrar</button>
+        <a th:href="@{/login}" th:text="#{re.back_to_login}">Voltar para login</a>
+    </div>
+</form>
+
+<footer>
+    <div>
+        <p th:text="#{re.select_language}">Selecione o idioma:</p>
+        <a href="?lang=pt_BR" th:text="#{re.portuguese}">Português</a> |
+        <a href="?lang=en" th:text="#{re.english}">English</a>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{lv.title}">Lista de Vagas</title>
+    <link rel="stylesheet" th:href="@{/css/listaVagasSlogin.css}">
+</head>
+<body>
+<h1 th:text="#{lv.header}">Vagas Disponíveis</h1>
+
+<!-- Filtro de cidade -->
+<form th:action="@{/vagas}" method="post">
+    <label for="cidade" th:text="#{lv.label.cidade}">Pesquisar por Cidade:</label>
+    <input type="text" id="cidade" name="cidade" th:value="${cidadePesquisada}" th:placeholder="#{lv.placeholder.cidade}" />
+    <button type="submit" th:text="#{lv.button.pesquisar}">Pesquisar</button>
+</form>
+
+<!-- Tabela de vagas -->
+<table border="1">
+    <thead>
+    <tr>
+        <th th:text="#{lv.table.empresa}">Empresa</th>
+        <th th:text="#{lv.table.descricao}">Descrição</th>
+        <th th:text="#{lv.table.remuneracao}">Remuneração</th>
+        <th th:text="#{lv.table.dataLimite}">Data Limite</th>
+        <th th:text="#{lv.table.cidade}">Cidade</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="vaga : ${vagas}">
+        <td th:text="${vaga.empresa.nome}"></td>
+        <td th:text="${vaga.descricao}"></td>
+        <td th:text="${vaga.remuneracao}"></td>
+        <td th:text="${#dates.format(vaga.dataLimiteInscricao, 'dd/MM/yyyy')}"></td>
+        <td th:text="${vaga.cidade}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<a th:href="@{/login}" th:text="#{lv.link.voltarLogin}">Voltar para o Login</a>
+<div>
+    <p th:text="#{rp.select_language}">Selecione o idioma:</p>
+    <a href="?lang=pt_BR" th:text="#{rp.portuguese}">Português</a> |
+    <a href="?lang=en" th:text="#{rp.english}">English</a>
+</div>
+</body>
+</html>

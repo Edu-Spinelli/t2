@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="#{alp.title}">Lista de Profissionais</title>
+  <link rel="stylesheet" th:href="@{/css/admin/listaProfissionais.css}">
+</head>
+<body>
+<div class="container">
+  <h1 th:text="#{alp.professional_list}">Lista de Profissionais</h1>
+
+  <!-- Exibe a mensagem de sucesso -->
+  <div th:if="${sucesso}" class="success">
+    <p th:text="${sucesso}"></p>
+  </div>
+
+  <!-- Exibe a mensagem de erro -->
+  <div th:if="${erro}" class="error">
+    <p th:text="${erro}"></p>
+  </div>
+
+  <!-- Tabela de profissionais -->
+  <table>
+    <thead>
+    <tr>
+      <th th:text="#{alp.name}">Nome</th>
+      <th th:text="#{alp.email}">Email</th>
+      <th th:text="#{alp.cpf}">CPF</th>
+      <th th:text="#{alp.phone}">Telefone</th>
+      <th th:text="#{alp.actions}">Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="profissional : ${profissionais}">
+      <td th:text="${profissional.nome}"></td>
+      <td th:text="${profissional.usuario.email}"></td>
+      <td th:text="${profissional.cpf}"></td>
+      <td th:text="${profissional.telefone}"></td>
+      <td>
+        <a th:href="@{/admin/editarProfissional/{id}(id=${profissional.id})}" th:text="#{alp.edit}">Editar</a>
+        <a th:href="@{/admin/excluirProfissional/{id}(id=${profissional.id})}" th:text="#{alp.delete}">Excluir</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- Botão de voltar -->
+  <a href="/admin/home" th:text="#{alp.back_home}">Voltar para tela inicial</a>
+
+  <!-- Footer -->
+  <footer>
+    <div>
+      <p th:text="#{ph.select_language}">Selecione o idioma:</p>
+      <a href="?lang=pt_BR" th:text="#{ph.portuguese}">Português</a> |
+      <a href="?lang=en" th:text="#{ph.english}">English</a>
+    </div>
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="#{eec.title}">Candidatos da Vaga</title>
+  <link rel="stylesheet" th:href="@{/css/empresa/verCandidatos.css}">
+</head>
+<body>
+<div class="container">
+  <h1 th:text="${#messages.msg('eec.candidates_applied', vaga.descricao)}">Candidatos Inscritos na Vaga: <span th:text="${vaga.descricao}"></span></h1>
+
+  <div th:if="${erro}" class="message error">
+    <p th:text="${erro}"></p>
+  </div>
+
+  <!-- Exibe a mensagem de sucesso -->
+  <div th:if="${sucesso}" class="message success">
+    <p th:text="${sucesso}"></p>
+  </div>
+
+  <table>
+    <thead>
+    <tr>
+      <th th:text="#{eec.candidate_name}">Nome do Candidato</th>
+      <th th:text="#{eec.email}">Email</th>
+      <th th:text="#{eec.registration_date}">Data de Inscrição</th>
+      <th th:text="#{eec.resume}">Currículo</th>
+      <th th:text="#{eec.actions}">Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="candidatura : ${candidaturas}">
+      <td th:text="${candidatura.profissional.nome}"></td>
+      <td th:text="${candidatura.profissional.usuario.email}"></td>
+      <td th:text="${#dates.format(candidatura.dataCandidatura, 'dd/MM/yyyy')}"></td>
+      <td>
+        <a th:href="@{/empresa/downloadCurriculo/{candidaturaId}(candidaturaId=${candidatura.id})}">
+          <span th:text="${candidatura.curriculoNome}">Download Currículo</span>
+        </a>
+      </td>
+      <td>
+        <a th:if="${vaga.dataLimiteInscricao.time <= #dates.createNow().time}"
+           th:href="@{/empresa/avaliarCandidato/{candidaturaId}(candidaturaId=${candidatura.id})}"
+           th:text="#{eec.evaluate_candidate}">
+        </a>
+        <span th:if="${vaga.dataLimiteInscricao.time > #dates.createNow().time}" th:text="#{eec.evaluation_after_deadline}">
+          Avaliação disponível após a data limite.
+        </span>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <a href="/empresa/listaVagas" class="back-btn" th:text="#{eec.back_to_job_list}">Voltar para lista de vagas</a>
+</div>
+
+<footer>
+  <div>
+    <p th:text="#{ph.select_language}">Selecione o idioma:</p>
+    <a href="?lang=pt_BR" th:text="#{ph.portuguese}">Português</a> |
+    <a href="?lang=en" th:text="#{ph.english}">English</a>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="#{aep.title}">Editar Profissional</title>
+  <link rel="stylesheet" th:href="@{/css/admin/editarProfissional.css}">
+  <script>
+    // Função para formatar CPF (somente números)
+    function formatarCPF(cpfInput) {
+      let cpf = cpfInput.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+
+      // Aplica a máscara: XXX.XXX.XXX-XX
+      if (cpf.length > 9) {
+        cpf = cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2}).*/, "$1.$2.$3-$4");
+      } else if (cpf.length > 6) {
+        cpf = cpf.replace(/^(\d{3})(\d{3})(\d{3}).*/, "$1.$2.$3");
+      } else if (cpf.length > 3) {
+        cpf = cpf.replace(/^(\d{3})(\d{3}).*/, "$1.$2");
+      }
+
+      cpfInput.value = cpf; // Atualiza o campo com a formatação
+    }
+
+    // Função para formatar telefone (somente números)
+    function formatarTelefone(telefoneInput) {
+      let telefone = telefoneInput.value.replace(/\D/g, '');
+
+      // Aplica a máscara: (XX) XXXXX-XXXX ou (XX) XXXX-XXXX
+      if (telefone.length > 10) {
+        telefone = telefone.replace(/^(\d{2})(\d{5})(\d{4}).*/, "($1) $2-$3");
+      } else if (telefone.length > 6) {
+        telefone = telefone.replace(/^(\d{2})(\d{4})(\d{4}).*/, "($1) $2-$3");
+      } else if (telefone.length > 2) {
+        telefone = telefone.replace(/^(\d{2})(\d{4}).*/, "($1) $2");
+      }
+
+      telefoneInput.value = telefone; // Atualiza o campo com a formatação
+    }
+
+    function validarCPF(cpfInput) {
+      let cpf = cpfInput.value.replace(/\D/g, '');
+      if (cpf.length !== 11) {
+        alert('O CPF deve conter exatamente 11 dígitos numéricos.');
+        return false;
+      }
+      return true;
+    }
+
+    function validarTelefone(telefoneInput) {
+      let telefone = telefoneInput.value.replace(/\D/g, '');
+      if (telefone.length !== 10 && telefone.length !== 11) {
+        alert('O telefone deve conter 10 ou 11 dígitos numéricos.');
+        return false;
+      }
+      return true;
+    }
+
+    function validarFormulario() {
+      return validarCPF(document.getElementById('cpf')) && validarTelefone(document.getElementById('telefone'));
+    }
+  </script>
+</head>
+<body>
+<div class="container">
+  <h1 th:text="#{aep.title}">Editar Profissional</h1>
+
+  <!-- Exibe a mensagem de sucesso -->
+  <div th:if="${sucesso}" class="message success">
+    <p th:text="${sucesso}"></p>
+  </div>
+
+  <!-- Exibe a mensagem de erro -->
+  <div th:if="${erro}" class="message error">
+    <p th:text="${erro}"></p>
+  </div>
+
+  <form th:action="@{'/admin/profissional/save/' + ${profissionais.id}}" th:object="${profissionais}" method="post" onsubmit="return validarFormulario()">
+
+    <input type="hidden" th:field="*{id}"/>
+
+    <div class="form-group">
+      <label for="nome" th:text="#{aep.name}">Nome:</label>
+      <input type="text" id="nome" th:field="*{nome}" required="required"/>
+    </div>
+
+    <div class="form-group">
+      <label for="cpf" th:text="#{aep.cpf}">CPF:</label>
+      <input type="text" id="cpf" th:field="*{cpf}" oninput="formatarCPF(this)" maxlength="14" required="required"/>
+      <span th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}" class="error"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="telefone" th:text="#{aep.phone}">Telefone:</label>
+      <input type="text" id="telefone" th:field="*{telefone}" oninput="formatarTelefone(this)" maxlength="15" required="required"/>
+      <span th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}" class="error"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="email" th:text="#{aep.email}">Email:</label>
+      <input type="email" id="email" th:field="*{usuario.email}" required="required"/>
+    </div>
+
+    <div class="form-group">
+      <label for="senha" th:text="#{aep.password}">Senha:</label>
+      <input type="password" id="senha" th:field="*{usuario.senha}"/>
+    </div>
+
+    <div class="form-group">
+      <button type="submit" th:text="#{aep.save}">Salvar</button>
+      <a th:href="@{/admin/profissional}" th:text="#{aep.cancel}">Cancelar</a>
+    </div>
+  </form>
+</div>
+<footer>
+  <div>
+    <p th:text="#{ph.select_language}">Selecione o idioma:</p>
+    <a href="?lang=pt_BR" th:text="#{ph.portuguese}">Português</a> |
+    <a href="?lang=en" th:text="#{ph.english}">English</a>
+  </div>
+</footer>
+</body>
+</html>

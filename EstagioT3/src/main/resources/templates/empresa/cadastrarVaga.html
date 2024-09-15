@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="#{ecv.title}">Cadastrar Vaga</title>
+  <link rel="stylesheet" th:href="@{/css/empresa/cadastrarVaga.css}">
+  <script>
+    // Função para impedir a entrada de letras no campo de remuneração
+    function validarRemuneracao(event) {
+      let charCode = (event.which) ? event.which : event.keyCode;
+      // Permite apenas números e ponto (.)
+      if (charCode !== 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+        event.preventDefault();
+        return false;
+      }
+      return true;
+    }
+  </script>
+</head>
+<body>
+<div class="container">
+  <h1 th:text="#{ecv.title}">Cadastrar Vaga</h1>
+
+  <!-- Exibe a mensagem de erro geral -->
+  <div th:if="${erro}" class="error">
+    <p th:text="${erro}"></p>
+  </div>
+
+  <!-- Exibe a mensagem de sucesso -->
+  <div th:if="${sucesso}" class="success">
+    <p th:text="${sucesso}"></p>
+  </div>
+
+  <form th:action="@{/empresa/cadastrarVaga}" th:object="${vaga}" method="post">
+    <div class="form-group">
+      <label for="cnpj" th:text="#{ecv.company_cnpj}">CNPJ da Empresa:</label>
+      <input type="text" id="cnpj" th:field="*{empresa.cnpj}" disabled="disabled" th:placeholder="#{ecv.company_cnpj_placeholder}" />
+    </div>
+
+    <div class="form-group">
+      <label for="descricao" th:text="#{ecv.job_description}">Descrição da Vaga:</label>
+      <textarea id="descricao" th:field="*{descricao}" required="required" th:placeholder="#{ecv.job_description_placeholder}"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="remuneracao" th:text="#{ecv.salary}">Remuneração:</label>
+      <input type="text" id="remuneracao" th:field="*{remuneracao}" required="required" th:placeholder="#{ecv.salary_placeholder}"
+             onkeypress="return validarRemuneracao(event)" />
+      <!-- Exibe erro específico do campo 'remuneracao' -->
+      <p th:if="${#fields.hasErrors('remuneracao')}" th:errors="*{remuneracao}" class="error"></p>
+    </div>
+
+    <div class="form-group">
+      <label for="dataLimiteInscricao" th:text="#{ecv.deadline}">Data Limite de Inscrição:</label>
+      <input type="date" id="dataLimiteInscricao" th:field="*{dataLimiteInscricao}" required="required"
+             th:placeholder="#{ecv.deadline_placeholder}" />
+    </div>
+
+    <div class="form-group">
+      <label for="cidade" th:text="#{ecv.city}">Cidade:</label>
+      <input type="text" id="cidade" th:field="*{cidade}" required="required" th:placeholder="#{ecv.city_placeholder}" />
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" th:text="#{ecv.submit}">Cadastrar Vaga</button>
+      <a href="/empresa/home" class="cancel-btn" th:text="#{ecv.cancel}">Cancelar</a>
+    </div>
+  </form>
+</div>
+<footer>
+  <p th:text="#{ph.select_language}">Selecione o idioma:</p>
+  <a href="?lang=pt_BR" th:text="#{ph.portuguese}">Português</a> |
+  <a href="?lang=en" th:text="#{ph.english}">English</a>
+</footer>
+</body>
+</html>

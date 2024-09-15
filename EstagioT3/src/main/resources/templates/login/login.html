@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <title th:text="#{login.title}">Login</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+</head>
+<body>
+<div class="container">
+    <h2 th:text="#{login.title}">Login</h2>
+
+    <!-- Exibe a mensagem de erro se houver -->
+    <div th:if="${errorMessage}" class="message error">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <!-- Exibe a mensagem de logout se houver -->
+    <div th:if="${logoutMessage}" class="message success">
+        <p th:text="${logoutMessage}"></p>
+    </div>
+
+    <div th:if="${sucesso}" class="message success">
+        <p th:text="${sucesso}"></p>
+    </div>
+
+
+
+    <form th:action="@{/login}" method="post">
+        <div class="form-group">
+            <label th:text="#{login.email}">Email: </label>
+            <input type="text" name="username"/>
+        </div>
+        <div class="form-group">
+            <label th:text="#{login.password}">Senha: </label>
+            <input type="password" name="password"/>
+        </div>
+        <div>
+            <input type="submit" th:value="#{login.submit}" value="Login"/>
+        </div>
+    </form>
+
+    <div class="links">
+        <a th:href="@{/register/empresa}" th:text="#{login.register}">Registrar</a>
+        <a th:href="@{/vagas}" th:text="#{login.view_jobs}">Ver Vagas</a>
+    </div>
+</div>
+
+<!-- Footer com os botões para alterar idioma -->
+<footer>
+    <div>
+        <p th:text="#{pvi.select_language}">Selecione o idioma:</p>
+        <a href="?lang=pt_BR" th:text="#{pvi.portuguese}">Português</a> |
+        <a href="?lang=en" th:text="#{pvi.english}">English</a>
+    </div>
+</footer>
+
+</body>
+</html>
