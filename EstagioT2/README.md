@@ -76,6 +76,11 @@ Senha - profissional123
 
 ---
 
+[Video explicando o T2 - link](https://drive.google.com/file/d/1ULLdNmxfjOp6Q1ySuB13q6co265_NGwz/view?usp=drive_link)
+
+---
+
+
 ### Contribuidores
 - **Eduardo Spinelli**
 
