@@ -35,6 +35,10 @@ public class EmpresaService {
         return empresa.orElse(null);
     }
 
+    public List<Empresa> buscarPorCidade(String cidade) {
+        return empresaRepository.findByCidade(cidade);
+    }
+
     public void excluir(Long id) {
         empresaRepository.deleteById(id);
     }
