@@ -6,8 +6,10 @@ Repositório para o Trabalho 2 -> EstagioT2
 - **MySQL**
 
 ### Script de Criação
-- mvn spring-boot:run
 
+```
+mvn spring-boot:run
+```
 ---
 
 
